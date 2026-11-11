@@ -91,12 +91,12 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
     </div>
 
     <div class="space-y-2">
-      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema sartoriale e all'intelligenza artificiale Orion, è obbligatorio avviare l'applicazione in modalità PWA dedicata.</p>
+      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion</h1>
+      <p class="text-xs text-sky-200">Per accedere all'ecosistema all'intelligenza artificiale Orion Horizon, è obbligatorio installare l'instant-app</p>
     </div>
 
     <div id="pwa-action-container" class="space-y-4 pt-2">
-      <!-- Dinamico inserito via JS in base a OS e versione -->
+     
     </div>
 
     <div class="text-[10px] text-slate-400 font-mono pt-2 border-t border-sky-500/20 flex items-center justify-center gap-2">
@@ -118,11 +118,12 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// GESTIONE ISTANTANEA SCREENLOCK & RILEVAMENTO OS / VERSIONI
-let deferredPrompt = null;
+// GESTIONE ISTANTANEA SCREENLOCK & RILEVAMENTO OS / VERSIONI CON FIX INSTALLAZIONE AUTOMATICA
+window._deferredPrompt = window._deferredPrompt || null;
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
-  deferredPrompt = e;
+  window._deferredPrompt = e;
   renderScreenLockUI();
 });
 
@@ -145,6 +146,8 @@ function detectOSAndVersion() {
     if (match) version = match[1].replace(/_/g, '.');
   } else if (/Win/.test(ua)) {
     os = "Windows";
+  } else if (/Linux/.test(ua)) {
+    os = "Linux";
   }
   return { os, version };
 }
@@ -157,7 +160,8 @@ function renderScreenLockUI() {
   let majorVer = parseInt(version, 10) || 0;
 
   if (window._isPWAInstalled) {
-    document.getElementById("pwa-screenlock").style.display = "none";
+    const lockScreen = document.getElementById("pwa-screenlock");
+    if(lockScreen) lockScreen.style.display = "none";
     return;
   }
 
@@ -173,14 +177,14 @@ function renderScreenLockUI() {
         📥 Installa PWA Subito
       </button>
     `;
-  } else if (os === "Windows") {
+  } else if (os === "Windows" || os === "Linux") {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">PC Desktop Windows Rilevato</span>
+        <span class="text-sky-300 font-bold block">PC Desktop (${os}) Rilevato</span>
         <p>Aggiungi l'app al desktop per un'esperienza nativa e fluida.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su Windows
+        📥 Installa su ${os}
       </button>
     `;
   } else if (os === "iOS") {
@@ -237,25 +241,35 @@ function renderScreenLockUI() {
   const installBtn = document.getElementById("pwa-install-btn");
   if (installBtn) {
     installBtn.addEventListener("click", async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+      if (window._deferredPrompt) {
+        window._deferredPrompt.prompt();
+        const { outcome } = await window._deferredPrompt.userChoice;
         if (outcome === 'accepted') {
           window._isPWAInstalled = true;
-          document.getElementById("pwa-screenlock").style.display = "none";
+          document.documentElement.classList.add('pwa-ready');
+          const lockScreen = document.getElementById("pwa-screenlock");
+          if(lockScreen) lockScreen.style.display = "none";
         }
-        deferredPrompt = null;
+        window._deferredPrompt = null;
       } else {
-        alert("Per installare la PWA, utilizza il menu del browser (es. 'Installa app' o 'Aggiungi a schermata Home').");
+        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
       }
     });
   }
 }
 
+window.addEventListener('appinstalled', () => {
+  window._isPWAInstalled = true;
+  document.documentElement.classList.add('pwa-ready');
+  const lockScreen = document.getElementById("pwa-screenlock");
+  if(lockScreen) lockScreen.style.display = "none";
+});
+
 // Esecuzione immediata all'avvio
 document.addEventListener("DOMContentLoaded", () => {
   if (window._isPWAInstalled) {
-    document.getElementById("pwa-screenlock").style.display = "none";
+    const lockScreen = document.getElementById("pwa-screenlock");
+    if(lockScreen) lockScreen.style.display = "none";
   } else {
     renderScreenLockUI();
   }
@@ -841,7 +855,7 @@ function IntakeSurvey({onDone}){
     redness: "Frequenti (Pelle sensibile o rosacea)",
     // Step 3: Occhi & Iride
     eyeColor: "Marrone Scuro / Nero",
-    eyeFlecks: "Nessuna sfumatura, iride omogenea",
+    eyeFlecks: "Nessuna sfumature, iride omogenea",
     eyeContrast: "Alto contrasto (Bianco sclera brillante)",
     // Step 4: Capelli & Riflessi
     hairNatural: "Castano Scuro / Bruno",
