@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="LandraFashion">
 <link rel="apple-touch-icon" href="./icone/icon-192.png">
 
-<!-- SCRIPT DI RILEVAMENTO PWA ISTANTANEO E CHIUSURA SCHEDA BROWSER -->
+<!-- SCRIPT DI RILEVAMENTO PWA ISTANTANEO E BYPASS WEB -->
 <script>
 (function() {
   window._isPWAInstalled = false;
@@ -21,8 +21,7 @@
     window._isPWAInstalled = true;
   }
   
-  // Se l'app è in modalità PWA standalone, assicuriamoci di marcare subito la prontezza
-  if (window._isPWAInstalled) {
+  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
     document.documentElement.classList.add('pwa-ready');
   }
 })();
@@ -93,10 +92,17 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 
     <div class="space-y-2">
       <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema e all'Ai Orion Horizon, è obbligatorio installare l'applicazione 
+      <p class="text-xs text-sky-200">Per accedere all'ecosistema sartoriale e all'Aiartificiale Orion, installa l'applicazione dedicata.</p>
+    </div>
 
     <div id="pwa-action-container" class="space-y-4 pt-2">
       <!-- Dinamico inserito via JS in base a OS e versione -->
+    </div>
+
+    <div class="pt-2">
+      <button type="button" id="pwa-bypass-btn" class="text-xs text-sky-400 hover:text-sky-300 underline bg-transparent border-0 cursor-pointer font-medium">
+        Continua sul browser web standard →
+      </button>
     </div>
 
     <div class="text-[10px] text-slate-400 font-mono pt-2 border-t border-sky-500/20 flex items-center justify-center gap-2">
@@ -118,7 +124,17 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// GESTIONE ISTANTANEA SCREENLOCK & CHIUSURA SCHEDA BROWSER POST INSTALLAZIONE
+// GESTIONE BYPASS E SCREENLOCK
+document.addEventListener("DOMContentLoaded", () => {
+  const bypassBtn = document.getElementById("pwa-bypass-btn");
+  if(bypassBtn) {
+    bypassBtn.addEventListener("click", () => {
+      localStorage.setItem('hrz_pwa_bypassed', 'true');
+      document.documentElement.classList.add('pwa-ready');
+    });
+  }
+});
+
 window._deferredPrompt = window._deferredPrompt || null;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -159,9 +175,8 @@ function renderScreenLockUI() {
   const { os, version } = detectOSAndVersion();
   let majorVer = parseInt(version, 10) || 0;
 
-  if (window._isPWAInstalled) {
-    const lockScreen = document.getElementById("pwa-screenlock");
-    if(lockScreen) lockScreen.style.display = "none";
+  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
+    document.documentElement.classList.add('pwa-ready');
     return;
   }
 
@@ -171,20 +186,20 @@ function renderScreenLockUI() {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">Dispositivo Android Rilevato</span>
-        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia.</p>
+        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia a schermo intero.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa subito (.Apk)
+        📥 Installa App Subito
       </button>
     `;
   } else if (os === "Windows" || os === "Linux") {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">PC Desktop (${os}) Rilevato</span>
-        <p>Installa l'app al desktop per un'esperienza nativa e fluida.</p>
+        <p>Aggiungi l'app al desktop per un'esperienza nativa e fluida.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su ${os} 
+        📥 Installa su ${os}
       </button>
     `;
   } else if (os === "iOS") {
@@ -228,7 +243,7 @@ function renderScreenLockUI() {
   } else {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-xs text-slate-300">
-        <p>Installa la PWA dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
+        <p>Installa l'app dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold">
         📥 Installa App
@@ -247,17 +262,13 @@ function renderScreenLockUI() {
         if (outcome === 'accepted') {
           window._isPWAInstalled = true;
           document.documentElement.classList.add('pwa-ready');
-          const lockScreen = document.getElementById("pwa-screenlock");
-          if(lockScreen) lockScreen.style.display = "none";
-          
-          // Tenta di chiudere la scheda del browser web subito dopo l'installazione
           setTimeout(() => {
             try { window.close(); } catch(e) {}
           }, 800);
         }
         window._deferredPrompt = null;
       } else {
-        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
+        alert("Per installare l'app, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
       }
     });
   }
@@ -266,20 +277,14 @@ function renderScreenLockUI() {
 window.addEventListener('appinstalled', () => {
   window._isPWAInstalled = true;
   document.documentElement.classList.add('pwa-ready');
-  const lockScreen = document.getElementById("pwa-screenlock");
-  if(lockScreen) lockScreen.style.display = "none";
-  
-  // Chiusura automatica della scheda browser di origine dopo l'installazione PWA
   setTimeout(() => {
     try { window.close(); } catch(e) {}
   }, 1000);
 });
 
-// Esecuzione immediata all'avvio
 document.addEventListener("DOMContentLoaded", () => {
-  if (window._isPWAInstalled) {
-    const lockScreen = document.getElementById("pwa-screenlock");
-    if(lockScreen) lockScreen.style.display = "none";
+  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
+    document.documentElement.classList.add('pwa-ready');
   } else {
     renderScreenLockUI();
   }
@@ -308,7 +313,6 @@ const CFG = {
     measurementId: "G-7GM9H4WBHP"
   },
   TEXT: "openai/gpt-oss-120b",
-  // CHIAVE GROQ OFFUSCATA E PARTIZIONATA PER EVITARE RILEVAMENTO GITHUB SECRET SCANNING
   GROQ_KEY: (function() {
     const p1 = "gsk_33c";
     const p2 = "FQ2MnK1";
@@ -848,32 +852,25 @@ function AuthGate({children}){
   `;
 }
 
-// FORM PROFILAZIONE ARMOCROMATICA COMPLETO A SCORRIMENTO WIZARD LATERALE
 function IntakeSurvey({onDone}){
   const {user} = useApp();
   const [step, setStep] = useState(1);
   const totalSteps = 6;
 
   const [f, setF] = useState({
-    // Step 1: Base & Localizzazione
     gender: "Donna",
     city: "Milano",
-    // Step 2: Incarnato & Sottotono
     skinTone: "Chiara / Porcellana",
     sunReaction: "Mi scotto facilmente, bronzo lento",
     veinsColor: "Blu / VIola (Cool)",
     redness: "Frequenti (Pelle sensibile o rosacea)",
-    // Step 3: Occhi & Iride
     eyeColor: "Marrone Scuro / Nero",
     eyeFlecks: "Nessuna sfumature, iride omogenea",
     eyeContrast: "Alto contrasto (Bianco sclera brillante)",
-    // Step 4: Capelli & Riflessi
     hairNatural: "Castano Scuro / Bruno",
     hairReflections: "Cenere / Freddi / Nessuno",
-    // Step 5: Contrasto & Valore Sovrano
     overallContrast: "Alto (Contrasto forte pelle/occhi/capelli)",
     overallValue: "Scuro / Intenso (Deep)",
-    // Step 6: Risposta ai Colori & Metalli
     metalPreference: "Argento / Platino (Freddo)",
     colorReaction: "Nero e colori saturi mi illuminano",
     worstColor: "Arancio caldo e senape mi ingrigiscono"
@@ -881,28 +878,23 @@ function IntakeSurvey({onDone}){
 
   const [busy, setBusy] = useState(false);
 
-  // Calcolo scientifico preciso della stagione armocromatica in base ai dati inseriti
   const calculateSeason = () => {
     let warmScore = 0;
     let coolScore = 0;
     let deepScore = 0;
     let lightScore = 0;
 
-    // Sottotono
     if(f.veinsColor.includes("Verdi")) warmScore += 2;
     if(f.veinsColor.includes("Blu")) coolScore += 2;
     if(f.sunReaction.includes("Abbronzatura dorata")) warmScore += 1.5;
     if(f.sunReaction.includes("scotto facilmente")) coolScore += 1.5;
 
-    // Capelli & Riflessi
     if(f.hairReflections.includes("Dorati") || f.hairReflections.includes("Rame")) warmScore += 1.5;
     if(f.hairReflections.includes("Cenere")) coolScore += 1.5;
 
-    // Metallo
     if(f.metalPreference.includes("Oro")) warmScore += 2;
     if(f.metalPreference.includes("Argento")) coolScore += 2;
 
-    // Valore / Contrasto
     if(f.overallValue.includes("Scuro") || f.hairNatural.includes("Scuro") || f.eyeColor.includes("Scuro")) deepScore += 2;
     if(f.overallValue.includes("Chiaro") || f.hairNatural.includes("Biondo")) lightScore += 2;
 
@@ -953,8 +945,6 @@ function IntakeSurvey({onDone}){
   return html`
     <div class="min-h-screen flex items-center justify-center p-3 sm:p-6 my-auto">
       <div class="glass glass-strong w-full max-w-xl p-6 sm:p-8 space-y-6 border border-sky-500/40 relative overflow-hidden shadow-2xl">
-        
-        <!-- Header Wizard -->
         <div class="flex items-center justify-between border-b border-sky-500/20 pb-4">
           <${BrandLogo}/>
           <div class="text-right">
@@ -963,15 +953,11 @@ function IntakeSurvey({onDone}){
           </div>
         </div>
 
-        <!-- Barra Progresso -->
         <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden border border-sky-500/20">
           <div class="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-blue-600 transition-all duration-300" style=${{width: `${(step/totalSteps)*100}%`}}></div>
         </div>
 
-        <!-- Contenitore Carousel con effetto Slider -->
         <div class="min-h-[380px] flex flex-col justify-between">
-          
-          <!-- STEP 1: Generale & Sesso -->
           ${step === 1 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1000,7 +986,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- STEP 2: Incarnato & Sottotono -->
           ${step === 2 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1052,7 +1037,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- STEP 3: Occhi & Iride -->
           ${step === 3 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1093,7 +1077,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- STEP 4: Capelli & Riflessi -->
           ${step === 4 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1127,7 +1110,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- STEP 5: Contrasto & Valore Sovrano -->
           ${step === 5 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1159,7 +1141,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- STEP 6: Risposta ai Colori & Metalli -->
           ${step === 6 && html`
             <div class="wizard-slide-active space-y-4">
               <div class="space-y-1">
@@ -1200,7 +1181,6 @@ function IntakeSurvey({onDone}){
             </div>
           `}
 
-          <!-- Navigazione Pulsanti Avanti / Indietro -->
           <div class="flex gap-3 pt-6 border-t border-sky-500/20 mt-auto">
             ${step > 1 && html`
               <button type="button" class="btn-ghost flex-1 py-3 text-xs" onClick=${prevStep}>
