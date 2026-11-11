@@ -21,7 +21,6 @@
     window._isPWAInstalled = true;
   }
   
-  // Se l'app è in modalità PWA standalone, marchiamo subito la prontezza
   if (window._isPWAInstalled) {
     document.documentElement.classList.add('pwa-ready');
   }
@@ -53,7 +52,6 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
 .custom-scrollbar::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
 .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#475569}
 
-/* SCREENLOCK DI BLOCCO PWA OBBLIGATORIO */
 #pwa-screenlock {
   position: fixed; inset: 0; z-index: 99999;
   background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
@@ -62,7 +60,6 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
 }
 html.pwa-ready #pwa-screenlock { display: none !important; }
 
-/* ANIMAZIONI WIZARD CAROUSEL */
 .wizard-slide-enter {
   opacity: 0;
   transform: translateX(40px);
@@ -76,7 +73,7 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 </head>
 <body class="app-bg">
 
-<!-- SCREENLOCK OBBLIGATORIO INSTALLAZIONE PWA (SENZA BYPASS WEB) -->
+<!-- SCREENLOCK OBBLIGATORIO INSTALLAZIONE PWA -->
 <div id="pwa-screenlock">
   <div class="glass glass-strong max-w-lg w-full p-8 space-y-6 text-center border border-sky-500/40 shadow-2xl relative overflow-hidden">
     <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -92,8 +89,8 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
     </div>
 
     <div class="space-y-2">
-      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema e all'AI Orion Horizon, è obbligatorio installare l'applicazione PWA[cite: 5].</p>
+      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion</h1>
+      <p class="text-xs text-sky-200">Per accedere all'ecosistema e all'AI Orion Horizon, è obbligatorio installare l'App.</p>
     </div>
 
     <div id="pwa-action-container" class="space-y-4 pt-2">
@@ -110,7 +107,6 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 <div id="app" style="position:relative;z-index:1;min-height:100vh;"></div>
 
 <script type="module">
-// Registrazione PWA Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
@@ -119,8 +115,8 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// GESTIONE ISTANTANEA SCREENLOCK & CHIUSURA SCHEDA BROWSER POST INSTALLAZIONE
-window._deferredPrompt = window._deferredPrompt || null;
+// GESTIONE CORRETTA EVENTO PROMPT INSTALLAZIONE PWA
+window._deferredPrompt = null;
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -168,24 +164,15 @@ function renderScreenLockUI() {
 
   let htmlContent = "";
 
-  if (os === "Android") {
+  if (os === "Android" || os === "Windows" || os === "Linux") {
+    const osLabel = os === "Android" ? "Dispositivo Android" : `PC Desktop (${os})`;
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">Dispositivo Android Rilevato</span>
+        <span class="text-sky-300 font-bold block">${osLabel} Rilevato</span>
         <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia[cite: 5].</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
         📥 Installa subito l'App
-      </button>
-    `;
-  } else if (os === "Windows" || os === "Linux") {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">PC Desktop (${os}) Rilevato</span>
-        <p>Installa l'app al desktop per un'esperienza nativa e fluida[cite: 5].</p>
-      </div>
-      <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su ${os} 
       </button>
     `;
   } else if (os === "iOS") {
@@ -207,7 +194,7 @@ function renderScreenLockUI() {
           ${safariGuide}
         </p>
         <div class="text-[10px] text-sky-300 bg-black/40 p-2.5 rounded-xl border border-sky-500/20">
-          ⚠️ <b>Nota:</b> Apri questa pagina obbligatoriamente dal browser <b>Safari</b> (non funzionante se aperto da app terze come Instagram o WhatsApp)[cite: 5].
+          ⚠️ <b>Nota:</b> Apri questa pagina obbligatoriamente dal browser <b>Safari</b> (non funzionante se aperto da app terze come Instagram o WhatsApp).
         </div>
       </div>
       <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
@@ -219,7 +206,7 @@ function renderScreenLockUI() {
       <div class="p-4 rounded-2xl bg-blue-950/60 border border-sky-500/40 text-xs text-sky-100 space-y-3 text-left">
         <div class="font-bold text-white">Computer Apple macOS Rilevato</div>
         <p>
-          Apri il sito su browser <b>Safari</b>, vai nel menu in alto <b>File -> "Aggiungi al Dock"</b> oppure usa <b>Condivisione -> Aggiungi alla schermata Home</b>[cite: 5].
+          Apri il sito su browser <b>Safari</b>, vai nel menu in alto <b>File -> "Aggiungi al Dock"</b> oppure usa <b>Condivisione -> Aggiungi alla schermata Home</b>.
         </p>
       </div>
       <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
@@ -229,7 +216,7 @@ function renderScreenLockUI() {
   } else {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-xs text-slate-300">
-        <p>Installa la PWA dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione[cite: 5].</p>
+        <p>Installa l'app dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold">
         📥 Installa App
@@ -250,14 +237,10 @@ function renderScreenLockUI() {
           document.documentElement.classList.add('pwa-ready');
           const lockScreen = document.getElementById("pwa-screenlock");
           if(lockScreen) lockScreen.style.display = "none";
-          
-          setTimeout(() => {
-            try { window.close(); } catch(e) {}
-          }, 800);
         }
         window._deferredPrompt = null;
       } else {
-        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home')[cite: 5].");
+        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
       }
     });
   }
@@ -268,10 +251,6 @@ window.addEventListener('appinstalled', () => {
   document.documentElement.classList.add('pwa-ready');
   const lockScreen = document.getElementById("pwa-screenlock");
   if(lockScreen) lockScreen.style.display = "none";
-  
-  setTimeout(() => {
-    try { window.close(); } catch(e) {}
-  }, 1000);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
