@@ -60,6 +60,17 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
   transition: opacity 0.3s ease;
 }
 html.pwa-ready #pwa-screenlock { display: none !important; }
+
+/* ANIMAZIONI WIZARD CAROUSEL */
+.wizard-slide-enter {
+  opacity: 0;
+  transform: translateX(40px);
+}
+.wizard-slide-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
 </style>
 </head>
 <body class="app-bg">
@@ -471,9 +482,9 @@ function LockedFeatureCard({ title, module }){
 }
 
 function OrionChatModule(){
-  const { canAccess, user } = useApp();
+  const { canAccess, user, profileData } = useApp();
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "Ciao! Sono Orion, il tuo AI Concierge armocromatico. Chiedimi consigli su palette, abbinamenti e stile sartoriale." }
+    { role: "assistant", content: `Ciao! Sono Orion, il tuo AI Concierge armocromatico. Ho analizzato la tua scheda professionale: la tua stagione principale è ${profileData?.season?.toUpperCase() || 'inverno'}. Chiedimi qualsiasi consiglio su abbinamenti, outfit e palette sartoriale!` }
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -490,9 +501,10 @@ function OrionChatModule(){
     setBusy(true);
 
     try {
+      const intakeContext = JSON.stringify(profileData?.intake || {});
       const res = await groq({
         messages: [
-          { role: "system", content: "Sei Orion, l'assistente virtuale d'élite di LandraFashion specializzato in armocromia, analisi del sottotono e consigli di stile sartoriale in italiano." },
+          { role: "system", content: `Sei Orion, l'assistente virtuale d'élite di LandraFashion specializzato in armocromia avanzata, analisi del sottotono e consigli di stile sartoriale in italiano. Dati del profilo utente per la consulenza: Stagione=${profileData?.season || 'inverno'}, Genere=${profileData?.gender || 'Donna'}, Città=${profileData?.city || 'Milano'}, Dettagli Armocromatici=${intakeContext}. Mantieni un tono raffinato, esperto ed altamente personalizzato.` },
           ...newMsgs.map(m => ({ role: m.role, content: m.content }))
         ]
       });
@@ -812,14 +824,79 @@ function AuthGate({children}){
   `;
 }
 
+// FORM PROFILAZIONE ARMOCROMATICA COMPLETO A SCORRIMENTO WIZARD LATERALE
 function IntakeSurvey({onDone}){
   const {user} = useApp();
-  const [f, setF] = useState({gender:"Donna", city:"Brescia", eyes:"Marroni", hair:"Castano", metal:"Oro"});
+  const [step, setStep] = useState(1);
+  const totalSteps = 6;
+
+  const [f, setF] = useState({
+    // Step 1: Base & Localizzazione
+    gender: "Donna",
+    city: "Milano",
+    // Step 2: Incarnato & Sottotono
+    skinTone: "Chiara / Porcellana",
+    sunReaction: "Mi scotto facilmente, bronzo lento",
+    veinsColor: "Blu / VIola (Cool)",
+    redness: "Frequenti (Pelle sensibile o rosacea)",
+    // Step 3: Occhi & Iride
+    eyeColor: "Marrone Scuro / Nero",
+    eyeFlecks: "Nessuna sfumatura, iride omogenea",
+    eyeContrast: "Alto contrasto (Bianco sclera brillante)",
+    // Step 4: Capelli & Riflessi
+    hairNatural: "Castano Scuro / Bruno",
+    hairReflections: "Cenere / Freddi / Nessuno",
+    // Step 5: Contrasto & Valore Sovrano
+    overallContrast: "Alto (Contrasto forte pelle/occhi/capelli)",
+    overallValue: "Scuro / Intenso (Deep)",
+    // Step 6: Risposta ai Colori & Metalli
+    metalPreference: "Argento / Platino (Freddo)",
+    colorReaction: "Nero e colori saturi mi illuminano",
+    worstColor: "Arancio caldo e senape mi ingrigiscono"
+  });
+
   const [busy, setBusy] = useState(false);
 
-  const submit = async e => {
-    e.preventDefault(); setBusy(true);
-    const assignedSeason = f.metal === "Oro" ? "autunno" : "inverno";
+  // Calcolo scientifico preciso della stagione armocromatica in base ai dati inseriti
+  const calculateSeason = () => {
+    let warmScore = 0;
+    let coolScore = 0;
+    let deepScore = 0;
+    let lightScore = 0;
+
+    // Sottotono
+    if(f.veinsColor.includes("Verdi")) warmScore += 2;
+    if(f.veinsColor.includes("Blu")) coolScore += 2;
+    if(f.sunReaction.includes("Abbronzatura dorata")) warmScore += 1.5;
+    if(f.sunReaction.includes("scotto facilmente")) coolScore += 1.5;
+
+    // Capelli & Riflessi
+    if(f.hairReflections.includes("Dorati") || f.hairReflections.includes("Rame")) warmScore += 1.5;
+    if(f.hairReflections.includes("Cenere")) coolScore += 1.5;
+
+    // Metallo
+    if(f.metalPreference.includes("Oro")) warmScore += 2;
+    if(f.metalPreference.includes("Argento")) coolScore += 2;
+
+    // Valore / Contrasto
+    if(f.overallValue.includes("Scuro") || f.hairNatural.includes("Scuro") || f.eyeColor.includes("Scuro")) deepScore += 2;
+    if(f.overallValue.includes("Chiaro") || f.hairNatural.includes("Biondo")) lightScore += 2;
+
+    const isWarm = warmScore > coolScore;
+    const isDeep = deepScore >= lightScore;
+
+    if(isWarm) {
+      return isDeep ? "autunno" : "primavera";
+    } else {
+      return isDeep ? "inverno" : "estate";
+    }
+  };
+
+  const submit = async (e) => {
+    if (e) e.preventDefault();
+    setBusy(true);
+    const assignedSeason = calculateSeason();
+
     const payload = {
       gender: f.gender,
       city: f.city,
@@ -831,48 +908,289 @@ function IntakeSurvey({onDone}){
         season: assignedSeason,
         gender: f.gender,
         city: f.city,
-        notes: `Profilo per ${f.gender} a ${f.city} adattato alla stagione ${assignedSeason}.`
+        notes: `Diagnosi Completa: Sottotono ${assignedSeason.toUpperCase()} calcolato su parametri avanzati.`
       }
     };
+
     if(rtdb) await update(ref(rtdb, "users/"+user.uid), payload);
     setBusy(false);
     onDone();
   };
 
+  const nextStep = () => {
+    if(step < totalSteps) setStep(step + 1);
+    else submit();
+  };
+
+  const prevStep = () => {
+    if(step > 1) setStep(step - 1);
+  };
+
   return html`
-    <div class="min-h-screen flex items-center justify-center p-4">
-      <form onSubmit=${submit} class="glass glass-strong w-full max-w-lg p-8 space-y-4 border border-sky-500/30">
-        <div class="flex justify-center"><${BrandLogo}/></div>
-        <h2 class="text-2xl font-serif font-bold text-white text-center">Scheda Iniziale Sartoriale</h2>
+    <div class="min-h-screen flex items-center justify-center p-3 sm:p-6 my-auto">
+      <div class="glass glass-strong w-full max-w-xl p-6 sm:p-8 space-y-6 border border-sky-500/40 relative overflow-hidden shadow-2xl">
         
-        <div>
-          <span class="text-xs text-sky-300 font-bold block mb-1">Genere / Sesso *</span>
-          <div class="grid grid-cols-3 gap-2">
-            ${["Donna", "Uomo", "Unisex"].map(g => html`
-              <button type="button" key=${g} class="btn-ghost text-xs ${f.gender===g?'on':''}" onClick=${()=>setF({...f, gender:g})}>${g}</button>
-            `)}
+        <!-- Header Wizard -->
+        <div class="flex items-center justify-between border-b border-sky-500/20 pb-4">
+          <${BrandLogo}/>
+          <div class="text-right">
+            <span class="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-widest block">Analisi Sartoriale</span>
+            <span class="text-xs font-bold text-white font-mono">Step ${step} di ${totalSteps}</span>
           </div>
         </div>
 
-        <label class="block"><span class="text-xs text-slate-300">Città approssimativa (per meteo e stagionalità)</span>
-          <input class="field mt-1" required value=${f.city} onInput=${e=>setF({...f, city:e.target.value})}/>
-        </label>
-
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <label class="block"><span class="text-slate-300">Metallo Prezioso</span>
-            <select class="field mt-1" value=${f.metal} onChange=${e=>setF({...f, metal:e.target.value})}>
-              <option value="Oro">Oro (Warm)</option><option value="Argento">Argento (Cool)</option>
-            </select>
-          </label>
-          <label class="block"><span class="text-slate-300">Occhi</span>
-            <select class="field mt-1" value=${f.eyes} onChange=${e=>setF({...f, eyes:e.target.value})}>
-              <option value="Marroni">Marroni</option><option value="Azzurri">Azzurri</option><option value="Verdi">Verdi</option>
-            </select>
-          </label>
+        <!-- Barra Progresso -->
+        <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden border border-sky-500/20">
+          <div class="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-blue-600 transition-all duration-300" style=${{width: `${(step/totalSteps)*100}%`}}></div>
         </div>
 
-        <button type="submit" class="btn w-full mt-4" disabled=${busy}>Inizia l'Esperienza</button>
-      </form>
+        <!-- Contenitore Carousel con effetto Slider -->
+        <div class="min-h-[380px] flex flex-col justify-between">
+          
+          <!-- STEP 1: Generale & Sesso -->
+          ${step === 1 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase 1 • Informazioni di Base</span>
+                <h3 class="text-xl font-serif font-bold text-white">Profilazione & Localizzazione</h3>
+                <p class="text-xs text-slate-300">Imposta i dettagli iniziali per adattare il meteo e l'algoritmo di silhouette.</p>
+              </div>
+
+              <div class="space-y-4 pt-2">
+                <div>
+                  <span class="text-xs text-sky-300 font-bold block mb-2">Genere / Sesso *</span>
+                  <div class="grid grid-cols-3 gap-2">
+                    ${["Donna", "Uomo", "Unisex"].map(g => html`
+                      <button type="button" key=${g} class="btn-ghost text-xs py-3 ${f.gender===g?'on':''}" onClick=${()=>setF({...f, gender:g})}>
+                        ${g}
+                      </button>
+                    `)}
+                  </div>
+                </div>
+
+                <label class="block pt-2">
+                  <span class="text-xs text-slate-300 font-bold block mb-1">Città di riferimento (per Meteo & ArmoWardrobe)</span>
+                  <input class="field" required placeholder="Es. Milano, Roma, Brescia..." value=${f.city} onInput=${e=>setF({...f, city:e.target.value})}/>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- STEP 2: Incarnato & Sottotono -->
+          ${step === 2 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase 2 • Incarnato & Sottotono</span>
+                <h3 class="text-xl font-serif font-bold text-white">Pelle, Vene & Sole</h3>
+                <p class="text-xs text-slate-300">Analizziamo la reazione biologica al sole ed i pigmenti cutanei.</p>
+              </div>
+
+              <div class="space-y-3 pt-1 text-xs">
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Tonalità di Pelle (Incarnato):</span>
+                  <select class="field mt-1" value=${f.skinTone} onChange=${e=>setF({...f, skinTone:e.target.value})}>
+                    <option value="Molto Chiara / Porcellana">Molto Chiara / Porcellana</option>
+                    <option value="Chiara / Avorio">Chiara / Avorio</option>
+                    <option value="Media / Neutra">Media / Neutra</option>
+                    <option value="Dorata / Biscotto">Dorata / Biscotto</option>
+                    <option value="Olivastra / Ambrata">Olivastra / Ambrata</option>
+                    <option value="Scura / Intensa">Scura / Intensa</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Reazione all'Esposizione Solare:</span>
+                  <select class="field mt-1" value=${f.sunReaction} onChange=${e=>setF({...f, sunReaction:e.target.value})}>
+                    <option value="Mi scotto facilmente, bronzo lento">Mi scotto facilmente, mi Abbronzo con difficoltà</option>
+                    <option value="Prima arrossisco, poi diventa dorata">Arrossisco leggermente, poi diventa dorata</option>
+                    <option value="Abbronzatura dorata e rapida">Abbronzatura rapida, dorata ed intensa</option>
+                    <option value="Abbronzatura scura/scurissima senza scottature">Abbronzatura immediata senza scottature</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Colore delle Vene nell'interno del Polso:</span>
+                  <select class="field mt-1" value=${f.veinsColor} onChange=${e=>setF({...f, veinsColor:e.target.value})}>
+                    <option value="Blu / Viola (Cool)">Blu / Viola (Sottotono Freddo)</option>
+                    <option value="Verdi / Oliva (Warm)">Verdi / Oliva (Sottotono Caldo)</option>
+                    <option value="Miste Blu e Verdi (Neutral)">Miste / Non definite (Sottotono Neutro)</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Tendenza a Rossori sul Viso / Rosacea:</span>
+                  <select class="field mt-1" value=${f.redness} onChange=${e=>setF({...f, redness:e.target.value})}>
+                    <option value="Frequenti (Pelle sensibile o rosacea)">Frequenti su guance/naso (Sottotono Freddo/Rosato)</option>
+                    <option value="Rari / Assenti">Rari o assenti (Incarnato omogeneo/Giallo-Dorato)</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- STEP 3: Occhi & Iride -->
+          ${step === 3 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase 3 • Occhi & Contrasto Iride</span>
+                <h3 class="text-xl font-serif font-bold text-white">Caratteristiche dell'Occhio</h3>
+                <p class="text-xs text-slate-300">Dettagli su iride, sfumature e contrasto del bianco oculare.</p>
+              </div>
+
+              <div class="space-y-3 pt-1 text-xs">
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Colore Principale degli Occhi:</span>
+                  <select class="field mt-1" value=${f.eyeColor} onChange=${e=>setF({...f, eyeColor:e.target.value})}>
+                    <option value="Marrone Scuro / Nero">Marrone Scuro / Nero Nocciola</option>
+                    <option value="Marrone Chiaro / Miele">Marrone Chiaro / Miele / Ambra</option>
+                    <option value="Azzurro Freddo / Ghiaccio">Azzurro Freddo / Ghiaccio / Blu Ciano</option>
+                    <option value="Verde Bosco / Oliva">Verde Bosco / Oliva / Nocciola Verde</option>
+                    <option value="Grigio / Ottanio">Grigio / Verde Azzurro / Ottanio</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Sfumature o Pagliuzze nell'Iride:</span>
+                  <select class="field mt-1" value=${f.eyeFlecks} onChange=${e=>setF({...f, eyeFlecks:e.target.value})}>
+                    <option value="Nessuna sfumatura, iride omogenea">Nessuna sfumatura, iride omogenea e definita</option>
+                    <option value="Pagliuzze dorate / miele al centro">Pagliuzze o raggiera dorata / miele attorno alla pupilla</option>
+                    <option value="Sfumature grigie o bianche">Sfumature fredde grigie o contorno scuro netto</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Contraste della Sclera (Bianco dell'Occhio):</span>
+                  <select class="field mt-1" value=${f.eyeContrast} onChange=${e=>setF({...f, eyeContrast:e.target.value})}>
+                    <option value="Alto contrasto (Bianco sclera brillante)">Alto contrasto (Sclera bianco brillante e iride brillante)</option>
+                    <option value="Soft / Delicato (Bianco sclera avorio/morbido)">Soft / Delicato (Bianco morbido o iride velata)</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- STEP 4: Capelli & Riflessi -->
+          ${step === 4 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase 4 • Capelli Naturale & Riflessi</span>
+                <h3 class="text-xl font-serif font-bold text-white">Chioma & Pigmentazione</h3>
+                <p class="text-xs text-slate-300">Valuta il colore naturale alla radice e la risposta alla luce solare.</p>
+              </div>
+
+              <div class="space-y-3 pt-1 text-xs">
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Colore Naturale di Base (di Nascita/Radice):</span>
+                  <select class="field mt-1" value=${f.hairNatural} onChange=${e=>setF({...f, hairNatural:e.target.value})}>
+                    <option value="Nero Corvino / Bruno Scuro">Nero Corvino / Bruno Scuro</option>
+                    <option value="Castano Medio / Scuro">Castano Medio / Scuro</option>
+                    <option value="Castano Chiaro / Chiaro">Castano Chiaro / Biondo Scuro</option>
+                    <option value="Biondo Dorato / Miele">Biondo Dorato / Miele / Grano</option>
+                    <option value="Biondo Cenere / Platino">Biondo Cenere / Platino / Svedese</option>
+                    <option value="Rosso Naturale / Rame / Tiziano">Rosso Naturale / Rame / Tiziano</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Riflessi alla Luce del Sole:</span>
+                  <select class="field mt-1" value=${f.hairReflections} onChange=${e=>setF({...f, hairReflections:e.target.value})}>
+                    <option value="Cenere / Freddi / Nessuno">Cenere / Freddi / Nessun riflesso caldo</option>
+                    <option value="Dorati / Miele">Dorati / Miele al sole</option>
+                    <option value="Ramati / Bronzo / Rossi">Ramati / Bronzo / Rossi intensi</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- STEP 5: Contrasto & Valore Sovrano -->
+          ${step === 5 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase 5 • Valore Sovrano & Contrasto</span>
+                <h3 class="text-xl font-serif font-bold text-white">Dominante Cromatica Viso</h3>
+                <p class="text-xs text-slate-300">Analizziamo la differenza tra pelle, occhi e capelli.</p>
+              </div>
+
+              <div class="space-y-3 pt-1 text-xs">
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Livello di Contrasto Generale (Pelle vs Capelli/Occhi):</span>
+                  <select class="field mt-1" value=${f.overallContrast} onChange=${e=>setF({...f, overallContrast:e.target.value})}>
+                    <option value="Alto (Contrasto forte pelle/occhi/capelli)">Alto (Es. Pelle chiarissima e capelli/occhi scurissimi)</option>
+                    <option value="Medio (Equilibrato ed armonico)">Medio (Equilibrio armonico tra pelle ed occhi/capelli)</option>
+                    <option value="Basso (Omogeneo / Tono su tono)">Basso / Soft (Colori omogenei tono su tono)</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Valore Sovrano (Intensità/Scurità Complessiva):</span>
+                  <select class="field mt-1" value=${f.overallValue} onChange=${e=>setF({...f, overallValue:e.target.value})}>
+                    <option value="Scuro / Intenso (Deep)">Scuro / Intenso (Dominano toni profondi e saturi)</option>
+                    <option value="Chiaro / Delicato (Light)">Chiaro / Delicato (Dominano toni luminosi e chiari)</option>
+                    <option value="Brillante / Puro (Bright)">Brillante / Puro (Dominano occhi gioiello o alto contrasto)</option>
+                    <option value="Morbido / Opaco (Soft)">Morbido / Opaco (Dominano sfumature desaturate e soft)</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- STEP 6: Risposta ai Colori & Metalli -->
+          ${step === 6 && html`
+            <div class="wizard-slide-active space-y-4">
+              <div class="space-y-1">
+                <span class="text-xs uppercase font-mono font-bold text-sky-400">Fase Finale 6 • Resa Metalli & Colori</span>
+                <h3 class="text-xl font-serif font-bold text-white">Test di Risposta Cromatica</h3>
+                <p class="text-xs text-slate-300">Ultimo passaggio per calcolare la stagione ed istruire Orion AI.</p>
+              </div>
+
+              <div class="space-y-3 pt-1 text-xs">
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Metallo Prezioso che ti Valorizza di Più:</span>
+                  <select class="field mt-1" value=${f.metalPreference} onChange=${e=>setF({...f, metalPreference:e.target.value})}>
+                    <option value="Argento / Platino (Freddo)">Argento Puro / Platino / Oro Bianco (Freddo)</option>
+                    <option value="Oro Giallo / Bronzo (Caldo)">Oro Giallo / Bronzo / Oro Zecchino (Caldo)</option>
+                    <option value="Oro Rosa (Neutro/Soft)">Oro Rosa / Metalli Opachi (Neutro/Soft)</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Colore che ti Dona Maggiore Luminosità al Viso:</span>
+                  <select class="field mt-1" value=${f.colorReaction} onChange=${e=>setF({...f, colorReaction:e.target.value})}>
+                    <option value="Nero e colori saturi mi illuminano">Nero Assoluto, Blu Zaffiro o Bianco Ottico</option>
+                    <option value="Tonalità calde come Terracotta e Senape">Tonalità calde: Terracotta, Senape, Arancio e Cammello</option>
+                    <option value="Tonalità pastello e soft come Rosa Polvere">Tonalità soft/fredde: Rosa Polvere, Lilla, Blu Avio</option>
+                    <option value="Colori brillanti e caldi come Corallo">Colori brillanti e caldi: Corallo, Verde Mela, Turchese</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-slate-300 font-semibold">Colore che ti Rende Pallido/Ingrigito:</span>
+                  <select class="field mt-1" value=${f.worstColor} onChange=${e=>setF({...f, worstColor:e.target.value})}>
+                    <option value="Arancio caldo e senape mi ingrigiscono">Arancio Caldo / Senape / Beige Giallastro</option>
+                    <option value="Nero assoluto mi sbatte e invecchia">Nero Assoluto / Grigio Scuro rigido</option>
+                    <option value="Colori pastello mi spegnano completamente">Colori Pastello sbiaditi / Toni cipria</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          `}
+
+          <!-- Navigazione Pulsanti Avanti / Indietro -->
+          <div class="flex gap-3 pt-6 border-t border-sky-500/20 mt-auto">
+            ${step > 1 && html`
+              <button type="button" class="btn-ghost flex-1 py-3 text-xs" onClick=${prevStep}>
+                ← Indietro
+              </button>
+            `}
+            <button type="button" class="btn flex-1 py-3 text-xs font-bold shadow-lg shadow-sky-950/50" disabled=${busy} onClick=${nextStep}>
+              ${busy ? "Elaborazione Diagnosi AI..." : (step === totalSteps ? "✨ Concludi & Calcola Armocromia" : "Avanti →")}
+            </button>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   `;
 }
