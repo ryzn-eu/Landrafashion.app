@@ -174,7 +174,7 @@ function renderScreenLockUI() {
         <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia a schermo intero.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa PWA Subito
+        📥 Installa L'App (.APK)
       </button>
     `;
   } else if (os === "Windows" || os === "Linux") {
@@ -184,7 +184,7 @@ function renderScreenLockUI() {
         <p>Aggiungi l'app al desktop per un'esperienza nativa e fluida.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su ${os}
+        📥 Installa su ${os} (.flatpak)
       </button>
     `;
   } else if (os === "iOS") {
@@ -210,7 +210,7 @@ function renderScreenLockUI() {
         </div>
       </div>
       <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
-        🔄 Ho installato l'App, aggiorna interfaccia
+        🔄 Ho installato l'App(.php), aggiorna interfaccia
       </button>
     `;
   } else if (os === "macOS") {
