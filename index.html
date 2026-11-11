@@ -129,7 +129,7 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 // Registrazione PWA Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
       .then(reg => console.log('PWA ServiceWorker registrato con successo:', reg.scope))
       .catch(err => console.warn('Registrazione PWA fallita:', err));
   });
@@ -284,10 +284,77 @@ function renderScreenLockUI() {
           hint.className = "p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs text-amber-100 text-left leading-relaxed";
           installBtn.insertAdjacentElement("afterend", hint);
         }
-        hint.innerHTML = "Il browser non ha ancora reso disponibile l'installazione diretta. Aprila dal menu del browser: <b>⋮ → \"Installa app\"</b> (Chrome/Edge) oppure <b>\"Aggiungi a schermata Home\"</b>. Se hai appena aperto la pagina, attendi qualche secondo e riprova il pulsante.";
+        hint.innerHTML = "Il browser non ha reso disponibile l'installazione diretta. Controllo il motivo...";
+        runPWADiagnostics().then(r => { hint.innerHTML = r; });
       }
     });
   }
+}
+
+
+async function runPWADiagnostics() {
+  const ok = t => `<div>✅ ${t}</div>`, ko = t => `<div>❌ ${t}</div>`, wn = t => `<div>⚠️ ${t}</div>`;
+  let out = [];
+  try {
+    const secure = window.isSecureContext;
+    out.push(secure ? ok("Connessione sicura (HTTPS)") : ko("Pagina NON in HTTPS: Chrome non permette l'installazione"));
+
+    if (window.matchMedia('(display-mode: standalone)').matches) out.push(wn("Sei già dentro l'app installata"));
+
+    try {
+      if (navigator.getInstalledRelatedApps) {
+        const rel = await navigator.getInstalledRelatedApps();
+        if (rel && rel.length) out.push(wn("App già installata su questo dispositivo: aprila dall'icona sul desktop/menu Start (Chrome non offre di nuovo l'installazione)"));
+      }
+    } catch (e) {}
+
+    const link = document.querySelector('link[rel="manifest"]');
+    if (!link) {
+      out.push(ko("Tag &lt;link rel=manifest&gt; mancante"));
+    } else {
+      try {
+        const r = await fetch(link.href, { cache: 'no-store' });
+        if (!r.ok) {
+          out.push(ko("manifest.json non raggiungibile (errore " + r.status + ") → controlla che sia caricato accanto a index.html"));
+        } else {
+          let m = null;
+          try { m = await r.json(); } catch (e) { out.push(ko("manifest.json non è un JSON valido")); }
+          if (m) {
+            out.push(ok("manifest.json letto correttamente"));
+            if (!m.name && !m.short_name) out.push(ko("Manifest senza name"));
+            if (m.display !== 'standalone' && m.display !== 'fullscreen' && m.display !== 'minimal-ui') out.push(ko("display non valido"));
+            const icons = m.icons || [];
+            for (const ic of icons) {
+              try {
+                const u = new URL(ic.src, link.href).href;
+                const ir = await fetch(u, { cache: 'no-store' });
+                const ct = ir.headers.get('content-type') || '';
+                if (ir.ok && ct.indexOf('image') === 0) out.push(ok("Icona " + ic.sizes + " trovata"));
+                else out.push(ko("Icona " + ic.sizes + " NON trovata (" + ir.status + ") → carica la cartella <b>icone</b> con " + ic.src.replace('./','')));
+              } catch (e) { out.push(ko("Icona " + ic.sizes + " non raggiungibile")); }
+            }
+          }
+        }
+      } catch (e) { out.push(ko("Impossibile leggere manifest.json")); }
+    }
+
+    if (!('serviceWorker' in navigator)) {
+      out.push(ko("Service worker non supportato in questo browser"));
+    } else {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) out.push(ko("Service worker NON registrato → controlla che sw.js sia caricato accanto a index.html"));
+      else if (reg.active) out.push(ok("Service worker attivo"));
+      else out.push(wn("Service worker in attivazione: ricarica la pagina tra qualche secondo"));
+    }
+
+    const ua = navigator.userAgent;
+    if (/Firefox\//.test(ua) && !/Android/.test(ua)) out.push(ko("Firefox desktop non supporta l'installazione diretta: usa Chrome o Edge"));
+    if (/Safari\//.test(ua) && !/Chrome|Chromium|Edg|CriOS|Android/.test(ua)) out.push(wn("Safari: usa Condivisione → Aggiungi alla schermata Home"));
+  } catch (e) {
+    out.push(ko("Diagnostica fallita: " + e.message));
+  }
+  out.push('<div class="pt-2 opacity-80">Se tutto è ✅ ma il bottone non parte: ricarica con Ctrl+Shift+R, oppure menu ⋮ → <b>Installa LandraFashion</b>.</div>');
+  return '<div class="space-y-1">' + out.join('') + '</div>';
 }
 
 // Esecuzione immediata all'avvio
