@@ -164,12 +164,12 @@ function renderScreenLockUI() {
 
   let htmlContent = "";
 
-  if (os === "Android" || os === "Windows" || os === "Linux") {
-    const osLabel = os === "Android" ? "Dispositivo Android" : `PC Desktop (${os})`;
+  if (os === "Android" || os === "Windows" || os === "Linux" || os === "Desktop") {
+    const osLabel = os === "Android" ? "Dispositivo Android" : `Dispositivo Abilitato (${os})`;
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">${osLabel} Rilevato</span>
-        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia.</p>
+        <p>Installa l'applicazione direttamente con un solo click.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
         📥 Installa subito l'App
@@ -216,7 +216,7 @@ function renderScreenLockUI() {
   } else {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-xs text-slate-300">
-        <p>Installa l'app dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
+        <p>Installa l'app dal menu del tuo browser o direttamente tramite il pulsante sottostante.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold">
         📥 Installa App
@@ -240,7 +240,11 @@ function renderScreenLockUI() {
         }
         window._deferredPrompt = null;
       } else {
-        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
+        if (navigator.serviceWorker && window.BeforeInstallPromptEvent === undefined) {
+          alert("L'installazione automatica è già disponibile nel menu del browser (es. icona 'Installa app' o 'Aggiungi a schermata Home' nella barra degli indirizzi).");
+        } else {
+          alert("Il prompt di installazione non è ancora pronto o l'app è già installata. Verifica che il file manifest.json e il Service Worker siano attivi in HTTPS.");
+        }
       }
     });
   }
