@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="LandraFashion">
 <link rel="apple-touch-icon" href="./icone/icon-192.png">
 
-<!-- SCRIPT DI RILEVAMENTO PWA ISTANTANEO E BYPASS WEB -->
+<!-- SCRIPT DI RILEVAMENTO PWA ISTANTANEO E CHIUSURA SCHEDA BROWSER -->
 <script>
 (function() {
   window._isPWAInstalled = false;
@@ -21,7 +21,8 @@
     window._isPWAInstalled = true;
   }
   
-  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
+  // Se l'app è in modalità PWA standalone, marchiamo subito la prontezza
+  if (window._isPWAInstalled) {
     document.documentElement.classList.add('pwa-ready');
   }
 })();
@@ -52,7 +53,7 @@ body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Displ
 .custom-scrollbar::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
 .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#475569}
 
-/* SCREENLOCK DI BLOCCO PWA */
+/* SCREENLOCK DI BLOCCO PWA OBBLIGATORIO */
 #pwa-screenlock {
   position: fixed; inset: 0; z-index: 99999;
   background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
@@ -75,7 +76,7 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 </head>
 <body class="app-bg">
 
-<!-- SCREENLOCK OBBLIGATORIO INSTALLAZIONE PWA -->
+<!-- SCREENLOCK OBBLIGATORIO INSTALLAZIONE PWA (SENZA BYPASS WEB) -->
 <div id="pwa-screenlock">
   <div class="glass glass-strong max-w-lg w-full p-8 space-y-6 text-center border border-sky-500/40 shadow-2xl relative overflow-hidden">
     <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -92,17 +93,11 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 
     <div class="space-y-2">
       <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema sartoriale e all'Aiartificiale Orion, installa l'applicazione dedicata.</p>
+      <p class="text-xs text-sky-200">Per accedere all'ecosistema e all'AI Orion Horizon, è obbligatorio installare l'applicazione PWA[cite: 5].</p>
     </div>
 
     <div id="pwa-action-container" class="space-y-4 pt-2">
       <!-- Dinamico inserito via JS in base a OS e versione -->
-    </div>
-
-    <div class="pt-2">
-      <button type="button" id="pwa-bypass-btn" class="text-xs text-sky-400 hover:text-sky-300 underline bg-transparent border-0 cursor-pointer font-medium">
-        Continua sul browser web standard →
-      </button>
     </div>
 
     <div class="text-[10px] text-slate-400 font-mono pt-2 border-t border-sky-500/20 flex items-center justify-center gap-2">
@@ -124,17 +119,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// GESTIONE BYPASS E SCREENLOCK
-document.addEventListener("DOMContentLoaded", () => {
-  const bypassBtn = document.getElementById("pwa-bypass-btn");
-  if(bypassBtn) {
-    bypassBtn.addEventListener("click", () => {
-      localStorage.setItem('hrz_pwa_bypassed', 'true');
-      document.documentElement.classList.add('pwa-ready');
-    });
-  }
-});
-
+// GESTIONE ISTANTANEA SCREENLOCK & CHIUSURA SCHEDA BROWSER POST INSTALLAZIONE
 window._deferredPrompt = window._deferredPrompt || null;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -175,8 +160,9 @@ function renderScreenLockUI() {
   const { os, version } = detectOSAndVersion();
   let majorVer = parseInt(version, 10) || 0;
 
-  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
-    document.documentElement.classList.add('pwa-ready');
+  if (window._isPWAInstalled) {
+    const lockScreen = document.getElementById("pwa-screenlock");
+    if(lockScreen) lockScreen.style.display = "none";
     return;
   }
 
@@ -186,30 +172,30 @@ function renderScreenLockUI() {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">Dispositivo Android Rilevato</span>
-        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia a schermo intero.</p>
+        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia[cite: 5].</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa App Subito
+        📥 Installa subito l'App
       </button>
     `;
   } else if (os === "Windows" || os === "Linux") {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">PC Desktop (${os}) Rilevato</span>
-        <p>Aggiungi l'app al desktop per un'esperienza nativa e fluida.</p>
+        <p>Installa l'app al desktop per un'esperienza nativa e fluida[cite: 5].</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su ${os}
+        📥 Installa su ${os} 
       </button>
     `;
   } else if (os === "iOS") {
     let safariGuide = "";
     if (majorVer >= 17) {
-      safariGuide = `Tocca l'icona di <b>Condivisione (quadradino con freccia in sù ⎋)</b> nella barra in basso di Safari, quindi scorri e seleziona <b>"Aggiungi alla schermata Home" (+)</b>.`;
+      safariGuide = `Tocca l'icona di <b>Condivisione (quadradino con freccia in sù ⎋)</b> nella barra in basso di Safari, quindi scorri e seleziona <b>"Aggiungi alla schermata Home" (+)</b>[cite: 5].`;
     } else if (majorVer >= 15 && majorVer < 17) {
-      safariGuide = `Tocca il tasto <b>Condivisione ⎋</b> in basso al centro su Safari, poi scorri l'elenco e tocca <b>"Aggiungi alla schermata Home"</b>.`;
+      safariGuide = `Tocca il tasto <b>Condivisione ⎋</b> in basso al centro su Safari, poi scorri l'elenco e tocca <b>"Aggiungi alla schermata Home"</b>[cite: 5].`;
     } else {
-      safariGuide = `Tocca il tasto centrale <b>Condivisione ⎋</b> nel browser Safari e seleziona l'icona <b>"+" Aggiungi a Home</b>.`;
+      safariGuide = `Tocca il tasto centrale <b>Condivisione ⎋</b> nel browser Safari e seleziona l'icona <b>"+" Aggiungi a Home</b>[cite: 5].`;
     }
 
     htmlContent = `
@@ -221,7 +207,7 @@ function renderScreenLockUI() {
           ${safariGuide}
         </p>
         <div class="text-[10px] text-sky-300 bg-black/40 p-2.5 rounded-xl border border-sky-500/20">
-          ⚠️ <b>Nota:</b> Apri questa pagina obbligatoriamente dal browser <b>Safari</b> (non funzionante se aperto da app terze come Instagram o WhatsApp).
+          ⚠️ <b>Nota:</b> Apri questa pagina obbligatoriamente dal browser <b>Safari</b> (non funzionante se aperto da app terze come Instagram o WhatsApp)[cite: 5].
         </div>
       </div>
       <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
@@ -233,7 +219,7 @@ function renderScreenLockUI() {
       <div class="p-4 rounded-2xl bg-blue-950/60 border border-sky-500/40 text-xs text-sky-100 space-y-3 text-left">
         <div class="font-bold text-white">Computer Apple macOS Rilevato</div>
         <p>
-          Apri il sito su browser <b>Safari</b>, vai nel menu in alto <b>File -> "Aggiungi al Dock"</b> oppure usa <b>Condivisione -> Aggiungi alla schermata Home</b>.
+          Apri il sito su browser <b>Safari</b>, vai nel menu in alto <b>File -> "Aggiungi al Dock"</b> oppure usa <b>Condivisione -> Aggiungi alla schermata Home</b>[cite: 5].
         </p>
       </div>
       <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
@@ -243,7 +229,7 @@ function renderScreenLockUI() {
   } else {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-xs text-slate-300">
-        <p>Installa l'app dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
+        <p>Installa la PWA dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione[cite: 5].</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold">
         📥 Installa App
@@ -262,13 +248,16 @@ function renderScreenLockUI() {
         if (outcome === 'accepted') {
           window._isPWAInstalled = true;
           document.documentElement.classList.add('pwa-ready');
+          const lockScreen = document.getElementById("pwa-screenlock");
+          if(lockScreen) lockScreen.style.display = "none";
+          
           setTimeout(() => {
             try { window.close(); } catch(e) {}
           }, 800);
         }
         window._deferredPrompt = null;
       } else {
-        alert("Per installare l'app, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home').");
+        alert("Per installare la PWA, utilizza il menu delle impostazioni del browser (es. icona 'Installa app' sulla barra degli indirizzi o 'Aggiungi a schermata Home')[cite: 5].");
       }
     });
   }
@@ -277,14 +266,18 @@ function renderScreenLockUI() {
 window.addEventListener('appinstalled', () => {
   window._isPWAInstalled = true;
   document.documentElement.classList.add('pwa-ready');
+  const lockScreen = document.getElementById("pwa-screenlock");
+  if(lockScreen) lockScreen.style.display = "none";
+  
   setTimeout(() => {
     try { window.close(); } catch(e) {}
   }, 1000);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (window._isPWAInstalled || localStorage.getItem('hrz_pwa_bypassed') === 'true') {
-    document.documentElement.classList.add('pwa-ready');
+  if (window._isPWAInstalled) {
+    const lockScreen = document.getElementById("pwa-screenlock");
+    if(lockScreen) lockScreen.style.display = "none";
   } else {
     renderScreenLockUI();
   }
