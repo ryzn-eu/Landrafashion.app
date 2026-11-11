@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LandraFashion – Master Armocromia & AI Platform</title>
+<meta name="description" content="Ecosistema sartoriale avanzato di armocromia, intelligenza artificiale Orion e gestione professionale CMS.">
+<meta name="theme-color" content="#0a0503">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.0/purify.min.js"></script>
+<style type="text/tailwindcss">
+:root{--ink:#fbf7f4;--muted:#c5a896}
+html,body{height:100%;margin:0;padding:0;overflow-x:hidden}
+body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#0a0503,#140b08,#1e120e);background-attachment:fixed;-webkit-tap-highlight-color:transparent}
+body::before,body::after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(140px);opacity:.35}
+body::before{width:65vmax;height:65vmax;left:-15vmax;top:-15vmax;background:#991b1b}
+body::after{width:60vmax;height:60vmax;right:-15vmax;bottom:-15vmax;background:#b45309}
+
+@layer components{
+.glass{background:rgba(26, 15, 11, 0.88);backdrop-filter:blur(32px) saturate(220%);-webkit-backdrop-filter:blur(32px) saturate(220%);border:1px solid rgba(197,168,150,.22);box-shadow:0 24px 60px rgba(10,5,3,.5);@apply rounded-3xl}
+.glass-strong{background:rgba(18, 10, 7, 0.96);@apply glass}
+.btn{@apply rounded-2xl bg-gradient-to-r from-red-800 to-amber-700 px-5 py-3 text-sm font-semibold text-white shadow-xl transition active:scale-95 disabled:opacity-50 inline-flex items-center justify-center gap-2}
+.btn-ghost{@apply rounded-2xl border border-amber-600/30 bg-amber-600/10 px-4 py-2 text-sm font-semibold text-amber-200 transition active:scale-95 inline-flex items-center justify-center gap-2}
+.field{@apply w-full rounded-2xl border border-amber-600/30 bg-stone-950/80 px-4 py-3 text-sm text-white outline-none focus:ring-2 focus:ring-amber-500/50}
+}
+.on{background:linear-gradient(to right, #991b1b, #b45309)!important;color:#fff!important;border-color:#ef4444!important}
+@keyframes spin-slow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.animate-spin-slow{animation:spin-slow 16s linear infinite}
+.safe-bottom{padding-bottom:env(safe-area-inset-bottom,1rem)}
+</style>
+</head>
+<body data-s="inverno">
+<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:0"></canvas>
+<div id="app" style="position:relative;z-index:1;min-height:100vh;"></div>
+
+<script type="module">
+const CFG = {
+  firebase: {
+    apiKey: "AIzaSyBjQC2dOKySeHPEJCVjjEEHyHEUy19DRPY",
+    authDomain: "auramusic-hrz.firebaseapp.com",
+    databaseURL: "https://auramusic-hrz-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "auramusic-hrz",
+    storageBucket: "auramusic-hrz.firebasestorage.app",
+    messagingSenderId: "185420108806",
+    appId: "1:185420108806:web:a23111fb8972763e661f87"
+  },
+  TEXT: "openai/gpt-oss-120b",
+  GROQ_KEY: "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",
+  CLOUD_NAME: "dxblnwvuq",
+  CLOUD_PRESET: "ml_default",
+  STAFF_EMAIL: "landra@infohorizon.it"
+};
+
+import {h, render, createContext} from 'https://esm.sh/preact@10.24.3';
+import {useState, useEffect, useRef, useMemo, useContext} from 'https://esm.sh/preact@10.24.3/hooks';
+import htm from 'https://esm.sh/htm@3.1.1';
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import {getDatabase, ref, set, get, update, remove, push, onValue, serverTimestamp} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
+
+const html = htm.bind(h);
+let fb = null, auth = null, rtdb = null;
+try {
+  fb = initializeApp(CFG.firebase);
+  auth = getAuth(fb);
+  rtdb = getDatabase(fb);
+} catch(e) { console.error("Firebase Init Error:", e); }
+
+const SEASONS = ["primavera", "estate", "autunno", "inverno"];
+const CATEGORIES = ["Palette Base", "Make-up & Colori", "Abbigliamento", "Accessori & Gioielli"];
+const TARGET_GENDERS = ["Donna", "Uomo", "Unisex"];
+
+const SYSTEM_MODULES = [
+  { id: "feed", name: "Home Editorial", desc: "Articoli e consigli cromatici", free: true },
+  { id: "social", name: "Social Page & Storie", desc: "Lookbook e post delle sfilate", free: true },
+  { id: "mannequin", name: "Manichino 3D / Vettoriale", desc: "Prova colore su silhouette Donna/Uomo", free: true },
+  { id: "orion", name: "Orion AI Concierge", desc: "Assistente virtuale armocromatico", free: false },
+  { id: "wardrobe", name: "ArmoWardrobe 3D", desc: "Guardaroba digitale con abbinamenti IA", free: false },
+  { id: "video", name: "Masterclass Video 4K", desc: "Video tutorial ed eventi esclusivi", free: false },
+  { id: "profile", name: "Profilo & Abbonamenti", desc: "Gestione piano e upgrade PayPal", free: true }
+];
+
+const DEFAULT_FEATURE_PERMISSIONS = {
+  free: ["feed", "social", "mannequin", "profile"],
+  pro: ["feed", "social", "mannequin", "orion", "wardrobe", "video", "profile"],
+  plus: ["feed", "social", "mannequin", "orion", "wardrobe", "video", "profile"]
+};
+
+// Canvas Particelle Neve Festiva
+(() => {
+  const c = document.getElementById("fx");
+  if(!c) return;
+  const x = c.getContext("2d");
+  let W, H;
+  const rs = () => { W = c.width = innerWidth; H = c.height = innerHeight; };
+  rs();
+  addEventListener("resize", rs);
+  const P = Array.from({length: 45}, () => ({x: Math.random()*2400, y: Math.random()*1400, r: Math.random()*1.8+0.8, s: Math.random()*0.5+0.1, t: Math.random()*6}));
+  (function f(){
+    x.clearRect(0,0,W,H);
+    for(const p of P){
+      p.y += p.s; p.t += 0.01; p.x += Math.sin(p.t)*0.2;
+      if(p.y > H+5){ p.y = -5; p.x = Math.random()*W; }
+      x.globalAlpha = 0.4; x.fillStyle = "#fef3c7";
+      x.beginPath(); x.arc(p.x%W, p.y, p.r, 0, 7); x.fill();
+    }
+    requestAnimationFrame(f);
+  })();
+})();
+
+const SvgIcon = ({ name, className = "w-5 h-5" }) => {
+  const icons = {
+    orion: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l2.4 5.4L20 9.8l-4.2 4.1 1 5.9L12 17l-4.8 2.8 1-5.9-4.2-4.1 5.6-2.4L12 2z" /><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>`,
+    home: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>`,
+    social: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`,
+    mannequin: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`,
+    profile: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+    video: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>`,
+    wardrobe: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>`,
+    grid: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>`,
+    lock: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>`,
+    check: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`,
+    trash: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`,
+    shopping: html`<svg class=${className} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>`
+  };
+  return icons[name] || icons.orion;
+};
+
+const pj = s => {
+  try {
+    return JSON.parse(s.replace(/```json/g, "").replace(/```/g, "").trim());
+  } catch {
+    const m = s.match(/\{[\s\S]*\}/);
+    if(!m) throw Error("JSON non valido dall'AI");
+    return JSON.parse(m[0]);
+  }
+};
+
+async function groq({messages, json, maxTokens=3000, temperature=.6}){
+  const body = {model: CFG.TEXT, messages, temperature, max_tokens: maxTokens};
+  if(json) body.response_format = {type: "json_object"};
+  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {"Authorization": "Bearer "+CFG.GROQ_KEY, "Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  });
+  if(!r.ok) throw Error("Errore chiamata Groq AI");
+  const j = await r.json();
+  return (j.choices[0].message.content||"").trim();
+}
+
+async function uploadToCloudinary(file) {
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("upload_preset", CFG.CLOUD_PRESET);
+    const r = await fetch(`https://api.cloudinary.com/v1_1/${CFG.CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
+    if(r.ok) {
+      const data = await r.json();
+      return data.secure_url;
+    }
+  } catch(e) { console.warn("Cloudinary upload fallback:", e); }
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+const BrandLogo = () => html`
+  <div class="flex items-center gap-3 cursor-pointer" onClick=${()=>window.location.hash="#"}>
+    <div class="relative w-10 h-10 flex items-center justify-center">
+      <div class="absolute inset-0 rounded-full bg-amber-500/20 blur-md animate-pulse"></div>
+      <${SvgIcon} name="orion" className="w-8 h-8 text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]" />
+    </div>
+    <div class="flex flex-col">
+      <span class="font-extrabold tracking-wider text-base text-white leading-none font-serif">LANDRAFASHION</span>
+      <span class="text-[9px] uppercase tracking-widest text-amber-400 font-semibold leading-tight mt-0.5">Master Armocromia Studio</span>
+    </div>
+  </div>
+`;
+
+const AppState = createContext();
+const useApp = () => useContext(AppState);
+
+function Providers({children}){
+  const [authReady, setAuthReady] = useState(false);
+  const [user, setUser] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [socialPosts, setSocialPosts] = useState([]);
+  const [stories, setStories] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [pricing, setPricing] = useState({ proPrice: "9.99", plusPrice: "24.99" });
+  const [permissions, setPermissions] = useState(DEFAULT_FEATURE_PERMISSIONS);
+  const [wardrobeItems, setWardrobeItems] = useState([]);
+  const [checkoutTier, setCheckoutTier] = useState(null);
+
+  useEffect(() => {
+    if(!auth) { setAuthReady(true); return; }
+    const unsub = onAuthStateChanged(auth, u => {
+      setUser(u);
+      if(u && rtdb) {
+        onValue(ref(rtdb, "users/"+u.uid), snap => {
+          const val = snap.val();
+          if(val) setProfileData(val);
+        });
+        onValue(ref(rtdb, "wardrobe/"+u.uid), snap => {
+          const v = snap.val();
+          setWardrobeItems(v ? Object.keys(v).map(id=>({id, ...v[id]})) : []);
+        });
+      }
+      setAuthReady(true);
+    });
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    if(!rtdb) return;
+    onValue(ref(rtdb, "articles"), snap => {
+      const v = snap.val();
+      if(v) setArticles(Object.keys(v).map(id => ({id, ...v[id]})));
+      else {
+        // Placeholder iniziale automatico se vuoto
+        setArticles([
+          {id:"art1", category:"Palette Base", season:"inverno", targetGender:"Donna", title:{it:"Guida Suprema ai Contrasti Invernali"}, excerpt:{it:"Come valorizzare il proprio sottotono con velluti e tonalità fredde."}, body:{it:"Contenuto editoriale di approfondimento armocromatico."}, imageUrl:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800"}
+        ]);
+      }
+    });
+
+    onValue(ref(rtdb, "products"), snap => {
+      const v = snap.val();
+      if(v) setProducts(Object.keys(v).map(id => ({id, ...v[id]})));
+      else {
+        setProducts([
+          {id:"prod1", name:"Blazer Velluto Cremisi", price:189, season:"inverno", targetGender:"Donna", imageUrl:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800", link:"#"}
+        ]);
+      }
+    });
+
+    onValue(ref(rtdb, "socialPosts"), snap => {
+      const v = snap.val();
+      if(v) setSocialPosts(Object.keys(v).map(id => ({id, ...v[id]})));
+      else {
+        setSocialPosts([
+          {id:"sp1", author:"LandraFashion Studio", caption:"🎄 Anteprima sfilata invernale con abbinamenti oro e velluto.", mediaUrl:"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800", likes:{}}
+        ]);
+      }
+    });
+
+    onValue(ref(rtdb, "stories"), snap => {
+      const v = snap.val();
+      if(v) setStories(Object.keys(v).map(id => ({id, ...v[id]})));
+      else {
+        setStories([
+          {id:"st1", title:"Capsule Capodanno", imageUrl:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400"},
+          {id:"st2", title:"Make-up Freddo", imageUrl:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400"},
+          {id:"st3", title:"Gioielli in Argento", imageUrl:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400"},
+          {id:"st4", title:"Tessuti Sartoriali", imageUrl:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400"},
+          {id:"st5", title:"Sfilata Milano", imageUrl:"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400"},
+          {id:"st6", title:"Palette Inverno", imageUrl:"https://images.unsplash.com/photo-1516762689617-e16efcef4556?w=400"}
+        ]);
+      }
+    });
+
+    onValue(ref(rtdb, "videos"), snap => {
+      const v = snap.val();
+      if(v) setVideos(Object.keys(v).map(id => ({id, ...v[id]})));
+      else {
+        setVideos([
+          {id:"vid1", title:"Masterclass Armocromia Avanzata", url:"https://www.youtube.com/embed/dQw4w9WgXcQ"}
+        ]);
+      }
+    });
+
+    onValue(ref(rtdb, "pricing"), snap => { if(snap.val()) setPricing(snap.val()); });
+    onValue(ref(rtdb, "permissions"), snap => { if(snap.val()) setPermissions(snap.val()); });
+  }, []);
+
+  const isStaff = user?.email?.toLowerCase() === CFG.STAFF_EMAIL.toLowerCase();
+  const userTier = profileData?.tier || "free";
+  const userGender = profileData?.gender || "Donna";
+
+  const canAccess = (moduleId) => {
+    if(isStaff) return true;
+    const allowed = permissions[userTier] || DEFAULT_FEATURE_PERMISSIONS[userTier] || [];
+    return allowed.includes(moduleId);
+  };
+
+  return html`
+    <${AppState.Provider} value=${{
+      user, isStaff, authReady, profileData, articles, products, socialPosts, stories, videos,
+      pricing, permissions, wardrobeItems, userTier, userGender, canAccess, checkoutTier, setCheckoutTier
+    }}>
+      ${children}
+    <//>
+  `;
+}
+
+function AuthGate({children}){
+  const {user, authReady} = useApp();
+  const [isReg, setIsReg] = useState(false);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [acceptGdpr, setAcceptGdpr] = useState(false);
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  if(!authReady) return html`<div class="grid min-h-screen place-items-center text-amber-200">Caricamento piattaforma...</div>`;
+  if(user) return children;
+
+  const submit = async e => {
+    e.preventDefault();
+    if(isReg && !acceptGdpr) { setErr("È necessario accettare le condizioni GDPR."); return; }
+    setErr(""); setBusy(true);
+    try {
+      if(isReg) {
+        const c = await createUserWithEmailAndPassword(auth, email, pass);
+        if(rtdb) await set(ref(rtdb, "users/"+c.user.uid), {email, acceptGdpr, tier: "free", onboarded: false, createdAt: serverTimestamp()});
+      } else {
+        await signInWithEmailAndPassword(auth, email, pass);
+      }
+    } catch(x) { setErr(x.message.replace("Firebase: ", "")); }
+    finally { setBusy(false); }
+  };
+
+  return html`
+    <div class="grid min-h-screen place-items-center p-4">
+      <form onSubmit=${submit} class="glass glass-strong w-full max-w-md space-y-4 p-8 border border-amber-600/30">
+        <div class="flex items-center justify-center mb-2"><${BrandLogo}/></div>
+        <h1 class="text-xl font-serif font-bold text-white text-center">Accedi a LandraFashion</h1>
+        <p class="text-xs text-stone-300 text-center">Armocromia & Intelligenza Artificiale Orion</p>
+        
+        <input class="field" type="email" required placeholder="Email" value=${email} onInput=${e=>setEmail(e.target.value)}/>
+        <input class="field" type="password" required minlength="6" placeholder="Password" value=${pass} onInput=${e=>setPass(e.target.value)}/>
+        
+        ${isReg && html`
+          <label class="flex items-start gap-2 cursor-pointer text-xs text-stone-300 pt-2 border-t border-amber-600/20">
+            <input type="checkbox" required checked=${acceptGdpr} onChange=${e=>setAcceptGdpr(e.target.checked)} class="mt-0.5 accent-red-600"/>
+            <span>Accetto il trattamento dati GDPR Horizon (server Alfianello BS / San Gervasio BS).</span>
+          </label>
+        `}
+
+        ${err && html`<p class="text-xs text-red-400 text-center">${err}</p>`}
+        <button class="btn w-full" disabled=${busy}>${isReg?"Registrati":"Accedi"}</button>
+        <button type="button" class="w-full text-xs text-amber-400 bg-transparent border-0 cursor-pointer text-center" onClick=${()=>setIsReg(!isReg)}>
+          ${isReg?"Hai già un account? Accedi":"Non hai un account? Registrati"}
+        </button>
+      </form>
+    </div>
+  `;
+}
+
+function IntakeSurvey({onDone}){
+  const {user} = useApp();
+  const [f, setF] = useState({gender:"Donna", city:"Brescia", eyes:"Marroni", hair:"Castano", metal:"Oro"});
+  const [busy, setBusy] = useState(false);
+
+  const submit = async e => {
+    e.preventDefault(); setBusy(true);
+    const assignedSeason = f.metal === "Oro" ? "autunno" : "inverno";
+    const payload = {
+      gender: f.gender,
+      city: f.city,
+      intake: f,
+      season: assignedSeason,
+      tier: "free",
+      onboarded: true,
+      profile: {
+        season: assignedSeason,
+        gender: f.gender,
+        city: f.city,
+        notes: `Profilo per ${f.gender} a ${f.city} adattato alla stagione ${assignedSeason}.`
+      }
+    };
+    if(rtdb) await update(ref(rtdb, "users/"+user.uid), payload);
+    setBusy(false);
+    onDone();
+  };
+
+  return html`
+    <div class="min-h-screen flex items-center justify-center p-4">
+      <form onSubmit=${submit} class="glass glass-strong w-full max-w-lg p-8 space-y-4 border border-amber-600/30">
+        <div class="flex justify-center"><${BrandLogo}/></div>
+        <h2 class="text-2xl font-serif font-bold text-white text-center">Scheda Iniziale Sartoriale</h2>
+        
+        <div>
+          <span class="text-xs text-amber-300 font-bold block mb-1">Genere / Sesso *</span>
+          <div class="grid grid-cols-3 gap-2">
+            ${["Donna", "Uomo", "Unisex"].map(g => html`
+              <button type="button" class="btn-ghost text-xs ${f.gender===g?'on':''}" onClick=${()=>setF({...f, gender:g})}>${g}</button>
+            `)}
+          </div>
+        </div>
+
+        <label class="block"><span class="text-xs text-stone-300">Città approssimativa (per meteo e stagionalità)</span>
+          <input class="field mt-1" required value=${f.city} onInput=${e=>setF({...f, city:e.target.value})}/>
+        </label>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <label class="block"><span class="text-stone-300">Metallo Prezioso</span>
+            <select class="field mt-1" value=${f.metal} onChange=${e=>setF({...f, metal:e.target.value})}>
+              <option value="Oro">Oro (Warm)</option><option value="Argento">Argento (Cool)</option>
+            </select>
+          </label>
+          <label class="block"><span class="text-stone-300">Occhi</span>
+            <select class="field mt-1" value=${f.eyes} onChange=${e=>setF({...f, eyes:e.target.value})}>
+              <option value="Marroni">Marroni</option><option value="Azzurri">Azzurri</option><option value="Verdi">Verdi</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="btn w-full mt-4" disabled=${busy}>Inizia l'Esperienza</button>
+      </form>
+    </div>
+  `;
+}
+
+function FeedModule(){
+  const {articles, products, profileData, userGender} = useApp();
+  const userSeason = profileData?.season || "inverno";
+  const userCity = profileData?.city || "Milano";
+  const [selectedArt, setSelectedArt] = useState(null);
+
+  const filteredArticles = useMemo(() => articles.filter(a => (!a.season || a.season === userSeason) && (!a.targetGender || a.targetGender === "Unisex" || a.targetGender === userGender)), [articles, userSeason, userGender]);
+  const filteredProducts = useMemo(() => products.filter(p => (!p.season || p.season === userSeason) && (!p.targetGender || p.targetGender === "Unisex" || p.targetGender === userGender)), [products, userSeason, userGender]);
+
+  return html`
+    <div class="space-y-6">
+      <div class="glass p-6 bg-gradient-to-r from-red-950/60 to-amber-950/60 flex justify-between items-center">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">📍 Meteo & Clima: ${userCity} (${userSeason.toUpperCase()})</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-1">Magazine Sartoriale Personalizzato</h2>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <section class="space-y-4">
+          <h3 class="text-sm font-bold uppercase text-amber-400">Articoli in Evidenza</h3>
+          <div class="grid gap-4 sm:grid-cols-2">
+            ${filteredArticles.map(a => html`
+              <div class="glass overflow-hidden cursor-pointer hover:-translate-y-1 transition border border-amber-600/20" onClick=${()=>setSelectedArt(a)}>
+                ${a.imageUrl && html`<img src=${a.imageUrl} class="w-full h-40 object-cover"/>`}
+                <div class="p-4 space-y-2">
+                  <span class="text-[10px] uppercase text-amber-400 font-bold">${a.category || "Style"}</span>
+                  <h4 class="font-serif font-bold text-white">${a.title?.it || a.title}</h4>
+                  <p class="text-xs text-stone-300 line-clamp-2">${a.excerpt?.it || a.excerpt}</p>
+                </div>
+              </div>
+            `)}
+          </div>
+        </section>
+
+        <aside class="space-y-4">
+          <h3 class="text-sm font-bold uppercase text-amber-400">Shop Mirato (${userGender})</h3>
+          <div class="space-y-3">
+            ${filteredProducts.map(p => html`
+              <div class="glass p-3 flex items-center gap-3 border border-amber-600/20">
+                ${p.imageUrl && html`<img src=${p.imageUrl} class="w-14 h-14 rounded-xl object-cover"/>`}
+                <div class="flex-1 min-w-0">
+                  <h5 class="font-bold text-xs text-white truncate">${p.name}</h5>
+                  <span class="text-[10px] text-amber-300 font-bold block">€ ${Number(p.price||0).toFixed(2)}</span>
+                  ${p.link && html`<a href=${p.link} target="_blank" class="text-[10px] text-amber-400 underline">Acquista</a>`}
+                </div>
+              </div>
+            `)}
+          </div>
+        </aside>
+      </div>
+
+      ${selectedArt && html`
+        <div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4" onClick=${()=>setSelectedArt(null)}>
+          <div class="glass glass-strong max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4" onClick=${e=>e.stopPropagation()}>
+            ${selectedArt.imageUrl && html`<img src=${selectedArt.imageUrl} class="w-full h-60 object-cover rounded-2xl"/>`}
+            <h2 class="text-2xl font-serif font-bold text-white">${selectedArt.title?.it || selectedArt.title}</h2>
+            <div class="whitespace-pre-line text-sm text-stone-200">${selectedArt.body?.it || selectedArt.body}</div>
+            <button class="btn" onClick=${()=>setSelectedArt(null)}>Chiudi</button>
+          </div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function SocialPageModule(){
+  const {stories, socialPosts, user} = useApp();
+  const [activeStory, setActiveStory] = useState(null);
+
+  const likePost = async (id, likesObj) => {
+    if(!rtdb || !user) return;
+    const likes = likesObj || {};
+    if(likes[user.uid]) delete likes[user.uid];
+    else likes[user.uid] = true;
+    await update(ref(rtdb, "socialPosts/"+id), {likes});
+  };
+
+  return html`
+    <div class="space-y-6 max-w-2xl mx-auto">
+      <!-- STORIE -->
+      <div class="glass p-4 flex gap-4 overflow-x-auto items-center">
+        ${(stories||[]).map(s => html`
+          <div class="flex flex-col items-center cursor-pointer flex-shrink-0" onClick=${()=>setActiveStory(s)}>
+            <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr from-red-600 to-amber-500">
+              <img src=${s.imageUrl} class="w-full h-full rounded-full object-cover border-2 border-stone-950"/>
+            </div>
+            <span class="text-[10px] text-amber-200 mt-1 truncate w-16 text-center">${s.title}</span>
+          </div>
+        `)}
+      </div>
+
+      <!-- POST SOCIAL -->
+      <div class="space-y-6">
+        ${(socialPosts||[]).map(p => {
+          const likesCount = Object.keys(p.likes || {}).length;
+          const hasLiked = user && p.likes?.[user.uid];
+          return html`
+            <div class="glass p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-sm text-white">${p.author || "LandraFashion Studio"}</span>
+              </div>
+              <p class="text-sm text-stone-100">${p.caption}</p>
+              ${p.mediaUrl && html`<img src=${p.mediaUrl} class="rounded-2xl max-h-96 w-full object-cover"/>`}
+              <button class="btn-ghost text-xs ${hasLiked?'on':''}" onClick=${()=>likePost(p.id, p.likes)}>❤️ ${likesCount} Mi Piace</button>
+            </div>
+          `;
+        })}
+      </div>
+
+      ${activeStory && html`
+        <div class="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4" onClick=${()=>setActiveStory(null)}>
+          <div class="max-w-md w-full glass p-2 flex flex-col items-center" onClick=${e=>e.stopPropagation()}>
+            <img src=${activeStory.imageUrl} class="max-h-[70vh] rounded-2xl object-contain w-full"/>
+            <h3 class="text-white font-bold mt-4">${activeStory.title}</h3>
+            <button class="btn mt-4 w-full" onClick=${()=>setActiveStory(null)}>Chiudi</button>
+          </div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function MannequinStudioModule(){
+  const {userGender} = useApp();
+  const [selectedGender, setSelectedGender] = useState(userGender || "Donna");
+  const [skinColor, setSkinColor] = useState("#f5d0c5");
+  const [hairColor, setHairColor] = useState("#4a2c11");
+  const [topColor, setTopColor] = useState("#991b1b");
+  const [bottomColor, setBottomColor] = useState("#1e3a8a");
+
+  return html`
+    <div class="max-w-4xl mx-auto space-y-6">
+      <div class="glass p-6 flex justify-between items-center">
+        <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2">
+          <${SvgIcon} name="mannequin" className="w-6 h-6 text-amber-400"/> Manichino 3D Interattivo
+        </h2>
+        <div class="flex gap-2">
+          <button class="btn-ghost text-xs ${selectedGender==='Donna'?'on':''}" onClick=${()=>setSelectedGender('Donna')}>Donna</button>
+          <button class="btn-ghost text-xs ${selectedGender==='Uomo'?'on':''}" onClick=${()=>setSelectedGender('Uomo')}>Uomo</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 items-center">
+        <div class="glass p-6 flex flex-col items-center bg-stone-950/80 border border-amber-600/30">
+          <svg class="w-56 h-96 drop-shadow-xl" viewBox="0 0 200 400">
+            <path d=${selectedGender==='Donna' ? "M70 65 Q100 20 130 65 Q145 110 135 150 Q100 130 65 150 Z" : "M75 60 Q100 35 125 60 Q130 75 125 80 Q100 70 75 80 Z"} fill=${hairColor} />
+            <ellipse cx="100" cy="90" rx="25" ry="32" fill=${skinColor} />
+            <rect x="92" y="118" width="16" height="20" fill=${skinColor} />
+            ${selectedGender === 'Donna' ? html`
+              <path d="M60 138 L140 138 L125 240 L75 240 Z" fill=${topColor} />
+              <path d="M75 240 L125 240 L135 340 L65 340 Z" fill=${bottomColor} />
+            ` : html`
+              <path d="M55 138 L145 138 L135 245 L65 245 Z" fill=${topColor} />
+              <path d="M65 245 L98 245 L95 360 L70 360 Z" fill=${bottomColor} />
+              <path d="M102 245 L135 245 L130 360 L105 360 Z" fill=${bottomColor} />
+            `}
+          </svg>
+        </div>
+
+        <div class="glass p-6 space-y-4 text-xs">
+          <h3 class="font-bold text-white text-sm">Personalizza Abiti</h3>
+          <label class="flex justify-between items-center text-stone-300"><span>Top</span><input type="color" value=${topColor} onChange=${e=>setTopColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer"/></label>
+          <label class="flex justify-between items-center text-stone-300"><span>Pantaloni/Gonna</span><input type="color" value=${bottomColor} onChange=${e=>setBottomColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer"/></label>
+          <label class="flex justify-between items-center text-stone-300"><span>Capelli</span><input type="color" value=${hairColor} onChange=${e=>setHairColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer"/></label>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function WardrobeModule(){
+  const {canAccess, user, wardrobeItems, profileData, userGender} = useApp();
+  const [name, setName] = useState("");
+  const [type, setType] = useState("Giacca");
+  const [colorHex, setColorHex] = useState("#991b1b");
+  const [desc, setDesc] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  if(!canAccess("wardrobe")) return html`<${LockedFeatureCard} title="ArmoWardrobe 3D" module="wardrobe" />`;
+
+  const addItem = async () => {
+    if(!name.trim() || !rtdb || !user) return;
+    setBusy(true);
+    await push(ref(rtdb, "wardrobe/"+user.uid), {
+      name, type, colorHex, desc, targetGender: userGender, season: profileData?.season || "inverno", createdAt: serverTimestamp()
+    });
+    setName(""); setDesc(""); setBusy(false);
+  };
+
+  return html`
+    <div class="space-y-6 max-w-4xl mx-auto">
+      <div class="glass p-6">
+        <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2">
+          <${SvgIcon} name="wardrobe" className="w-6 h-6 text-amber-400" /> ArmoWardrobe 3D Inteligente
+        </h2>
+        <p class="text-xs text-amber-200">Generatore 3D di capi basato su posizione e preferenze cromatiche.</p>
+      </div>
+
+      <div class="glass p-5 space-y-3 text-xs">
+        <input class="field" placeholder="Nome Capo (es. Cappotto di Cashmere)" value=${name} onInput=${e=>setName(e.target.value)}/>
+        <div class="grid grid-cols-2 gap-3">
+          <select class="field" value=${type} onChange=${e=>setType(e.target.value)}>
+            <option value="Giacca">Giacca</option><option value="Maglione">Maglione</option><option value="Pantaloni">Pantaloni</option>
+          </select>
+          <input type="color" class="h-11 w-full rounded-xl cursor-pointer bg-transparent" value=${colorHex} onChange=${e=>setColorHex(e.target.value)}/>
+        </div>
+        <textarea class="field" placeholder="Dettagli, meteo e occasioni d'uso..." value=${desc} onInput=${e=>setDesc(e.target.value)}></textarea>
+        <button class="btn w-full" disabled=${busy} onClick=${addItem}>Genera Capo nel Guardaroba</button>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        ${wardrobeItems.map(item => html`
+          <div class="glass p-4 flex items-center justify-between border border-amber-600/20">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center" style=${{backgroundColor: item.colorHex}}>
+                <${SvgIcon} name="wardrobe" className="w-6 h-6 text-white"/>
+              </div>
+              <div>
+                <h4 class="font-bold text-xs text-white">${item.name}</h4>
+                <span class="text-[10px] text-amber-300 uppercase">${item.type}</span>
+              </div>
+            </div>
+            <button class="text-red-400" onClick=${()=>remove(ref(rtdb, `wardrobe/${user.uid}/${item.id}`))}>
+              <${SvgIcon} name="trash" className="w-4 h-4"/>
+            </button>
+          </div>
+        `)}
+      </div>
+    </div>
+  `;
+}
+
+function OrionChatModule(){
+  const {canAccess, profileData, userGender} = useApp();
+  const [msgs, setMsgs] = useState([{role:"assistant", content:"Salve, sono Orion AI. Come posso aiutarti con il tuo stile?"}]);
+  const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  if(!canAccess("orion")) return html`<${LockedFeatureCard} title="Orion AI Concierge" module="orion" />`;
+
+  const send = async () => {
+    if(!input.trim() || busy) return;
+    const m = [...msgs, {role:"user", content:input}]; setMsgs(m); setInput(""); setBusy(true);
+    try {
+      const reply = await groq({messages:[{role:"system", content:`Sei Orion AI per ${userGender} (${profileData?.season}).`}, ...m]});
+      setMsgs([...m, {role:"assistant", content:reply}]);
+    } catch(e) { setMsgs([...m, {role:"assistant", content:"Errore temporaneo."}]); }
+    setBusy(false);
+  };
+
+  return html`
+    <div class="glass max-w-3xl mx-auto flex flex-col h-[75vh] p-4 space-y-4">
+      <div class="flex items-center gap-3 pb-3 border-b border-amber-600/20">
+        <${SvgIcon} name="orion" className="w-6 h-6 text-amber-400" />
+        <h2 class="font-serif font-bold text-white">Orion AI Concierge</h2>
+      </div>
+      <div class="flex-1 overflow-y-auto space-y-3 pr-2 text-xs">
+        ${msgs.map(x => html`<div class="p-3 rounded-2xl max-w-[85%] ${x.role==='user'?'ml-auto on text-white':'bg-stone-900 border border-amber-600/20 text-stone-200'}">${x.content}</div>`)}
+      </div>
+      <form class="flex gap-2" onSubmit=${e=>{e.preventDefault(); send();}}>
+        <input class="field" placeholder="Chiedi ad Orion..." value=${input} onInput=${e=>setInput(e.target.value)}/>
+        <button class="btn" disabled=${busy}>Invia</button>
+      </form>
+    </div>
+  `;
+}
+
+function LockedFeatureCard({title}){
+  const {pricing, setCheckoutTier} = useApp();
+  return html`
+    <div class="glass max-w-md mx-auto p-8 text-center space-y-4 border border-amber-600/40">
+      <${SvgIcon} name="lock" className="w-12 h-12 text-amber-400 mx-auto"/>
+      <h3 class="text-xl font-serif font-bold text-white">${title}</h3>
+      <p class="text-xs text-stone-300">Modulo riservato agli abbonati Pro (€${pricing.proPrice}) o Plus (€${pricing.plusPrice}).</p>
+      <button class="btn w-full" onClick=${()=>setCheckoutTier('pro')}>Fai Upgrade con PayPal</button>
+    </div>
+  `;
+}
+
+function PayPalCheckoutModal(){
+  const {checkoutTier, setCheckoutTier, pricing} = useApp();
+  if(!checkoutTier) return html``;
+
+  const price = checkoutTier === 'pro' ? pricing.proPrice : pricing.plusPrice;
+
+  const simulatePayment = async () => {
+    if(!rtdb || !auth.currentUser) return;
+    await update(ref(rtdb, "users/"+auth.currentUser.uid), { tier: checkoutTier });
+    alert(`Pagamento PayPal simulato completato! Piano ${checkoutTier.toUpperCase()} attivo.`);
+    setCheckoutTier(null);
+    window.location.reload();
+  };
+
+  return html`
+    <div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass glass-strong max-w-md w-full p-6 space-y-4 border border-amber-600/40 text-center">
+        <h3 class="text-xl font-serif font-bold text-white">Checkout PayPal — Piano ${checkoutTier.toUpperCase()}</h3>
+        <p class="text-xs text-stone-300">Totale da pagare: <b class="text-amber-300">€${price} / mese</b></p>
+        <div class="p-4 bg-stone-900 rounded-2xl border border-amber-600/20 text-xs text-amber-200">
+          Simulazione gateway di pagamento sicuro PayPal integrato con Horizon.
+        </div>
+        <div class="flex gap-2">
+          <button class="btn flex-1" onClick=${simulatePayement}>Conferma Pagamento PayPal</button>
+          <button class="btn-ghost" onClick=${()=>setCheckoutTier(null)}>Annulla</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function ProfileModule(){
+  const {profileData, userGender, pricing, setCheckoutTier, userTier} = useApp();
+
+  return html`
+    <div class="max-w-3xl mx-auto space-y-6">
+      <div class="glass p-6 space-y-4">
+        <h2 class="text-xl font-serif font-bold text-white">Profilo Utente & Abbonamenti</h2>
+        <div class="text-xs space-y-1">
+          <p class="text-stone-300">Genere: <b class="text-white">${userGender}</b></p>
+          <p class="text-stone-300">Piano Attuale: <b class="text-amber-400 uppercase">${userTier}</b></p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 pt-4">
+          <div class="glass p-4 bg-stone-900/80 space-y-2">
+            <h4 class="font-bold text-amber-300">Piano Pro</h4>
+            <p class="text-xs text-stone-300">€${pricing.proPrice} / mese</p>
+            <button class="btn w-full text-xs" onClick=${()=>setCheckoutTier('pro')}>Upgrade Pro (PayPal)</button>
+          </div>
+          <div class="glass p-4 bg-stone-900/80 space-y-2">
+            <h4 class="font-bold text-amber-300">Piano Plus ✨</h4>
+            <p class="text-xs text-stone-300">€${pricing.plusPrice} / mese</p>
+            <button class="btn w-full text-xs" onClick=${()=>setCheckoutTier('plus')}>Upgrade Plus (PayPal)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* MASTER CMS PROFESSIONALE STILE WORDPRESS & UFFICIO HORIZON */
+function CmsDashboard(){
+  const {isStaff, articles, products, socialPosts, stories, videos, pricing, permissions} = useApp();
+  const [tab, setTab] = useState("overview");
+  const [permState, setPermState] = useState(permissions);
+
+  // Form Articoli
+  const [artTitle, setArtTitle] = useState("");
+  const [artExcerpt, setArtExcerpt] = useState("");
+  const [artBody, setArtBody] = useState("");
+  const [artSeason, setArtSeason] = useState("inverno");
+  const [artGender, setArtGender] = useState("Unisex");
+  const [artFile, setArtFile] = useState(null);
+
+  // Form Prodotti
+  const [prodName, setProdName] = useState("");
+  const [prodPrice, setProdPrice] = useState("");
+  const [prodLink, setProdLink] = useState("");
+  const [prodSeason, setProdSeason] = useState("inverno");
+  const [prodGender, setProdGender] = useState("Unisex");
+  const [prodFile, setProdFile] = useState(null);
+
+  // Form Social Post
+  const [socialCaption, setSocialCaption] = useState("");
+  const [socialFile, setSocialFile] = useState(null);
+
+  // Form Prezzi
+  const [pPro, setPPro] = useState(pricing.proPrice);
+  const [pPlus, setPPlus] = useState(pricing.plusPrice);
+
+  if(!isStaff) return html`<div class="p-8 text-center text-white bg-slate-950 min-h-screen">403 — Accesso Negato Staff.</div>`;
+
+  const saveArticle = async () => {
+    if(!artTitle.trim() || !rtdb) return;
+    let imageUrl = artFile ? await uploadToCloudinary(artFile) : null;
+    await push(ref(rtdb, "articles"), {
+      title: {it: artTitle}, excerpt: {it: artExcerpt}, body: {it: artBody},
+      season: artSeason, targetGender: artGender, imageUrl, createdAt: serverTimestamp()
+    });
+    setArtTitle(""); setArtExcerpt(""); setArtBody(""); setArtFile(null);
+    alert("Articolo salvato con successo nel database");
+  };
+
+  const saveProduct = async () => {
+    if(!prodName.trim() || !rtdb) return;
+    let imageUrl = prodFile ? await uploadToCloudinary(prodFile) : null;
+    await push(ref(rtdb, "products"), {
+      name: prodName, price: Number(prodPrice)||0, link: prodLink,
+      season: prodSeason, targetGender: prodGender, imageUrl, createdAt: serverTimestamp()
+    });
+    setProdName(""); setProdPrice(""); setProdLink(""); setProdFile(null);
+    alert("Prodotto aggiunto allo Shop Mirato");
+  };
+
+  const saveSocialPost = async () => {
+    if(!socialCaption.trim() || !rtdb) return;
+    let mediaUrl = socialFile ? await uploadToCloudinary(socialFile) : null;
+    await push(ref(rtdb, "socialPosts"), {
+      author: "LandraFashion Studio", caption: socialCaption, mediaUrl, likes: {}, createdAt: serverTimestamp()
+    });
+    setSocialCaption(""); setSocialFile(null);
+    alert("Post pubblicato sulla Social Page");
+  };
+
+  const savePricing = async () => {
+    if(rtdb) {
+      await set(ref(rtdb, "pricing"), { proPrice: pPro, plusPrice: pPlus });
+      alert("Listino prezzi aggiornato");
+    }
+  };
+
+  return html`
+    <div class="min-h-screen flex flex-col md:flex-row bg-slate-950 text-slate-100 font-sans">
+      <!-- SIDEBAR ADMIN PROFESSIONALE -->
+      <aside class="w-full md:w-72 bg-slate-900 border-r border-slate-800 p-5 space-y-6">
+        <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+          <div class="w-8 h-8 rounded-lg bg-amber-600 flex items-center justify-center font-bold text-white">LF</div>
+          <div>
+            <div class="font-bold text-white text-sm">Landra Admin Office</div>
+            <div class="text-[10px] text-amber-400 font-mono">Horizon Datacenter BS</div>
+          </div>
+        </div>
+
+        <nav class="space-y-1 text-xs font-semibold">
+          <button class="w-full text-left p-2.5 rounded-lg transition ${tab==='overview'?'bg-amber-600 text-white':'text-slate-300 hover:bg-slate-800'}" onClick=${()=>setTab('overview')}>📊 Dashboard Generale</button>
+          <button class="w-full text-left p-2.5 rounded-lg transition ${tab==='articles'?'bg-amber-600 text-white':'text-slate-300 hover:bg-slate-800'}" onClick=${()=>setTab('articles')}>📰 Gestione Articoli Feed</button>
+          <button class="w-full text-left p-2.5 rounded-lg transition ${tab==='products'?'bg-amber-600 text-white':'text-slate-300 hover:bg-slate-800'}" onClick=${()=>setTab('products')}>🛍️ Shop Mirato</button>
+          <button class="w-full text-left p-2.5 rounded-lg transition ${tab==='social'?'bg-amber-600 text-white':'text-slate-300 hover:bg-slate-800'}" onClick=${()=>setTab('social')}>📸 Social Page & Storie</button>
+          <button class="w-full text-left p-2.5 rounded-lg transition ${tab==='pricing'?'bg-amber-600 text-white':'text-slate-300 hover:bg-slate-800'}" onClick=${()=>setTab('pricing')}>💳 Listino Prezzi & Abbonamenti</button>
+        </nav>
+
+        <a href="#" class="btn-ghost text-xs w-full text-center block mt-8">← Torna all'App Utente</a>
+      </aside>
+
+      <!-- MAIN CONTENT ADMIN -->
+      <main class="flex-1 p-8 space-y-6 overflow-y-auto bg-slate-900/50">
+        ${tab==='overview' && html`
+          <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-white">Dashboard CMS Amministrativa</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <span class="text-3xl font-bold text-amber-400">${articles.length}</span>
+                <span class="text-xs text-slate-400 block mt-1">Articoli Totali</span>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <span class="text-3xl font-bold text-amber-400">${products.length}</span>
+                <span class="text-3xl font-bold text-amber-400"></span>
+                <span class="text-xs text-slate-400 block mt-1">Prodotti Shop</span>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <span class="text-3xl font-bold text-amber-400">${socialPosts.length}</span>
+                <span class="text-xs text-slate-400 block mt-1">Post Social</span>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <span class="text-3xl font-bold text-amber-400">${(stories||[]).length}</span>
+                <span class="text-xs text-slate-400 block mt-1">Storie Attive</span>
+              </div>
+            </div>
+          </div>
+        `}
+
+        ${tab==='articles' && html`
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 max-w-3xl">
+            <h3 class="font-bold text-white text-lg">Crea o Modifica Articolo</h3>
+            <input class="field bg-slate-950" placeholder="Titolo articolo" value=${artTitle} onInput=${e=>setArtTitle(e.target.value)}/>
+            <input class="field bg-slate-950" placeholder="Estratto breve" value=${artExcerpt} onInput=${e=>setArtExcerpt(e.target.value)}/>
+            <div class="grid grid-cols-2 gap-3">
+              <select class="field bg-slate-950" value=${artSeason} onChange=${e=>setArtSeason(e.target.value)}>
+                ${SEASONS.map(s=>html`<option value=${s}>Stagione: ${s}</option>`)}
+              </select>
+              <select class="field bg-slate-950" value=${artGender} onChange=${e=>setArtGender(e.target.value)}>
+                ${TARGET_GENDERS.map(g=>html`<option value=${g}>Target Sesso: ${g}</option>`)}
+              </select>
+            </div>
+            <input type="file" class="field bg-slate-950 text-xs" accept="image/*" onChange=${e=>setArtFile(e.target.files[0])}/>
+            <textarea class="field bg-slate-950" rows="5" placeholder="Contenuto editoriale..." value=${artBody} onInput=${e=>setArtBody(e.target.value)}></textarea>
+            <button class="btn" onClick=${saveArticle}>Pubblica nel Feed</button>
+
+            <div class="pt-6 border-t border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Articoli Esistenti (${articles.length})</h4>
+              ${articles.map(a => html`
+                <div class="flex justify-between items-center p-3 bg-slate-950 rounded-lg text-xs">
+                  <span>${a.title?.it || a.title}</span>
+                  <button class="text-red-400" onClick=${()=>remove(ref(rtdb, "articles/"+a.id))}>Elimina</button>
+                </div>
+              `)}
+            </div>
+          </div>
+        `}
+
+        ${tab==='products' && html`
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 max-w-3xl">
+            <h3 class="font-bold text-white text-lg">Gestione Shop Mirato</h3>
+            <input class="field bg-slate-950" placeholder="Nome prodotto" value=${prodName} onInput=${e=>setProdName(e.target.value)}/>
+            <input class="field bg-slate-950" type="number" placeholder="Prezzo (€)" value=${prodPrice} onInput=${e=>setProdPrice(e.target.value)}/>
+            <input class="field bg-slate-950" placeholder="Link acquisto" value=${prodLink} onInput=${e=>setProdLink(e.target.value)}/>
+            <div class="grid grid-cols-2 gap-3">
+              <select class="field bg-slate-950" value=${prodSeason} onChange=${e=>setProdSeason(e.target.value)}>
+                ${SEASONS.map(s=>html`<option value=${s}>Stagione: ${s}</option>`)}
+              </select>
+              <select class="field bg-slate-950" value=${prodGender} onChange=${e=>setProdGender(e.target.value)}>
+                ${TARGET_GENDERS.map(g=>html`<option value=${g}>Target: ${g}</option>`)}
+              </select>
+            </div>
+            <input type="file" class="field bg-slate-950 text-xs" accept="image/*" onChange=${e=>setProdFile(e.target.files[0])}/>
+            <button class="btn" onClick=${saveProduct}>Aggiungi Prodotto</button>
+
+            <div class="pt-6 border-t border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Prodotti Esistenti</h4>
+              ${products.map(p => html`
+                <div class="flex justify-between items-center p-3 bg-slate-950 rounded-lg text-xs">
+                  <span>${p.name} (€${p.price})</span>
+                  <button class="text-red-400" onClick=${()=>remove(ref(rtdb, "products/"+p.id))}>Elimina</button>
+                </div>
+              `)}
+            </div>
+          </div>
+        `}
+
+        ${tab==='social' && html`
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 max-w-3xl">
+            <h3 class="font-bold text-white text-lg">Gestione Social Page & Post</h3>
+            <textarea class="field bg-slate-950" rows="3" placeholder="Testo del post social..." value=${socialCaption} onInput=${e=>setSocialCaption(e.target.value)}></textarea>
+            <input type="file" class="field bg-slate-950 text-xs" accept="image/*" onChange=${e=>setSocialFile(e.target.files[0])}/>
+            <button class="btn" onClick=${saveSocialPost}>Pubblica Post Social</button>
+
+            <div class="pt-6 border-t border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Post Social Attivi (${socialPosts.length})</h4>
+              ${socialPosts.map(p => html`
+                <div class="flex justify-between items-center p-3 bg-slate-950 rounded-lg text-xs">
+                  <span class="truncate max-w-md">${p.caption}</span>
+                  <button class="text-red-400" onClick=${()=>remove(ref(rtdb, "socialPosts/"+p.id))}>Elimina</button>
+                </div>
+              `)}
+            </div>
+          </div>
+        `}
+
+        ${tab==='pricing' && html`
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 max-w-md">
+            <h3 class="font-bold text-white text-lg">Gestione Prezzi Abbonamenti</h3>
+            <label class="block text-xs text-slate-300">Prezzo Pro (€/mo)
+              <input class="field bg-slate-950 mt-1" value=${pPro} onInput=${e=>setPPro(e.target.value)}/>
+            </label>
+            <label class="block text-xs text-slate-300">Prezzo Plus (€/mo)
+              <input class="field bg-slate-950 mt-1" value=${pPlus} onInput=${e=>setPPlus(e.target.value)}/>
+            </label>
+            <button class="btn" onClick=${savePricing}>Salva Listino</button>
+          </div>
+        `}
+      </main>
+    </div>
+  `;
+}
+
+function Shell(){
+  const {isStaff, userTier, pricing, setCheckoutTier} = useApp();
+  const [tab, setTab] = useState("feed");
+  const [startOpen, setStartOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [hash, setHash] = useState(location.hash);
+
+  useEffect(() => {
+    const h = () => setHash(location.hash);
+    addEventListener("hashchange", h);
+    return () => removeEventListener("hashchange", h);
+  }, []);
+
+  if(hash === "#staff") return html`<${CmsDashboard}/>`;
+
+  const openTab = (t) => { setTab(t); setStartOpen(false); setDropdownOpen(false); };
+
+  return html`
+    <div class="flex min-h-screen flex-col">
+      <header class="glass sticky top-0 z-30 flex items-center justify-between px-6 py-3 border-b border-amber-600/30">
+        <${BrandLogo}/>
+
+        <nav class="hidden md:flex items-center gap-2 relative">
+          <button class="btn-ghost ${tab==='feed'?'on':''}" onClick=${()=>setTab('feed')}>Home Editorial</button>
+          <button class="btn-ghost ${tab==='social'?'on':''}" onClick=${()=>setTab('social')}>Social Page</button>
+          <button class="btn-ghost ${tab==='mannequin'?'on':''}" onClick=${()=>setTab('mannequin')}>Manichino 3D</button>
+
+          <div class="relative">
+            <button class="btn-ghost flex items-center gap-1" onClick=${()=>setDropdownOpen(!dropdownOpen)}>
+              Moduli ▾
+            </button>
+            ${dropdownOpen && html`
+              <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 glass glass-strong p-2 space-y-1 shadow-2xl z-50">
+                ${SYSTEM_MODULES.map(m => html`
+                  <button class="w-full text-left p-2 rounded-xl text-xs hover:bg-amber-600/20 text-stone-200" onClick=${()=>openTab(m.id)}>
+                    ${m.name}
+                  </button>
+                `)}
+              </div>
+            `}
+          </div>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <!-- BADGE ABBONAMENTO CLICCABILE -->
+          <button class="btn-ghost text-xs uppercase tracking-wider text-amber-300 font-bold" onClick=${()=>setCheckoutTier(userTier==='free'?'pro':userTier)}>
+            💎 ${userTier}
+          </button>
+          ${isStaff && html`<a href="#staff" class="btn-ghost text-xs">CMS Staff</a>`}
+          <button class="btn-ghost" onClick=${()=>signOut(auth)}>Esci</button>
+        </div>
+      </header>
+
+      <main class="mx-auto w-full max-w-[1200px] flex-1 px-4 pt-6 pb-32">
+        ${tab==='feed' && html`<${FeedModule}/>`}
+        ${tab==='social' && html`<${SocialPageModule}/>`}
+        ${tab==='mannequin' && html`<${MannequinStudioModule}/>`}
+        ${tab==='wardrobe' && html`<${WardrobeModule}/>`}
+        ${tab==='orion' && html`<${OrionChatModule}/>`}
+        ${tab==='profile' && html`<${ProfileModule}/>`}
+      </main>
+
+      <!-- START MENU WINDOWS STYLE MOBILE -->
+      ${startOpen && html`
+        <div class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick=${()=>setStartOpen(false)}>
+          <div class="fixed bottom-20 left-4 right-4 glass glass-strong p-5 space-y-4 border border-amber-600/40" onClick=${e=>e.stopPropagation()}>
+            <div class="flex items-center justify-between border-b border-amber-600/20 pb-3">
+              <${BrandLogo}/>
+              <span class="text-[10px] text-amber-400 font-bold uppercase">Menu Start</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              ${SYSTEM_MODULES.map(m => html`
+                <button class="glass p-3 flex flex-col items-center justify-center text-center space-y-1.5" onClick=${()=>openTab(m.id)}>
+                  <${SvgIcon} name=${m.id} className="w-6 h-6 text-amber-400" />
+                  <span class="text-[10px] font-bold text-white">${m.name}</span>
+                </button>
+              `)}
+            </div>
+          </div>
+        </div>
+      `}
+
+      <!-- MOBILE DOCK -->
+      <nav class="glass fixed inset-x-4 bottom-4 z-40 flex items-center justify-around p-2 md:hidden border border-amber-600/30 safe-bottom">
+        <button class="flex flex-col items-center p-2 ${tab==='feed'?'text-amber-400':'text-stone-400'}" onClick=${()=>setTab('feed')}>
+          <${SvgIcon} name="home" className="w-5 h-5"/><span class="text-[9px]">Home</span>
+        </button>
+        <button class="flex flex-col items-center p-2 ${tab==='social'?'text-amber-400':'text-stone-400'}" onClick=${()=>setTab('social')}>
+          <${SvgIcon} name="social" className="w-5 h-5"/><span class="text-[9px]">Social</span>
+        </button>
+
+        <button class="relative -top-4 w-14 h-14 rounded-full bg-gradient-to-tr from-red-700 via-amber-600 to-amber-500 p-0.5 shadow-2xl flex items-center justify-center" onClick=${()=>setStartOpen(!startOpen)}>
+          <div class="w-full h-full rounded-full bg-stone-950 flex items-center justify-center">
+            <${SvgIcon} name="grid" className="w-6 h-6 text-amber-400" />
+          </div>
+        </button>
+
+        <button class="flex flex-col items-center p-2 ${tab==='mannequin'?'text-amber-400':'text-stone-400'}" onClick=${()=>setTab('mannequin')}>
+          <${SvgIcon} name="mannequin" className="w-5 h-5"/><span class="text-[9px]">3D Studio</span>
+        </button>
+        <button class="flex flex-col items-center p-2 ${tab==='profile'?'text-amber-400':'text-stone-400'}" onClick=${()=>setTab('profile')}>
+          <${SvgIcon} name="profile" className="w-5 h-5"/><span class="text-[9px]">Profilo</span>
+        </button>
+      </nav>
+
+      <${PayPalCheckoutModal}/>
+    </div>
+  `;
+}
+
+function Main(){
+  const {profileData} = useApp();
+  if(!profileData?.onboarded) return html`<${IntakeSurvey} onDone=${()=>window.location.reload()}/>`;
+  return html`<${Shell}/>`;
+}
+
+function App(){
+  return html`
+    <${Providers}>
+      <${AuthGate}>
+        <${Main}/>
+      <//>
+    <//>
+  `;
+}
+
+render(html`<${App}/>`, document.getElementById("app"));
+</script>
+</body>
+</html>
