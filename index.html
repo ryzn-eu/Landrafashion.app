@@ -23,6 +23,7 @@
   // Controllo immediato prima del rendering per evitare sfarfallii
   if (window._isPWAInstalled) {
     document.documentElement.classList.add('pwa-ready');
+    try { localStorage.setItem('lf_pwa_installed', '1'); } catch (e) {}
   }
 })();
 </script>
@@ -33,14 +34,16 @@ window.__deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   window.__deferredPrompt = e;
+  window.__bipFired = true;
+  // se Chrome offre l'installazione, l'app NON è installata: azzera il ricordo
+  try { localStorage.removeItem('lf_pwa_installed'); } catch (err) {}
   window.dispatchEvent(new Event('pwa-prompt-ready'));
 });
 window.addEventListener('appinstalled', function() {
+  // App installata: la scheda del browser RESTA BLOCCATA, si usa solo la PWA
   window.__deferredPrompt = null;
-  window._isPWAInstalled = true;
-  var el = document.getElementById('pwa-screenlock');
-  if (el) el.style.display = 'none';
-  document.documentElement.classList.add('pwa-ready');
+  try { localStorage.setItem('lf_pwa_installed', '1'); } catch (err) {}
+  window.dispatchEvent(new Event('pwa-installed-now'));
 });
 </script>
 
@@ -139,6 +142,18 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('pwa-prompt-ready', () => {
   renderScreenLockUI();
 });
+window.addEventListener('pwa-installed-now', () => {
+  renderScreenLockUI();
+  setTimeout(openInstalledPWA, 1200);
+});
+
+function openInstalledPWA() {
+  try {
+    const url = new URL('./', location.href).href;
+    const w = window.open(url, '_blank');
+    if (!w) location.href = url;
+  } catch (e) {}
+}
 
 function detectOSAndVersion() {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -176,6 +191,27 @@ function renderScreenLockUI() {
   }
 
   let htmlContent = "";
+
+  let _installedFlag = false;
+  try { _installedFlag = localStorage.getItem('lf_pwa_installed') === '1'; } catch (e) {}
+
+  if (!window.__deferredPrompt && _installedFlag) {
+    container.innerHTML = `
+      <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-100 space-y-2 text-left">
+        <span class="text-emerald-300 font-bold block">✅ App LandraFashion installata</span>
+        <p class="leading-relaxed">Per usare la piattaforma devi aprirla dall'<b>app installata</b> (icona LandraFashion sul desktop, menu Start o schermata Home), non da questa scheda del browser.</p>
+      </div>
+      <button type="button" id="pwa-open-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
+        🚀 Apri l'app
+      </button>
+      <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
+        🔄 Aggiorna stato
+      </button>
+    `;
+    const ob = document.getElementById("pwa-open-btn");
+    if (ob) ob.addEventListener("click", openInstalledPWA);
+    return;
+  }
 
   if (os === "Android") {
     htmlContent = `
@@ -267,14 +303,13 @@ function renderScreenLockUI() {
           dp.prompt();
           const { outcome } = await dp.userChoice;
           if (outcome === 'accepted') {
-            window._isPWAInstalled = true;
-            document.getElementById("pwa-screenlock").style.display = "none";
+            try { localStorage.setItem('lf_pwa_installed', '1'); } catch (err) {}
           }
         } catch (err) {
           console.warn('Prompt installazione fallito:', err);
         }
         window.__deferredPrompt = null;
-        if (!window._isPWAInstalled) renderScreenLockUI();
+        renderScreenLockUI();
       } else {
         // Prompt non ancora disponibile: istruzioni manuali visibili nella pagina (non solo alert)
         let hint = document.getElementById("pwa-manual-hint");
@@ -353,6 +388,7 @@ async function runPWADiagnostics() {
   } catch (e) {
     out.push(ko("Diagnostica fallita: " + e.message));
   }
+  out.push(window.__bipFired ? ok("Chrome ha inviato l'evento di installazione") : ko("Chrome NON ha inviato l'evento di installazione: la pagina è a posto, è il browser a non offrirlo (app già installata, installazione rifiutata in passato, finestra anonima o profilo ospite)"));
   out.push('<div class="pt-2 opacity-80">Se tutto è ✅ ma il bottone non parte: ricarica con Ctrl+Shift+R, oppure menu ⋮ → <b>Installa LandraFashion</b>.</div>');
   return '<div class="space-y-1">' + out.join('') + '</div>';
 }
