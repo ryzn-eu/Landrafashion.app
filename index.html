@@ -169,7 +169,7 @@ function renderScreenLockUI() {
     htmlContent = `
       <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
         <span class="text-sky-300 font-bold block">${osLabel} Rilevato</span>
-        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia[cite: 5].</p>
+        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia.</p>
       </div>
       <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
         📥 Installa subito l'App
@@ -178,11 +178,11 @@ function renderScreenLockUI() {
   } else if (os === "iOS") {
     let safariGuide = "";
     if (majorVer >= 17) {
-      safariGuide = `Tocca l'icona di <b>Condivisione (quadradino con freccia in sù ⎋)</b> nella barra in basso di Safari, quindi scorri e seleziona <b>"Aggiungi alla schermata Home" (+)</b>[cite: 5].`;
+      safariGuide = `Tocca l'icona di <b>Condivisione (quadradino con freccia in sù ⎋)</b> nella barra in basso di Safari, quindi scorri e seleziona <b>"Aggiungi alla schermata Home" (+)</b>.`;
     } else if (majorVer >= 15 && majorVer < 17) {
-      safariGuide = `Tocca il tasto <b>Condivisione ⎋</b> in basso al centro su Safari, poi scorri l'elenco e tocca <b>"Aggiungi alla schermata Home"</b>[cite: 5].`;
+      safariGuide = `Tocca il tasto <b>Condivisione ⎋</b> in basso al centro su Safari, poi scorri l'elenco e tocca <b>"Aggiungi alla schermata Home"</b>.`;
     } else {
-      safariGuide = `Tocca il tasto centrale <b>Condivisione ⎋</b> nel browser Safari e seleziona l'icona <b>"+" Aggiungi a Home</b>[cite: 5].`;
+      safariGuide = `Tocca il tasto centrale <b>Condivisione ⎋</b> nel browser Safari e seleziona l'icona <b>"+" Aggiungi a Home</b>.`;
     }
 
     htmlContent = `
