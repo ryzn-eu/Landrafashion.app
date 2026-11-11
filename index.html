@@ -109,7 +109,7 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
 <script type="module">
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
       .then(reg => console.log('PWA ServiceWorker registrato con successo:', reg.scope))
       .catch(err => console.warn('Registrazione PWA fallita:', err));
   });
@@ -240,11 +240,7 @@ function renderScreenLockUI() {
         }
         window._deferredPrompt = null;
       } else {
-        if (navigator.serviceWorker && window.BeforeInstallPromptEvent === undefined) {
-          alert("L'installazione automatica è già disponibile nel menu del browser (es. icona 'Installa app' o 'Aggiungi a schermata Home' nella barra degli indirizzi).");
-        } else {
-          alert("Il prompt di installazione non è ancora pronto o l'app è già installata. Verifica che il file manifest.json e il Service Worker siano attivi in HTTPS.");
-        }
+        alert("Per installare l'app correttamente bypassando il redirect di register.it, usa il menu del browser (es. 'Installa app' o 'Aggiungi a schermata Home').");
       }
     });
   }
