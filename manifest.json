@@ -23,5 +23,11 @@
   "launch_handler": {
     "client_mode": "focus-existing"
   },
-  "handle_links": "preferred"
+  "handle_links": "preferred",
+  "protocol_handlers": [
+    {
+      "protocol": "web+landrafashion",
+      "url": "./?open=%s"
+    }
+  ]
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>LandraFashion</title>
+<title>LandraFashion – Enterprise Armocromia & Horizon OS Platform</title>
 <meta name="description" content="Ecosistema avanzato di armocromia, alimentato da Orion Horizon Ai.">
 <meta name="theme-color" content="#020617">
 <!-- PWA Manifest & Meta -->
@@ -111,8 +111,8 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
     </div>
 
     <div class="space-y-2">
-      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema  e alle funzionalità Ai Orion, è obbligatorio avviare l'applicazione.</p>
+      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
+      <p class="text-xs text-sky-200">Per accedere all'ecosistema sartoriale e all'intelligenza artificiale Orion, è obbligatorio avviare l'applicazione in modalità PWA dedicata.</p>
     </div>
 
     <div id="pwa-action-container" class="space-y-4 pt-2">
@@ -144,15 +144,37 @@ window.addEventListener('pwa-prompt-ready', () => {
 });
 window.addEventListener('pwa-installed-now', () => {
   renderScreenLockUI();
-  setTimeout(openInstalledPWA, 1200);
 });
 
 function openInstalledPWA() {
+  const ua = navigator.userAgent || "";
+  const hint = (txt) => {
+    const c = document.getElementById("pwa-action-container");
+    if (!c) return;
+    let h = document.getElementById("pwa-open-hint");
+    if (!h) {
+      h = document.createElement("div");
+      h.id = "pwa-open-hint";
+      h.className = "p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs text-amber-100 text-left leading-relaxed";
+      c.appendChild(h);
+    }
+    h.innerHTML = txt;
+  };
   try {
-    const url = new URL('./', location.href).href;
-    const w = window.open(url, '_blank');
-    if (!w) location.href = url;
-  } catch (e) {}
+    if (/android/i.test(ua)) {
+      // Android: richiede ad Android di aprire l'indirizzo con l'app installata (WebAPK)
+      const u = new URL('./', location.href);
+      location.href = 'intent://' + u.host + u.pathname + u.search +
+        '#Intent;scheme=' + u.protocol.replace(':','') + ';action=android.intent.action.VIEW;end';
+      setTimeout(() => hint("Se l'app non si è aperta, toccala dall'icona <b>LandraFashion</b> nella schermata Home o nel cassetto delle app."), 1800);
+    } else {
+      // Desktop: protocollo registrato dalla PWA all'installazione
+      location.href = 'web+landrafashion:open';
+      setTimeout(() => hint("Se l'app non si è aperta: clicca l'icona <b>\"Apri in LandraFashion\"</b> a destra nella barra degli indirizzi, oppure avviala dall'icona sul desktop / menu Start. Se Chrome chiede di consentire l'apertura, premi <b>Consenti</b>."), 1800);
+    }
+  } catch (e) {
+    hint("Apri l'app dall'icona <b>LandraFashion</b> sul desktop, nel menu Start o nella schermata Home.");
+  }
 }
 
 function detectOSAndVersion() {
