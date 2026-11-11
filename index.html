@@ -125,6 +125,33 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
   </div>
 </div>
 
+<!-- SPLASH DI CARICAMENTO INIZIALE (resta finché login e profilo non sono verificati) -->
+<style>
+#app-splash{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;background:radial-gradient(circle at center,#0f172a 0%,#020617 100%);transition:opacity .45s ease}
+#app-splash.hide{opacity:0;pointer-events:none}
+#app-splash .sp-ring{width:56px;height:56px;border-radius:50%;border:3px solid rgba(56,189,248,.2);border-top-color:#38bdf8;animation:sp-spin .9s linear infinite}
+#app-splash .sp-title{font-family:Georgia,serif;font-weight:700;font-size:1.25rem;color:#f8fafc;letter-spacing:.04em}
+#app-splash .sp-sub{font-size:.7rem;color:#7dd3fc;letter-spacing:.12em;text-transform:uppercase;animation:sp-pulse 1.6s ease-in-out infinite}
+@keyframes sp-spin{to{transform:rotate(360deg)}}
+@keyframes sp-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+</style>
+<div id="app-splash">
+  <div class="sp-ring"></div>
+  <div class="sp-title">LandraFashion</div>
+  <div class="sp-sub">Caricamento in corso...</div>
+</div>
+<script>
+window.__hideSplash = function(){
+  var el = document.getElementById('app-splash');
+  if(!el || el.__hiding) return;
+  el.__hiding = true;
+  el.classList.add('hide');
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 500);
+};
+// sicurezza: se qualcosa non risponde (es. offline) lo splash non resta mai bloccato
+setTimeout(function(){ window.__hideSplash(); }, 8000);
+</script>
+
 <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:0"></canvas>
 <div id="app" style="position:relative;z-index:1;min-height:100vh;"></div>
 
@@ -715,6 +742,7 @@ function OrionChatModule(){
 
 function Providers({children}){
   const [authReady, setAuthReady] = useState(false);
+  const [profileLoaded, setProfileLoaded] = useState(false);
   const [user, setUser] = useState(null);
   const [profileData, setProfileData] = useState(null);
   const [articles, setArticles] = useState([]);
@@ -738,11 +766,13 @@ function Providers({children}){
     if(!auth) { setAuthReady(true); return; }
     const unsub = onAuthStateChanged(auth, u => {
       setUser(u);
+      if(!u || !rtdb) setProfileLoaded(true); else setProfileLoaded(false);
       if(u && rtdb) {
         onValue(ref(rtdb, "users/"+u.uid), snap => {
           const val = snap.val();
           if(val) setProfileData(val);
-        });
+          setProfileLoaded(true);
+        }, () => setProfileLoaded(true));
         onValue(ref(rtdb, "wardrobe/"+u.uid), snap => {
           const v = snap.val();
           setWardrobeItems(v ? Object.keys(v).map(id=>({id, ...v[id]})) : []);
@@ -752,6 +782,13 @@ function Providers({children}){
     });
     return () => unsub();
   }, []);
+
+  useEffect(() => {
+    if(!authReady || !profileLoaded) return;
+    const wait = Math.max(0, 1200 - (window.performance ? performance.now() : 0));
+    const t = setTimeout(() => { if(window.__hideSplash) window.__hideSplash(); }, wait);
+    return () => clearTimeout(t);
+  }, [authReady, profileLoaded]);
 
   useEffect(() => {
     if(!rtdb) return;
@@ -924,7 +961,7 @@ function Providers({children}){
 
   return html`
     <${AppState.Provider} value=${{
-      user, isStaff, authReady, profileData, articles, products, socialPosts, stories, videos, videoCategories,
+      user, isStaff, authReady, profileLoaded, profileData, articles, products, socialPosts, stories, videos, videoCategories,
       pricing, permissions, wardrobeItems, userTier, userGender, canAccess, checkoutTier, setCheckoutTier,
       transactions, videocallTariffs, autoConfig
     }}>
@@ -3030,7 +3067,8 @@ function Shell(){
 }
 
 function Main(){
-  const {profileData} = useApp();
+  const {profileData, profileLoaded} = useApp();
+  if(!profileLoaded) return html`<div class="grid min-h-screen place-items-center text-sky-200">Caricamento piattaforma...</div>`;
   if(!profileData?.onboarded) return html`<${IntakeSurvey} onDone=${()=>window.location.reload()}/>`;
   return html`<${Shell}/>`;
 }
