@@ -47,25 +47,55 @@ window.addEventListener('appinstalled', function() {
 });
 </script>
 
+<script>
+(function(){
+  var d=document.documentElement,ua=navigator.userAgent;
+  var ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  d.classList.add(ios?'is-ios':(/Android/.test(ua)?'is-android':'is-other'));
+  function measure(){
+    var p=document.createElement('div');
+    p.style.cssText='position:fixed;top:0;left:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
+    document.body.appendChild(p);var t=p.offsetHeight;document.body.removeChild(p);
+    d.style.setProperty('--sat',t+'px');
+    // Dynamic Island: inset superiore >= 54px (notch classico 44-50px) solo su iPhone
+    d.classList.toggle('has-island',ios&&/iPhone/.test(ua)&&t>=54);
+  }
+  window.__lfMeasure=measure;
+  if(document.body)measure();else document.addEventListener('DOMContentLoaded',measure);
+  addEventListener('resize',measure);addEventListener('orientationchange',function(){setTimeout(measure,250)});
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{serif:['Fraunces','Georgia','serif'],sans:['Inter','-apple-system','BlinkMacSystemFont','Segoe UI','Roboto','sans-serif']},colors:{
+slate:{50:'#F4F5FA',100:'#E6E9F2',200:'#CBD1E2',300:'#B3BAD0',400:'#9AA3BC',500:'#6F7894',600:'#3B4468',700:'#2F3650',800:'#262C42',900:'#141826',950:'#0A0C14'},
+sky:{200:'#CFE0FF',300:'#B5D0FF',400:'#8AB4FF',500:'#6C9CF2',600:'#4F82DB',700:'#3D68B5',900:'#1C2A4A',950:'#121A30'},
+blue:{400:'#8AB4FF',500:'#6C9CF2',600:'#8AB4FF',700:'#5E8FE0',800:'#1C2A4A',900:'#141826',950:'#0F1320'},
+indigo:{300:'#CFE0FF',400:'#8AB4FF',500:'#6C9CF2',600:'#6C9CF2',900:'#141826',950:'#0F1320'},
+cyan:{300:'#E8CFA0',400:'#E8CFA0',500:'#8AB4FF',600:'#8AB4FF',700:'#3D68B5',800:'#262C42',900:'#1C2133',950:'#141826'}}}}};
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.0/purify.min.js"></script>
 <style type="text/tailwindcss">
 :root{--ink:#f8fafc;--muted:#94a3b8}
-html,body{height:100%;margin:0;padding:0;overflow-x:hidden}
-body{color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#020617,#0f172a,#1e1b4b);background-attachment:fixed;-webkit-tap-highlight-color:transparent}
+html{background:#0A0C14;color-scheme:dark;-webkit-text-size-adjust:100%}
+html,body{margin:0;padding:0;overflow-x:hidden}
+#app{min-height:100vh;min-height:100dvh}
+.min-h-screen{min-height:100vh;min-height:100dvh}
+body{color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;background:#0A0C14;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 
-.app-bg::before,.app-bg::after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(140px);opacity:.35}
-.app-bg::before{width:65vmax;height:65vmax;left:-15vmax;top:-15vmax;background:#1d4ed8}
-.app-bg::after{width:60vmax;height:60vmax;right:-15vmax;bottom:-15vmax;background:#7c3aed}
 
 @layer components{
-.glass{background:rgba(15, 23, 42, 0.88);backdrop-filter:blur(32px) saturate(220%);-webkit-backdrop-filter:blur(32px) saturate(220%);border:1px solid rgba(56, 189, 248, 0.22);box-shadow:0 24px 60px rgba(2,6,23,.6);@apply rounded-3xl}
-.glass-strong{background:rgba(3, 7, 18, 0.96);@apply glass}
-.btn{@apply rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-xl transition active:scale-95 hover:brightness-110 disabled:opacity-50 inline-flex items-center justify-center gap-2 cursor-pointer select-none}
-.btn-ghost{@apply rounded-2xl border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-200 transition active:scale-95 hover:bg-sky-500/20 inline-flex items-center justify-center gap-2 cursor-pointer select-none}
-.field{@apply w-full rounded-2xl border border-sky-500/30 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none focus:ring-2 focus:ring-sky-500/50}
+.glass{background:#141826;border:1px solid #262C42;box-shadow:0 1px 0 rgba(255,255,255,.03) inset;@apply rounded-3xl}
+.glass-strong{background:#10131F;@apply glass}
+.btn{@apply rounded-2xl px-5 py-3 text-sm font-bold transition active:scale-95 hover:brightness-110 disabled:opacity-50 inline-flex items-center justify-center gap-2 cursor-pointer select-none;background:#8AB4FF;color:#0A0C14;min-height:48px}
+.btn-ghost{@apply rounded-2xl px-4 py-2 text-sm font-semibold transition active:scale-95 inline-flex items-center justify-center gap-2 cursor-pointer select-none;background:#1C2133;border:1px solid #2F3650;color:#CFE0FF;min-height:44px}
+.btn-ghost:hover{background:#262C42}
+.field{@apply w-full rounded-2xl px-4 py-3 text-sm text-white outline-none;background:#0A0C14;border:1px solid #262C42;min-height:48px;font-size:16px}
+.field:focus{border-color:#8AB4FF;box-shadow:0 0 0 3px rgba(138,180,255,.25)}
 }
-.on{background:linear-gradient(to right, #2563eb, #4f46e5)!important;color:#fff!important;border-color:#38bdf8!important}
+.on{background:#8AB4FF!important;color:#0A0C14!important;border-color:#8AB4FF!important}
 .safe-bottom{padding-bottom:env(safe-area-inset-bottom,1rem)}
 .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px}
 .custom-scrollbar::-webkit-scrollbar-track{background:rgba(15,23,42,0.6)}
@@ -91,6 +121,25 @@ html.pwa-ready #pwa-screenlock { display: none !important; }
   transform: translateX(0);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ===== LANDRAFASHION NEW UI: adattivo iOS (Dynamic Island) / Android / desktop ===== */
+.lf-top{position:sticky;top:0;z-index:30;padding-top:env(safe-area-inset-top,0px);background:rgba(10,12,20,.88);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid #262C42}
+.lf-top-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1200px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-left)) 10px max(16px,env(safe-area-inset-left))}
+.lf-top-l,.lf-top-r{display:flex;align-items:center;gap:8px;min-width:0}
+.lf-top-sub{display:none}
+/* iPhone con Dynamic Island: fascia superiore lasciata vuota, barra DIVISA in due capsule */
+html.has-island .lf-top{background:#0A0C14;border-bottom:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+html.has-island .lf-top-inner{padding-top:6px;padding-bottom:10px}
+html.has-island .lf-top-l,html.has-island .lf-top-r{background:#141826;border:1px solid #262C42;border-radius:24px;padding:4px 12px;min-height:52px}
+html.has-island .lf-top-r{padding:4px 6px}
+@media (max-width:767px){.lf-top-r .lf-txt{display:none}.lf-top-r .btn-ghost{padding:0 12px}.lf-top-l .lf-sub,.lf-top-l span.uppercase{display:none}}
+.lf-tab{position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:40;height:68px;display:flex;align-items:center;justify-content:space-around;background:rgba(28,33,51,.94);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid #2F3650;border-radius:34px;box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.lf-tab button{min-width:52px;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:0;font-size:10px;font-weight:600;cursor:pointer}
+.lf-tab .lf-mid{width:54px;height:54px;min-width:54px;border-radius:27px;background:#8AB4FF;color:#0A0C14;position:relative;top:-14px;box-shadow:0 10px 24px rgba(138,180,255,.35)}
+.lf-sheet{animation:lfUp .28s cubic-bezier(.16,1,.3,1)}@keyframes lfUp{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+main{padding-left:max(1rem,env(safe-area-inset-left))!important;padding-right:max(1rem,env(safe-area-inset-right))!important}
+@media (min-width:768px){.lf-tab{display:none}}
+img{max-width:100%}
 </style>
 </head>
 <body class="app-bg">
@@ -2972,8 +3021,9 @@ function Shell(){
 
   return html`
     <div class="flex min-h-screen flex-col">
-      <header class="glass sticky top-0 z-30 flex items-center justify-between px-6 py-3 border-b border-sky-500/30">
-        <${BrandLogo}/>
+      <header class="lf-top">
+        <div class="lf-top-inner">
+        <div class="lf-top-l"><${BrandLogo}/></div>
 
         <nav class="hidden md:flex items-center gap-2 relative">
           <button type="button" class="btn-ghost ${tab==='feed'?'on':''}" onClick=${()=>setTab('feed')}>Home Editorial</button>
@@ -2986,7 +3036,7 @@ function Shell(){
             </button>
             ${dropdownOpen && html`
               <div class="fixed inset-0 z-40" onClick=${()=>setDropdownOpen(false)}></div>
-              <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 glass glass-strong p-2 space-y-1 shadow-2xl z-50 border border-sky-500/40">
+              <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 glass glass-strong p-2 space-y-1 shadow-2xl z-50">
                 ${SYSTEM_MODULES.map(m => html`
                   <button type="button" key=${m.id} class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-sky-500/20 text-slate-200 transition flex items-center justify-between" onClick=${()=>openTab(m.id)}>
                     <span>${m.name}</span>
@@ -2998,12 +3048,13 @@ function Shell(){
           </div>
         </nav>
 
-        <div class="flex items-center gap-2">
-          <button type="button" class="btn-ghost text-xs uppercase tracking-wider text-sky-300 font-bold" onClick=${()=>setCheckoutTier(userTier==='free'?'pro':userTier)}>
-            💎 ${userTier}
+        <div class="lf-top-r">
+          <button type="button" class="btn-ghost text-xs uppercase tracking-wider text-sky-300 font-bold" aria-label="Piano ${userTier}" onClick=${()=>setCheckoutTier(userTier==='free'?'pro':userTier)}>
+            <${SvgIcon} name="sparkles" className="w-4 h-4"/> <span>${userTier}</span>
           </button>
-          ${isStaff && html`<a href="#staff" class="btn-ghost text-xs bg-cyan-950/80 border-cyan-700 text-cyan-300 font-mono">Horizon CMS</a>`}
-          <button type="button" class="btn-ghost" onClick=${()=>signOut(auth)}>Esci</button>
+          ${isStaff && html`<a href="#staff" class="btn-ghost text-xs font-mono">CMS</a>`}
+          <button type="button" class="btn-ghost" aria-label="Esci" onClick=${()=>signOut(auth)}><span class="lf-txt">Esci</span><span class="md:hidden" aria-hidden="true">⎋</span></button>
+        </div>
         </div>
       </header>
 
@@ -3021,15 +3072,15 @@ function Shell(){
       </main>
 
       ${startOpen && html`
-        <div class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick=${()=>setStartOpen(false)}>
-          <div class="fixed bottom-20 left-4 right-4 glass glass-strong p-5 space-y-4 border border-sky-500/40" onClick=${e=>e.stopPropagation()}>
-            <div class="flex items-center justify-between border-b border-sky-500/20 pb-3">
-              <${BrandLogo}/>
-              <span class="text-[10px] text-sky-400 font-bold uppercase">Menu Start</span>
+        <div class="fixed inset-0 z-40 bg-black/60 md:hidden" style="-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)" onClick=${()=>setStartOpen(false)}>
+          <div class="lf-sheet fixed left-4 right-4 glass glass-strong p-5 space-y-4" style="bottom:calc(env(safe-area-inset-bottom,0px) + 90px)" onClick=${e=>e.stopPropagation()}>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <span class="font-serif font-bold text-lg text-white">Moduli</span>
+              <span class="text-[10px] text-sky-400 font-bold uppercase">Il tuo atelier</span>
             </div>
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto">
               ${SYSTEM_MODULES.map(m => html`
-                <button type="button" key=${m.id} class="glass p-3 flex flex-col items-center justify-center text-center space-y-1.5 cursor-pointer" onClick=${()=>openTab(m.id)}>
+                <button type="button" key=${m.id} class="glass p-3 flex flex-col items-center justify-center text-center space-y-1.5 cursor-pointer min-h-[88px]" onClick=${()=>openTab(m.id)}>
                   <${SvgIcon} name=${m.id} className="w-6 h-6 text-sky-400" />
                   <span class="text-[10px] font-bold text-white">${m.name}</span>
                 </button>
@@ -3039,25 +3090,21 @@ function Shell(){
         </div>
       `}
 
-      <nav class="glass fixed inset-x-4 bottom-4 z-40 flex items-center justify-around p-2 md:hidden border border-sky-500/30 safe-bottom">
-        <button type="button" class="flex flex-col items-center p-2 ${tab==='feed'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('feed')}>
-          <${SvgIcon} name="home" className="w-5 h-5"/><span class="text-[9px]">Home</span>
+      <nav class="lf-tab md:hidden" aria-label="Navigazione">
+        <button type="button" class="${tab==='feed'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('feed')}>
+          <${SvgIcon} name="home" className="w-5 h-5"/><span>Home</span>
         </button>
-        <button type="button" class="flex flex-col items-center p-2 ${tab==='social'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('social')}>
-          <${SvgIcon} name="social" className="w-5 h-5"/><span class="text-[9px]">Social</span>
+        <button type="button" class="${tab==='social'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('social')}>
+          <${SvgIcon} name="social" className="w-5 h-5"/><span>Social</span>
         </button>
-
-        <button type="button" class="relative -top-4 w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 p-0.5 shadow-2xl flex items-center justify-center" onClick=${()=>setStartOpen(!startOpen)}>
-          <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
-            <${SvgIcon} name="grid" className="w-6 h-6 text-sky-400" />
-          </div>
+        <button type="button" class="lf-mid" aria-label="Moduli" onClick=${()=>setStartOpen(!startOpen)}>
+          <${SvgIcon} name="grid" className="w-6 h-6" />
         </button>
-
-        <button type="button" class="flex flex-col items-center p-2 ${tab==='mannequin'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('mannequin')}>
-          <${SvgIcon} name="mannequin" className="w-5 h-5"/><span class="text-[9px]">Vettoriale</span>
+        <button type="button" class="${tab==='mannequin'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('mannequin')}>
+          <${SvgIcon} name="mannequin" className="w-5 h-5"/><span>Manichino</span>
         </button>
-        <button type="button" class="flex flex-col items-center p-2 ${tab==='profile'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('profile')}>
-          <${SvgIcon} name="profile" className="w-5 h-5"/><span class="text-[9px]">Profilo</span>
+        <button type="button" class="${tab==='profile'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('profile')}>
+          <${SvgIcon} name="profile" className="w-5 h-5"/><span>Profilo</span>
         </button>
       </nav>
 
