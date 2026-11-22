@@ -165,6 +165,66 @@ main{animation:lfFade .5s ease both}@keyframes lfFade{from{opacity:0;transform:t
 #hs-load .l i{display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,#DDBF82,transparent);animation:hsbar 1.2s ease-in-out infinite}
 @keyframes hsbar{from{transform:translateX(-100%)}to{transform:translateX(350%)}}
 </style>
+<style id="atelier2">
+.lf-hero{padding:8px 0 36px}
+.lf-eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#DDBF82;margin:0 0 14px}
+.lf-hero h1{font-size:clamp(44px,11vw,96px);line-height:.98;margin:0 0 18px;color:#F7F4EF}
+.lf-hero h1 em{font-style:italic;font-weight:500;background:linear-gradient(120deg,#F3E6C8,#C9A45F);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lf-lead{max-width:34ch;color:#9A9082;font-size:16px;margin:0 0 22px}
+.lf-cta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+.lf-rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:4px 16px 18px;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;scrollbar-width:none}
+.lf-rail::-webkit-scrollbar{display:none}
+.lf-tile{flex:0 0 min(62vw,230px);scroll-snap-align:start;min-height:230px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:8px;text-align:left;padding:20px;border-radius:30px;border:1px solid #2E2A24;color:#DDBF82;cursor:pointer;position:relative;background:linear-gradient(165deg,#26211A,#13110E)}
+.lf-tile:active{transform:scale(.97)}
+.lf-tile b{color:#F7F4EF;font:600 19px/1.15 Fraunces,Georgia,serif}
+.lf-tile small{color:#9A9082;font-size:12px;line-height:1.35}
+.lf-n{position:absolute;top:18px;right:20px;font:italic 500 15px Fraunces,serif;color:#776E62}
+</style>
+<style id="atelier3">
+/* SCORRIMENTO: niente contenitori che bloccano il touch */
+html{overflow-x:visible!important;height:auto!important}
+body{overflow-x:clip!important;overflow-y:visible!important;height:auto!important;touch-action:auto!important}
+html.is-android #pwa-screenlock{display:none!important}
+/* PULSANTI */
+html body .btn{background:#F7F4EF;color:#0E0D0B;border-radius:999px;letter-spacing:.14em;font-size:11px;font-weight:700;box-shadow:none;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+html body .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(201,164,95,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+html body .btn:hover::after{transform:translateX(120%)}
+html body .btn:hover{box-shadow:0 12px 30px -12px rgba(221,191,130,.6);filter:none}
+html body .btn-ghost{background:transparent;border:1px solid rgba(221,191,130,.28);color:#EAD7A8;letter-spacing:.1em;font-size:11px;text-transform:uppercase;transition:all .25s}
+html body .btn-ghost:hover{background:rgba(221,191,130,.1);border-color:#DDBF82}
+html body .on{background:#F7F4EF!important;color:#0E0D0B!important;border-color:#F7F4EF!important}
+/* CARD */
+html body .glass{border:1px solid transparent;border-radius:24px;background:linear-gradient(#171512,#171512) padding-box,linear-gradient(160deg,rgba(221,191,130,.5),rgba(221,191,130,.06) 45%,rgba(255,255,255,.08)) border-box;box-shadow:0 24px 60px -30px #000;animation:cardIn .7s cubic-bezier(.16,1,.3,1) both;transition:transform .35s,box-shadow .35s}
+html body .glass:hover{transform:translateY(-3px);box-shadow:0 30px 70px -28px rgba(0,0,0,.9),0 0 0 1px rgba(221,191,130,.12)}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.985)}}
+html body .field{background:#0E0D0B;border:1px solid #2E2A24;border-radius:16px;transition:border-color .2s,box-shadow .2s}
+html body .field:focus{border-color:#DDBF82;box-shadow:0 0 0 4px rgba(221,191,130,.14)}
+.lf-tab button{letter-spacing:.08em;text-transform:uppercase;font-size:9px;transition:color .2s,transform .2s}
+.lf-tab button:active{transform:scale(.9)}
+.lf-tab .lf-mid{background:#F7F4EF;box-shadow:0 12px 28px -8px rgba(221,191,130,.5)}
+.lf-tile{transition:transform .3s,border-color .3s}.lf-tile:hover{border-color:#DDBF82;transform:translateY(-4px)}
+/* CMS stile social */
+.cms-root{background:#0E0D0B!important}
+.cms-aside{background:#110F0D!important;border-color:#2E2A24!important}
+.cms-create{margin:0 0 4px}
+.cms-stories{display:flex;gap:16px;overflow-x:auto;padding:6px 2px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cms-stories::-webkit-scrollbar{display:none}
+.cms-story{flex:none;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;color:#B9B0A2;font-size:11px;letter-spacing:.08em;text-decoration:none;cursor:pointer}
+.cms-story i{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:26px;background:#171512;border:2px solid transparent;background:linear-gradient(#171512,#171512) padding-box,conic-gradient(from 200deg,#F3E6C8,#C9A45F,#3A2E18,#F3E6C8) border-box;transition:transform .25s}
+.cms-story:active i{transform:scale(.92)}
+.cms-story.cur{color:#F7F4EF}.cms-story.cur i{box-shadow:0 0 0 4px rgba(221,191,130,.18)}
+.cms-main input,.cms-main select,.cms-main textarea{font-size:16px}
+@media(max-width:767px){
+ .cms-aside{position:sticky;top:0;z-index:30;padding:calc(env(safe-area-inset-top,0px) + 6px) 10px 8px!important;background:rgba(14,13,11,.94)!important;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-right:0!important;border-bottom:1px solid #2E2A24}
+ .cms-aside>div{width:100%}.cms-aside>div>:not(nav),.cms-aside>a{display:none!important}
+ .cms-aside nav{display:flex!important;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.cms-aside nav::-webkit-scrollbar{display:none}
+ .cms-aside nav button{width:auto!important;flex:none;white-space:nowrap;border:1px solid #2E2A24;border-radius:999px!important;padding:9px 14px!important}
+ .cms-main{padding:14px 14px 90px!important;overflow:visible!important}
+ .cms-main [class*="grid-cols"]{grid-template-columns:1fr!important}
+ .cms-main table{display:block;overflow-x:auto}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body class="app-bg">
 
@@ -1736,6 +1796,57 @@ function SocialPageModule(){
   `;
 }
 
+function Mannequin3D({gender,skin,hair,top,bottom}){
+  const box=useRef(null), api=useRef({});
+  useEffect(()=>{
+    let dead=false, raf=0, ro=null, r=null;
+    import('https://esm.sh/three@0.160.0').then(T=>{
+      const el=box.current; if(dead||!el) return;
+      const W=()=>el.clientWidth||320, H=()=>el.clientHeight||460;
+      r=new T.WebGLRenderer({antialias:true,alpha:true});
+      r.setPixelRatio(Math.min(devicePixelRatio||1,2)); r.setSize(W(),H());
+      r.domElement.style.cssText='display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab';
+      el.appendChild(r.domElement);
+      const sc=new T.Scene(), cam=new T.PerspectiveCamera(32,W()/H(),.1,50);
+      cam.position.set(0,.95,4.8); cam.lookAt(0,.85,0);
+      sc.add(new T.HemisphereLight(0xfff3dc,0x1a1815,1.1));
+      const d=new T.DirectionalLight(0xffffff,1.6); d.position.set(2,3,3); sc.add(d);
+      const rim=new T.DirectionalLight(0xddbf82,1.4); rim.position.set(-3,2,-2); sc.add(rim);
+      const M=(c,rg=.55)=>new T.MeshStandardMaterial({color:c,roughness:rg,metalness:.05,side:T.DoubleSide});
+      const mk={skin:M(skin,.6),hair:M(hair,.4),top:M(top),bottom:M(bottom)}; api.current.mk=mk;
+      const g=new T.Group(); sc.add(g);
+      const add=(geo,mat,x,y,z,rz,sx,sy,sz)=>{const o=new T.Mesh(geo,mat);o.position.set(x||0,y||0,z||0);o.rotation.z=rz||0;o.scale.set(sx||1,sy||1,sz||1);g.add(o);return o};
+      const lathe=(pts,mat,z)=>add(new T.LatheGeometry(pts.map(q=>new T.Vector2(q[0],q[1])),40),mat,0,0,0,0,1,1,z||.62);
+      const F=gender==='Donna';
+      add(new T.SphereGeometry(.17,32,24),mk.skin,0,1.76,0,0,.92,1.08,1);
+      add(new T.SphereGeometry(.185,32,24),mk.hair,0,1.79,-.03,0,.95,F?1:.8,1);
+      if(F) add(new T.CapsuleGeometry(.14,.4,8,16),mk.hair,0,1.5,-.1,0,1,1,.6);
+      add(new T.CylinderGeometry(.06,.07,.16,20),mk.skin,0,1.6,0);
+      lathe(F?[[.001,.98],[.2,.98],[.17,1.1],[.19,1.28],[.24,1.45],[.2,1.56],[.001,1.57]]:[[.001,.98],[.23,.98],[.24,1.2],[.29,1.45],[.22,1.56],[.001,1.57]],mk.top);
+      [-1,1].forEach(k=>{
+        add(new T.CapsuleGeometry(.055,.62,8,14),mk.skin,k*(F?.31:.36),1.15,0,k*.12);
+        add(new T.CapsuleGeometry(.068,.2,8,14),mk.top,k*(F?.28:.34),1.4,0,k*.2);
+        if(F) add(new T.CapsuleGeometry(.07,.58,8,14),mk.skin,k*.09,.32,0);
+        else add(new T.CapsuleGeometry(.092,.86,8,14),mk.bottom,k*.11,.5,0);
+      });
+      if(F) lathe([[.36,.58],[.3,.7],[.2,.98],[.001,.98]],mk.bottom,.8);
+      add(new T.CylinderGeometry(.5,.54,.04,48),M(0x1a1815,.3),0,-.04,0);
+      add(new T.TorusGeometry(.5,.008,8,64),M(0xddbf82,.3),0,-.015,0,0).rotation.x=Math.PI/2;
+      let ry=.5,vy=0,drag=false,lx=0;
+      const dn=e=>{drag=true;lx=e.clientX;vy=0;r.domElement.style.cursor='grabbing'};
+      const mv=e=>{if(!drag)return;vy=(e.clientX-lx)*.012;ry+=vy;lx=e.clientX};
+      const up=()=>{drag=false;r.domElement.style.cursor='grab'};
+      r.domElement.addEventListener('pointerdown',dn);addEventListener('pointermove',mv);addEventListener('pointerup',up);
+      ro=new ResizeObserver(()=>{r.setSize(W(),H());cam.aspect=W()/H();cam.updateProjectionMatrix()});ro.observe(el);
+      const loop=()=>{raf=requestAnimationFrame(loop);if(!drag){vy*=.94;ry+=vy+.004}g.rotation.y=ry;r.render(sc,cam)};loop();
+      api.current.off=()=>{r.domElement.removeEventListener('pointerdown',dn);removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};
+    }).catch(e=>console.warn('3D non disponibile',e));
+    return()=>{dead=true;cancelAnimationFrame(raf);if(ro)ro.disconnect();if(api.current.off)api.current.off();if(r){r.dispose();if(r.domElement.parentNode)r.domElement.parentNode.removeChild(r.domElement)}api.current.mk=null};
+  },[gender]);
+  useEffect(()=>{const k=api.current.mk;if(!k)return;k.skin.color.set(skin);k.hair.color.set(hair);k.top.color.set(top);k.bottom.color.set(bottom)},[skin,hair,top,bottom,gender]);
+  return html`<div ref=${box} style="width:100%;height:min(62vh,480px);min-height:340px;border-radius:24px;background:radial-gradient(circle at 50% 35%,#2a2519,#0E0D0B 70%)"></div>`;
+}
+
 function MannequinStudioModule(){
   const {userGender} = useApp();
   const [selectedGender, setSelectedGender] = useState(userGender || "Donna");
@@ -1748,7 +1859,7 @@ function MannequinStudioModule(){
     <div class="max-w-4xl mx-auto space-y-6">
       <div class="glass p-6 flex justify-between items-center">
         <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2">
-          <${SvgIcon} name="mannequin" className="w-6 h-6 text-sky-400"/> Manichino Vettoriale Interattivo
+          <${SvgIcon} name="mannequin" className="w-6 h-6 text-sky-400"/> Manichino 3D — trascina per ruotare
         </h2>
         <div class="flex gap-2">
           <button type="button" class="btn-ghost text-xs ${selectedGender==='Donna'?'on':''}" onClick=${()=>setSelectedGender('Donna')}>Donna</button>
@@ -1758,19 +1869,7 @@ function MannequinStudioModule(){
 
       <div class="grid md:grid-cols-2 gap-6 items-center">
         <div class="glass p-6 flex flex-col items-center bg-slate-950/90 border border-sky-500/30">
-          <svg class="w-60 h-[420px] drop-shadow-2xl" viewBox="0 0 200 400">
-            <path d=${selectedGender==='Donna' ? "M70 65 Q100 20 130 65 Q145 110 135 150 Q100 130 65 150 Z" : "M75 60 Q100 35 125 60 Q130 75 125 80 Q100 70 75 80 Z"} fill=${hairColor} />
-            <ellipse cx="100" cy="90" rx="25" ry="32" fill=${skinColor} />
-            <rect x="92" y="118" width="16" height="20" fill=${skinColor} />
-            ${selectedGender === 'Donna' ? html`
-              <path d="M60 138 L140 138 L125 240 L75 240 Z" fill=${topColor} />
-              <path d="M75 240 L125 240 L135 340 L65 340 Z" fill=${bottomColor} />
-            ` : html`
-              <path d="M55 138 L145 138 L135 245 L65 245 Z" fill=${topColor} />
-              <path d="M65 245 L98 245 L95 360 L70 360 Z" fill=${bottomColor} />
-              <path d="M102 245 L135 245 L130 360 L105 360 Z" fill=${bottomColor} />
-            `}
-          </svg>
+          <${Mannequin3D} gender=${selectedGender} skin=${skinColor} hair=${hairColor} top=${topColor} bottom=${bottomColor}/>
         </div>
 
         <div class="glass p-6 space-y-4 text-xs">
@@ -2588,8 +2687,8 @@ function CmsDashboard(){
   };
 
   return html`
-    <div class="min-h-screen flex flex-col md:flex-row bg-slate-950 text-slate-100 font-sans">
-      <aside class="w-full md:w-80 bg-slate-900 border-r border-slate-800 p-6 space-y-6 flex flex-col justify-between">
+    <div class="cms-root min-h-screen flex flex-col md:flex-row bg-slate-950 text-slate-100 font-sans">
+      <aside class="cms-aside w-full md:w-80 bg-slate-900 border-r border-slate-800 p-6 space-y-6 flex flex-col justify-between">
         <div class="space-y-6">
           <${HorizonLogoCorporate}/>
           <div class="px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-800/40 text-[10px] font-mono text-cyan-300 flex items-center justify-between">
@@ -2636,7 +2735,14 @@ function CmsDashboard(){
         </a>
       </aside>
 
-      <main class="flex-1 p-8 space-y-6 overflow-y-auto bg-slate-950/80 custom-scrollbar">
+      <main class="cms-main flex-1 p-8 space-y-6 bg-slate-950/80">
+        <section class="cms-create">
+          <p class="lf-eyebrow">Studio · cosa vuoi pubblicare oggi?</p>
+          <div class="cms-stories">
+            ${[['social','📸','Foto'],['social','✨','Storia'],['articles','📰','Articolo'],['videos','🎬','Video'],['shop','🛍️','Prodotto'],['expert_chat','💬','Messaggi']].map(x=>html`<button type="button" key=${x[2]} class="cms-story ${tab===x[0]?'cur':''}" onClick=${()=>setTab(x[0])}><i>${x[1]}</i><span>${x[2]}</span></button>`)}
+            <a href="#" class="cms-story"><i>↩</i><span>Esci</span></a>
+          </div>
+        </section>
         ${tab==='terminal' && html`
           <div class="space-y-6">
             <div class="flex items-center justify-between">
@@ -3092,6 +3198,23 @@ function Shell(){
       </header>
 
       <main class="mx-auto w-full max-w-[1200px] flex-1 px-4 pt-6 pb-32">
+        ${tab==='feed' && html`
+        <section class="lf-hero">
+          <p class="lf-eyebrow">Atelier digitale · Orion AI</p>
+          <h1>Il tuo stile,<br/><em>ridisegnato.</em></h1>
+          <p class="lf-lead">Armocromia, guardaroba e consulenza personale in un unico spazio.</p>
+          <div class="lf-cta">
+            <button type="button" class="btn" onClick=${()=>setTab('mannequin')}>Prova il manichino 3D</button>
+            <button type="button" class="btn-ghost" onClick=${()=>setTab('orion')}>Parla con Orion</button>
+          </div>
+          <div class="lf-rail">
+            ${SYSTEM_MODULES.map((m,i)=>html`<button type="button" key=${m.id} class="lf-tile" onClick=${()=>setTab(m.id)}>
+              <span class="lf-n">${String(i+1).padStart(2,'0')}</span>
+              <${SvgIcon} name=${m.id} className="w-7 h-7"/>
+              <b>${m.name}</b><small>${m.desc||''}</small>
+            </button>`)}
+          </div>
+        </section>`}
         ${tab==='feed' && html`<${FeedModule} onSwitchTab=${(t)=>setTab(t)}/>`}
         ${tab==='social' && html`<${SocialPageModule}/>`}
         ${tab==='mannequin' && html`<${MannequinStudioModule}/>`}
