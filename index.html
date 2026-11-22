@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LandraFashion</title>
 <meta name="description" content="Ecosistema avanzato di armocromia, alimentato da Orion Horizon Ai.">
-<meta name="theme-color" content="#0E0D0B">
+<meta name="theme-color" content="#0B2250">
 <!-- PWA Manifest & Meta -->
 <link rel="manifest" href="./manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -420,6 +420,22 @@ setTimeout(function(){var a=document.getElementById('app');if(a&&!a.children.len
 .pb-steps p{margin:3px 0 0;font-size:12px;line-height:1.5;color:#D3E3FA}
 .pb-steps svg{display:inline-block;vertical-align:-5px;color:#BFE0FF}
 .pb-install{font-size:15px!important;gap:10px}
+</style>
+<style id="safearea">
+/* ===== Schermo intero + zone sicure (notch, Dynamic Island, barra gesti) ===== */
+html{background:#071632!important;min-height:100%;-webkit-text-size-adjust:100%}
+html.lf-luxe body,html body{background-color:transparent}
+html.lf-luxe::before{content:"";position:fixed;left:0;right:0;top:0;bottom:0;z-index:-1;background:linear-gradient(180deg,#0B2250 0%,#071632 55%,#050E22 100%);pointer-events:none}
+html.lf-luxe body{background:transparent!important}
+html body #app,html body .lf-skin{min-height:100vh;min-height:100dvh}
+html body .lf-garland{top:env(safe-area-inset-top,0px)}
+html body .lf-skin .lf-top{padding-top:0}
+html body .lf-skin .lf-top-inner{padding:calc(env(safe-area-inset-top,0px) + 38px) max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left))}
+html body .lf-skin .lf-tab{left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+html body .lf-skin main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))!important}
+html body #pwa-screenlock{padding-top:calc(env(safe-area-inset-top,0px) + 16px)!important;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)!important;box-sizing:border-box}
+html body .lf-load{padding-top:calc(env(safe-area-inset-top,0px) + 24px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+@media(min-width:768px){html body .lf-skin .lf-tab{left:50%;right:auto}}
 </style>
 </head>
 <body class="app-bg">
