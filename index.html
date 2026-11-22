@@ -71,11 +71,11 @@ window.addEventListener('appinstalled', function() {
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 <script>
 tailwind.config={theme:{extend:{fontFamily:{serif:['Fraunces','Georgia','serif'],sans:['Inter','-apple-system','BlinkMacSystemFont','Segoe UI','Roboto','sans-serif']},colors:{
-slate:{50:'#F7F4EF',100:'#ECE7DF',200:'#D6CFC3',300:'#B9B0A2',400:'#9A9082',500:'#776E62',600:'#4A443C',700:'#37322C',800:'#29251F',900:'#1A1815',950:'#0E0D0B'},
-sky:{200:'#F3E6C8',300:'#EAD7A8',400:'#DDBF82',500:'#C9A45F',600:'#B08A43',700:'#8A6A30',900:'#3A2E18',950:'#241C0E'},
-blue:{400:'#DDBF82',500:'#C9A45F',600:'#DDBF82',700:'#B08A43',800:'#3A2E18',900:'#1A1815',950:'#141210'},
-indigo:{300:'#F3E6C8',400:'#DDBF82',500:'#C9A45F',600:'#C9A45F',900:'#1A1815',950:'#141210'},
-cyan:{300:'#F3E6C8',400:'#EAD7A8',500:'#DDBF82',600:'#DDBF82',700:'#B08A43',800:'#29251F',900:'#221F1B',950:'#1A1815'}}}}};
+slate:{50:'#F2F7FF',100:'#E3EEFF',200:'#C9DCF7',300:'#A9C2E6',400:'#869FC8',500:'#627CA8',600:'#3F5A8C',700:'#2A4375',800:'#173060',900:'#0E2250',950:'#071632'},
+sky:{200:'#DCEBFF',300:'#BFDBFF',400:'#8FC0FF',500:'#5B9DF5',600:'#3E80DC',700:'#2D63B3',900:'#12295A',950:'#0A1A3E'},
+blue:{400:'#8FC0FF',500:'#5B9DF5',600:'#8FC0FF',700:'#3E80DC',800:'#12295A',900:'#0E2250',950:'#0A1A3E'},
+indigo:{300:'#DCEBFF',400:'#8FC0FF',500:'#5B9DF5',600:'#5B9DF5',900:'#0E2250',950:'#0A1A3E'},
+cyan:{300:'#DCEBFF',400:'#BFDBFF',500:'#8FC0FF',600:'#8FC0FF',700:'#3E80DC',800:'#173060',900:'#0E2250',950:'#0A1A3E'}}}}};
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.0/purify.min.js"></script>
 <style type="text/tailwindcss">
@@ -297,120 +297,128 @@ html.lf-xmas .fixed.inset-0>div{max-height:calc(100dvh - 2rem);overflow-y:auto;-
 </style>
 
 <style id="luxe">
-/* ===== LUXE: stile come screen 2 (nero profondo, oro, vetro) ===== */
-html.lf-luxe{--g:#E8C98A;--g2:#C9A45F}
-html.lf-luxe body{background:#050403;background-image:radial-gradient(520px 420px at 100% 0%,rgba(150,100,40,.30),transparent 62%),radial-gradient(520px 520px at 0% 38%,rgba(110,12,36,.26),transparent 62%),radial-gradient(600px 400px at 60% 100%,rgba(150,100,40,.16),transparent 60%);background-attachment:fixed}
+/* ===== TEMA NATALE BIANCO/BLU (stile mockup, sfondi pieni, niente vetro) ===== */
+html.lf-luxe{--g:#CFE6FF;--g2:#7DB8FF;--card:#0F2A5C;--card2:#0A1E47;--line:#3F73BE}
+html.lf-luxe body{background:linear-gradient(180deg,#0B2250 0%,#071632 55%,#050E22 100%) fixed;background-color:#071632}
 html.lf-luxe body::after{display:none!important}
 .lf-i{width:22px;height:22px;flex:none}
-.lf-star{color:var(--g);filter:drop-shadow(0 0 8px rgba(232,201,138,.65));flex:none}
-html body .lf-skin .lf-top{background:transparent;border:0}
-.lf-skin .lf-top-inner{padding-top:10px;padding-bottom:8px}
-.lf-brand{display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;text-align:left;cursor:pointer;min-width:0}
-.lf-brand b{display:block;font:500 25px/1 Fraunces,Georgia,serif;letter-spacing:-.01em;color:#F6EFE3}
-.lf-brand small{display:block;font-size:8px;letter-spacing:.3em;color:#D6CFC3;margin-top:5px;white-space:nowrap}
-html body .lf-skin .lf-top-r{background:none;border:0;box-shadow:none;padding:0;min-height:0;gap:9px}
-html body .lf-skin .lf-ib{width:46px;height:46px;background:rgba(20,17,14,.7);border:1px solid rgba(232,201,138,.45);color:#fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-html body .lf-skin .lf-ib b{background:#E0243F;border:0;color:#fff;top:-2px;right:-2px}
-html body .lf-skin .lf-av{background:linear-gradient(135deg,#F3E2B8,#B08A43);color:#1a1208;border-color:#E8C98A}
-.lf-hero3{position:relative;margin:0 -16px;padding:22px 20px 96px;min-height:430px;overflow:hidden;background:linear-gradient(90deg,rgba(5,4,3,.88) 0%,rgba(5,4,3,.4) 62%,rgba(5,4,3,.1)),linear-gradient(180deg,rgba(5,4,3,0) 55%,#050403),var(--hero) center top/cover no-repeat,radial-gradient(90% 70% at 80% 25%,rgba(232,201,138,.28),transparent 60%),radial-gradient(70% 60% at 100% 70%,rgba(150,15,45,.35),transparent 65%),#0a0807}
-.lf-hero3 .lf-chip{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:99px;border:1px solid rgba(232,201,138,.65);background:rgba(20,16,10,.55);color:#F6EFE3;font-size:13px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.lf-hero3 .lf-chip .lf-i{width:18px;height:18px;color:var(--g)}
-.lf-hero3 h1{font:500 clamp(44px,13vw,70px)/1.02 Fraunces,Georgia,serif!important;margin:20px 0 14px;color:#F6EFE3;font-weight:500!important}
-.lf-hero3 h1 em{font-style:italic;background:linear-gradient(120deg,#F3E2B8,#C9A45F);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lf-hero3 p{color:#F0E8DA;font-size:16px;line-height:1.4;margin:0 0 20px;max-width:30ch}
-html body .lf-skin .btn.lf-cta2,html body .lf-skin .btn.lf-vis{background:linear-gradient(135deg,rgba(232,201,138,.22),rgba(20,15,8,.55));color:#fff;border:1px solid rgba(232,201,138,.8);text-transform:none;letter-spacing:0;font-size:17px;font-weight:500;padding:8px 10px 8px 16px;box-shadow:0 0 22px rgba(232,201,138,.35),inset 0 0 14px rgba(232,201,138,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-html body .lf-skin .btn.lf-vis{font-size:15px;padding:8px 8px 8px 16px}
+.lf-star{color:var(--g);filter:drop-shadow(0 0 6px rgba(159,208,255,.7));flex:none}
+/* ghirlanda con luci */
+.lf-garland{position:fixed;top:0;left:0;right:0;height:62px;z-index:60;pointer-events:none}
+.lf-garland svg{position:absolute;left:0;top:0;width:100%;height:62px}
+.lf-garland i{position:absolute;width:9px;height:12px;margin-left:-4.5px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:var(--c);box-shadow:0 0 8px 2px var(--c);animation:lfTw 2.4s ease-in-out infinite}
+@keyframes lfTw{0%,100%{opacity:1}50%{opacity:.4}}
+/* header */
+html body .lf-skin .lf-top{background:#0A1D45;border:0;border-bottom:1px solid #1E3F7C;-webkit-backdrop-filter:none;backdrop-filter:none}
+html body .lf-skin .lf-top-inner{padding:42px 14px 10px;gap:8px}
+.lf-brand{display:flex;align-items:center;gap:8px;background:none;border:0;color:#fff;text-align:left;cursor:pointer;min-width:0}
+.lf-brand b{display:block;font:500 19px/1 Fraunces,Georgia,serif;color:#fff}
+.lf-brand small{display:block;font-size:7px;letter-spacing:.26em;color:#BFD6F5;margin-top:4px;white-space:nowrap}
+html body .lf-skin .lf-top-r{background:none;border:0;box-shadow:none;padding:0;min-height:0;gap:7px}
+html body .lf-skin .lf-ib{width:40px;height:40px;background:#12306A;border:1px solid #4B7FC4;color:#fff}
+html body .lf-skin .lf-ib .lf-i{width:19px;height:19px}
+html body .lf-skin .lf-av{background:linear-gradient(135deg,#FFFFFF,#8FC0FF);color:#082055;border-color:#CFE6FF}
+/* hero */
+.lf-hero3{position:relative;margin:6px 0 14px;padding:22px 18px;border-radius:28px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(7,22,50,.94) 0%,rgba(7,22,50,.6) 100%),var(--hero) center/cover no-repeat,radial-gradient(90% 80% at 85% 20%,#1d4fa8,transparent 60%),#0B2250;overflow:hidden}
+.lf-hero3 .lf-chip{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:99px;border:1px solid var(--g);background:#12306A;color:#fff;font-size:13px}
+.lf-hero3 .lf-chip .lf-i{width:17px;height:17px;color:var(--g)}
+.lf-hero3 h1{font:500 clamp(40px,12vw,64px)/1.04 Fraunces,Georgia,serif!important;margin:16px 0 12px;color:#fff;font-weight:500!important}
+.lf-hero3 h1 em{font-style:italic;background:linear-gradient(120deg,#FFFFFF,#8FC8FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lf-hero3 p{color:#E3EEFF;font-size:15px;line-height:1.4;margin:0 0 18px;max-width:30ch}
+html body .lf-skin .btn.lf-cta2,html body .lf-skin .btn.lf-vis{background:#12306A;color:#fff;border:1px solid var(--g);text-transform:none;letter-spacing:0;font-size:16px;font-weight:500;padding:7px 8px 7px 16px;box-shadow:0 0 18px rgba(143,200,255,.45)}
+html body .lf-skin .btn.lf-vis{font-size:14px}
 html body .lf-skin .btn.lf-cta2::after,html body .lf-skin .btn.lf-vis::after{display:none}
-.lf-arr{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:1px solid rgba(232,201,138,.7)}
-.lf-arr .lf-i{width:16px;height:16px}
-html body .lf-skin .lf-orion{position:absolute;right:14px;bottom:30px;width:auto;max-width:215px;margin:0;padding:10px 14px;border-radius:22px;background:rgba(20,17,14,.62);border:1px solid rgba(232,201,138,.4);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);gap:10px;color:#fff}
-.lf-orion .lf-i{width:34px;height:34px;color:var(--g)}
-.lf-orion b{display:block;font-size:17px;font-weight:500}.lf-orion small{display:block;font-size:10px;line-height:1.2;color:#D6CFC3}
-html body .lf-skin .lf-qn{position:relative;z-index:3;margin:-58px 0 14px;padding:10px 8px;justify-content:space-between;gap:0;border-radius:40px;background:rgba(14,12,10,.74);border:1px solid rgba(232,201,138,.5);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);box-shadow:0 14px 40px -14px #000}
-html body .lf-skin .lf-qi{min-width:0;flex:1;color:#F0E8DA;font-size:11.5px;gap:5px}
-html body .lf-skin .lf-qi i{width:46px;height:46px;background:none;box-shadow:none;border:1px solid transparent;color:#fff}
-html body .lf-skin .lf-qi.cur i{border-color:var(--g);box-shadow:0 0 18px rgba(232,201,138,.55),inset 0 0 12px rgba(232,201,138,.18);color:var(--g)}
+.lf-arr{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--g)}
+.lf-arr .lf-i{width:15px;height:15px}
+html body .lf-skin .lf-orion{display:flex;align-items:center;gap:10px;width:100%;max-width:340px;margin:16px 0 0;padding:10px 14px;border-radius:20px;background:#0A1E47;border:1px solid var(--line);color:#fff}
+.lf-orion .lf-i{width:32px;height:32px;color:var(--g)}
+.lf-orion b{display:block;font-size:16px;font-weight:500}.lf-orion small{display:block;font-size:10px;line-height:1.2;color:#BFD6F5}
+/* barra moduli */
+html body .lf-skin .lf-qn{margin:0 0 14px;padding:8px 6px;justify-content:flex-start;gap:4px;border-radius:36px;background:var(--card);border:1px solid var(--line)}
+html body .lf-skin .lf-qi{flex:none;min-width:66px;color:#E3EEFF;font-size:11px;gap:5px}
+html body .lf-skin .lf-qi i{width:44px;height:44px;background:var(--card2);box-shadow:none;border:1px solid var(--line);color:#fff}
+html body .lf-skin .lf-qi.cur i{border-color:var(--g);box-shadow:0 0 14px rgba(159,208,255,.6);color:var(--g);outline:0}
 html body .lf-skin .lf-qi.cur{color:var(--g)}
-html body .lf-sh .lf-qi i{border:1px solid rgba(232,201,138,.35)}
-html body .lf-skin .lf-pal{position:relative;overflow:hidden;gap:10px;padding:18px 16px;min-height:150px;border-radius:30px;background:radial-gradient(120% 150% at 85% 10%,#b3123a,#5c0719 55%,#190408),#190408;border:1px solid rgba(232,201,138,.55);box-shadow:0 18px 40px -22px #000}
-html body .lf-skin .lf-sw{gap:0;flex:none;padding-left:6px}
-html body .lf-skin .lf-sw button{width:42px;height:98px;margin-right:-12px;border-radius:12px;border:1px solid rgba(255,255,255,.4);box-shadow:0 8px 18px -8px #000}
-.lf-pal-t{flex:1;min-width:140px;padding-left:12px}
-.lf-pal-t .font-serif{font-size:25px;line-height:1.05;margin:8px 0 6px;color:#F6EFE3}
-.lf-pal-t small{color:#F0DCD0;font-size:13px;line-height:1.3;display:block}
-.lf-pal .lf-chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;font-size:11px;border-radius:99px;border:1px solid rgba(232,201,138,.65);background:rgba(20,10,8,.45);color:#F6EFE3}
-html body .lf-skin .lf-pal .lf-vis{margin-left:auto}
-.lf-dots{display:flex;justify-content:center;gap:7px;margin:12px 0 14px}.lf-dots i{width:8px;height:8px;border-radius:9px;background:rgba(255,255,255,.35)}.lf-dots i.on2{width:22px;background:var(--g)}
-.lf-two{margin:6px 0 14px}
-html body .lf-skin .lf-big{min-height:210px;align-items:flex-start;justify-content:flex-start;gap:4px;padding:16px;border-radius:28px;border:1px solid rgba(232,201,138,.55);background-color:#120d0a;background-size:cover;background-position:center right}
-html body .lf-skin .lf-big::before{background:linear-gradient(90deg,rgba(5,4,3,.9) 0%,rgba(5,4,3,.55) 55%,rgba(5,4,3,.05))}
-.lf-big .lf-i{width:30px;height:30px;color:#FF7A2F}
-.lf-big:nth-child(2) .lf-i{color:var(--g)}
-.lf-big b{font:500 24px/1.05 Fraunces,Georgia,serif;margin-top:4px;color:#F6EFE3}
-.lf-big small{font-size:12.5px;line-height:1.3;color:#E6DCCB}
-.lf-pill{margin-top:auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;border:1px solid rgba(232,201,138,.7);background:rgba(10,8,6,.55);font-size:14px;color:#fff}
-.lf-pill .lf-i{width:16px;height:16px;color:#fff!important}
-.lf-h2{font:500 25px Fraunces,Georgia,serif!important;margin:20px 0 10px;color:#F6EFE3}
+/* widget */
+.lf-grid{margin:0 0 14px}
+html body .lf-skin .lf-w{border:1px solid var(--line);box-shadow:none}
+/* palette */
+html body .lf-skin .lf-pal{gap:12px;padding:16px;border-radius:28px;background:linear-gradient(120deg,var(--k) 0%,#0A1E47 85%);border:1px solid var(--line);margin:0 0 14px}
+html body .lf-skin .lf-sw{gap:6px;flex:none}
+html body .lf-skin .lf-sw button{width:34px;height:76px;border-radius:10px;border:1px solid rgba(255,255,255,.5)}
+.lf-pal-t{flex:1;min-width:140px}
+.lf-pal-t .font-serif{font-size:23px;line-height:1.05;margin:8px 0 6px;color:#fff}
+.lf-pal-t small{color:#E3EEFF;font-size:12.5px;line-height:1.3;display:block}
+.lf-pal .lf-chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;font-size:11px;border-radius:99px;border:1px solid var(--g);background:#0A1E47;color:#fff}
+/* due card */
+.lf-two{margin:0 0 14px}
+html body .lf-skin .lf-big{min-height:200px;align-items:flex-start;justify-content:flex-start;gap:4px;padding:16px;border-radius:26px;border:1px solid var(--line);background-color:#0A1E47;background-size:cover;background-position:center right}
+html body .lf-skin .lf-big::before{background:linear-gradient(90deg,rgba(5,14,34,.92) 0%,rgba(5,14,34,.6) 55%,rgba(5,14,34,.1))}
+.lf-big .lf-i{width:28px;height:28px;color:#8FC8FF}
+.lf-big b{font:500 22px/1.05 Fraunces,Georgia,serif;margin-top:4px;color:#fff}
+.lf-big small{font-size:12px;line-height:1.3;color:#E3EEFF}
+.lf-pill{margin-top:auto;display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:99px;border:1px solid var(--g);background:#0A1E47;font-size:13px;color:#fff}
+.lf-pill .lf-i{width:15px;height:15px}
+/* ispirazioni */
+.lf-h2{font:500 23px Fraunces,Georgia,serif!important;margin:18px 0 10px;color:#fff}
 .lf-h2>span{display:inline-flex;align-items:center;gap:8px}
-.lf-link{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#F0E8DA;font:500 14px Inter,sans-serif;cursor:pointer}
-.lf-link .lf-i{width:16px;height:16px}
-html body .lf-skin .lf-insp{flex:none;width:96px;height:128px;border-radius:18px;border:1px solid rgba(232,201,138,.3);align-items:center;justify-content:center;padding:0;background-color:#1a1410}
-html body .lf-skin .lf-insp::before{background:linear-gradient(0deg,rgba(5,4,3,.55),transparent 70%)}
-.lf-play{position:relative;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(10,8,6,.62);border:1px solid rgba(255,255,255,.7);color:#fff}
-.lf-play .lf-i{width:16px;height:16px}
-.lf-mini{position:fixed;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 98px);z-index:39;height:64px;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:34px;background:rgba(12,10,8,.84);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);border:1px solid rgba(232,201,138,.65);box-shadow:0 0 26px rgba(232,201,138,.2);max-width:560px;margin:0 auto}
-.lf-cover{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:radial-gradient(circle,#2c4a3a,#0d1a14);border:1px solid rgba(232,201,138,.6);cursor:pointer;color:#fff}
-.lf-mini-t{flex:1;min-width:0;cursor:pointer}.lf-mini-t b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#F6EFE3}.lf-mini-t small{display:block;font-size:13px;color:#D6CFC3}
-.lf-mc{flex:none;width:36px;height:36px;display:grid;place-items:center;background:none;border:0;color:#F6EFE3;cursor:pointer}
-.lf-mc.lf-mp{width:46px;height:46px;border-radius:50%;border:2px solid var(--g);box-shadow:0 0 16px rgba(232,201,138,.5)}
-html body .lf-skin .lf-tab{height:76px;border-radius:38px;background:rgba(12,10,8,.88);border:1px solid rgba(232,201,138,.45);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);max-width:560px;margin:0 auto;left:14px;right:14px}
-html body .lf-skin .lf-tab button{color:#E6DCCB;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500;gap:4px}
+.lf-link{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#E3EEFF;font:500 13px Inter,sans-serif;cursor:pointer}
+.lf-link .lf-i{width:15px;height:15px}
+html body .lf-skin .lf-insp{border:1px solid var(--line);background-color:#0A1E47}
+/* tab bar */
+html body .lf-skin .lf-tab{height:70px;border-radius:35px;background:#0A1D45;border:1px solid var(--line);-webkit-backdrop-filter:none;backdrop-filter:none;max-width:560px;margin:0 auto;left:14px;right:14px;z-index:40}
+html body .lf-skin .lf-tab button{color:#BFD6F5;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;gap:4px}
 html body .lf-skin .lf-tab button.cur{color:var(--g)}
-html body .lf-skin .lf-tab .lf-i{width:26px;height:26px}
-html body .lf-skin .lf-tab .lf-mid{width:78px;height:78px;min-width:78px;top:-26px;border-radius:50%;background:radial-gradient(circle,#1b1408,#050403 70%);color:var(--g);border:2px solid var(--g);box-shadow:0 0 0 4px rgba(5,4,3,.9),0 0 34px rgba(232,201,138,.55),inset 0 0 18px rgba(232,201,138,.2)}
-@media(min-width:768px){html body .lf-skin .lf-tab{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 32px)}.lf-mini{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 28px)}}
-html body .lf-skin .glass{background:linear-gradient(rgba(18,15,12,.82),rgba(12,10,8,.9)) padding-box,linear-gradient(160deg,rgba(232,201,138,.6),rgba(232,201,138,.08) 45%,rgba(255,255,255,.1)) border-box;border:1px solid transparent;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-html body .lf-skin .btn{background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;box-shadow:0 10px 26px -12px rgba(232,201,138,.7)}
-html body .lf-skin .btn-ghost{background:rgba(20,16,10,.5);border:1px solid rgba(232,201,138,.5);color:#F3E6C8}
-html body .lf-skin .on{background:linear-gradient(135deg,#F3E2B8,#C9A45F)!important;color:#1a1208!important}
-html body .lf-skin .field{background:rgba(5,4,3,.7);border-color:rgba(232,201,138,.3)}
-html body .lf-skin [class*="text-sky-"]{color:#E8C98A!important}
-html body .lf-sh{background:linear-gradient(160deg,#18130e,#080605);border:1px solid rgba(232,201,138,.5);color:#F6EFE3}
-html body .lf-staff{background:radial-gradient(circle,#2a1f0c,#0a0807);border-color:var(--g);color:var(--g)}
+html body .lf-skin .lf-tab .lf-mid{width:72px;height:72px;min-width:72px;top:-24px;border-radius:50%;background:#0A1D45;color:var(--g);border:2px solid var(--g);box-shadow:0 0 0 4px #071632,0 0 26px rgba(159,208,255,.6)}
+@media(min-width:768px){html body .lf-skin .lf-tab{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 32px)}}
+/* superfici piene */
+html body .lf-skin .glass{background:var(--card);border:1px solid #345F9F;border-radius:24px;box-shadow:0 14px 30px -18px #000;-webkit-backdrop-filter:none;backdrop-filter:none}
+html body .lf-skin .btn{background:linear-gradient(135deg,#FFFFFF,#9CC9FF);color:#082055;box-shadow:0 8px 20px -10px rgba(143,200,255,.8)}
+html body .lf-skin .btn-ghost{background:#12306A;border:1px solid #4B7FC4;color:#E3EEFF}
+html body .lf-skin .on{background:linear-gradient(135deg,#FFFFFF,#9CC9FF)!important;color:#082055!important}
+html body .lf-skin .field{background:#07163A;border-color:#345F9F;color:#fff}
+html body .lf-skin [class*="text-sky-"]{color:#BFE0FF!important}
+html body .lf-skin [class*="bg-sky-"]{background-color:rgba(95,160,255,.18)!important}
+html body .lf-skin [class*="border-sky-"]{border-color:rgba(143,200,255,.45)!important}
+html body .lf-ov{background:rgba(3,10,28,.82)}
+html body .lf-sh{background:#0B1F4A;border:1px solid var(--line);color:#fff}
+html body .lf-staff{background:#0A1D45;border-color:var(--g);color:var(--g)}
+/* caricamento */
 .lf-load{min-height:100vh;min-height:100dvh;display:grid;place-items:center;text-align:center;padding:24px}
 .lf-load-in{display:flex;flex-direction:column;align-items:center;gap:10px}
-.lf-load-star{font-size:48px;color:var(--g);text-shadow:0 0 28px rgba(232,201,138,.8);animation:sp-pulse 1.6s ease-in-out infinite}
-.lf-load-t{font:500 36px Fraunces,Georgia,serif;color:#F6EFE3}
-.lf-load-s{font-size:10px;letter-spacing:.32em;color:#D6CFC3}
-.lf-load-bar{margin-top:18px;width:180px;height:2px;border-radius:2px;background:rgba(232,201,138,.2);overflow:hidden}
+.lf-load-star{font-size:48px;color:var(--g);text-shadow:0 0 24px rgba(159,208,255,.9);animation:sp-pulse 1.6s ease-in-out infinite}
+.lf-load-t{font:500 34px Fraunces,Georgia,serif;color:#fff}
+.lf-load-s{font-size:10px;letter-spacing:.3em;color:#BFD6F5}
+.lf-load-bar{margin-top:18px;width:180px;height:2px;border-radius:2px;background:rgba(159,208,255,.25);overflow:hidden}
 .lf-load-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,var(--g),transparent);animation:hsbar 1.2s ease-in-out infinite}
-.lf-load-m{margin-top:10px;font-size:13px;color:#E6DCCB;line-height:1.5}
-html body #pwa-screenlock{background:radial-gradient(600px 460px at 90% 0%,rgba(150,100,40,.4),transparent 60%),radial-gradient(600px 460px at 0% 100%,rgba(110,12,36,.4),transparent 60%),#050403!important}
-html body #pwa-screenlock .glass{background:linear-gradient(rgba(18,15,12,.9),rgba(10,8,6,.95)) padding-box,linear-gradient(160deg,#E8C98A,rgba(232,201,138,.1) 50%,#E8C98A) border-box!important;border:1px solid transparent!important}
-html body #pwa-screenlock .btn{background:linear-gradient(135deg,#F3E2B8,#C9A45F)!important;color:#1a1208!important}
-html body #pwa-screenlock [class*="bg-sky-"]{background:rgba(232,201,138,.12)!important}
-html body #pwa-screenlock [class*="border-sky-"]{border-color:rgba(232,201,138,.4)!important}
+.lf-load-m{margin-top:10px;font-size:13px;color:#E3EEFF;line-height:1.5}
+/* banner PWA */
+html body #pwa-screenlock{background:#071632!important}
+html body #pwa-screenlock .glass{background:#0F2A5C!important;border:1px solid #4B7FC4!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+html body #pwa-screenlock .btn{background:linear-gradient(135deg,#FFFFFF,#9CC9FF)!important;color:#082055!important}
+html body #pwa-screenlock [class*="bg-sky-"]{background:#12306A!important}
+html body #pwa-screenlock [class*="border-sky-"]{border-color:#4B7FC4!important}
 </style>
 <script>
 /* WATCHDOG: se la piattaforma non parte entro 12s mostra un messaggio con "Riprova" invece di restare vuota */
 setTimeout(function(){var a=document.getElementById('app');if(a&&!a.children.length){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#050403;color:#F3E6C8;text-align:center;padding:24px;font-family:Inter,sans-serif';d.innerHTML='<div style="font-size:44px;color:#E8C98A">✦</div><div style="font:500 30px Fraunces,Georgia,serif">LandraFashion</div><p style="max-width:300px;opacity:.85;font-size:14px;line-height:1.5;margin:0">Impossibile avviare la piattaforma. Controlla la connessione oppure apri il sito dal suo indirizzo https.</p><button onclick="location.reload()" style="margin-top:6px;padding:12px 26px;border-radius:99px;border:0;background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;font-weight:700">Riprova</button>';document.body.appendChild(d);if(window.__hideSplash)window.__hideSplash();}},12000);
 </script>
 <style id="pwabanner">
-.pb-powered{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#B9B0A2}
-.pb-compat-t{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#B9B0A2;margin-bottom:10px}
+.pb-powered{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A9C2E6}
+.pb-compat-t{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#A9C2E6;margin-bottom:10px}
 .pb-compat{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.pb-os{display:flex;flex-direction:column;align-items:center;gap:5px;color:#B9B0A2}
-.pb-os span{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(232,201,138,.3);background:rgba(255,255,255,.03)}
+.pb-os{display:flex;flex-direction:column;align-items:center;gap:5px;color:#A9C2E6}
+.pb-os span{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(159,208,255,.3);background:rgba(255,255,255,.03)}
 .pb-os small{font-size:9.5px}
-.pb-os.cur{color:#E8C98A}.pb-os.cur span{border-color:#E8C98A;box-shadow:0 0 14px rgba(232,201,138,.5)}
-.pb-note{padding:14px;border-radius:18px;background:rgba(232,201,138,.08);border:1px solid rgba(232,201,138,.3);color:#F0E8DA;font-size:12px;line-height:1.5}
-.pb-note b{color:#E8C98A}.pb-note p{margin:4px 0 0}
+.pb-os.cur{color:#BFE0FF}.pb-os.cur span{border-color:#BFE0FF;box-shadow:0 0 14px rgba(159,208,255,.5)}
+.pb-note{padding:14px;border-radius:18px;background:rgba(159,208,255,.08);border:1px solid rgba(159,208,255,.3);color:#E3EEFF;font-size:12px;line-height:1.5}
+.pb-note b{color:#BFE0FF}.pb-note p{margin:4px 0 0}
 .pb-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;text-align:left}
-.pb-steps li{display:flex;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(232,201,138,.25)}
-.pb-steps .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;font-weight:800;font-size:14px}
-.pb-steps b{display:block;color:#F6EFE3;font-size:13.5px}
-.pb-steps p{margin:3px 0 0;font-size:12px;line-height:1.5;color:#D6CFC3}
-.pb-steps svg{display:inline-block;vertical-align:-5px;color:#E8C98A}
+.pb-steps li{display:flex;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(159,208,255,.25)}
+.pb-steps .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#FFFFFF,#9CC9FF);color:#082055;font-weight:800;font-size:14px}
+.pb-steps b{display:block;color:#FFFFFF;font-size:13.5px}
+.pb-steps p{margin:3px 0 0;font-size:12px;line-height:1.5;color:#D3E3FA}
+.pb-steps svg{display:inline-block;vertical-align:-5px;color:#BFE0FF}
 .pb-install{font-size:15px!important;gap:10px}
 </style>
 </head>
@@ -450,11 +458,11 @@ setTimeout(function(){var a=document.getElementById('app');if(a&&!a.children.len
 
 <!-- SPLASH DI CARICAMENTO INIZIALE (resta finché login e profilo non sono verificati) -->
 <style>
-#app-splash{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;background:radial-gradient(circle at center,#1A1815 0%,#0E0D0B 100%);transition:opacity .45s ease}
+#app-splash{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;background:radial-gradient(circle at center,#0B2250 0%,#050E22 100%);transition:opacity .45s ease}
 #app-splash.hide{opacity:0;pointer-events:none}
-#app-splash .sp-ring{width:56px;height:56px;border-radius:50%;border:3px solid rgba(221,191,130,.2);border-top-color:#DDBF82;animation:sp-spin .9s linear infinite}
+#app-splash .sp-ring{width:56px;height:56px;border-radius:50%;border:3px solid rgba(159,208,255,.2);border-top-color:#BFE0FF;animation:sp-spin .9s linear infinite}
 #app-splash .sp-title{font-family:Georgia,serif;font-weight:700;font-size:1.25rem;color:#f8fafc;letter-spacing:.04em}
-#app-splash .sp-sub{font-size:.7rem;color:#EAD7A8;letter-spacing:.12em;text-transform:uppercase;animation:sp-pulse 1.6s ease-in-out infinite}
+#app-splash .sp-sub{font-size:.7rem;color:#BFD6F5;letter-spacing:.12em;text-transform:uppercase;animation:sp-pulse 1.6s ease-in-out infinite}
 @keyframes sp-spin{to{transform:rotate(360deg)}}
 @keyframes sp-pulse{0%,100%{opacity:.5}50%{opacity:1}}
 </style>
@@ -851,7 +859,7 @@ const DEFAULT_FEATURE_PERMISSIONS = {
     for(const p of P){
       p.y += p.s; p.t += 0.01; p.x += Math.sin(p.t)*0.2;
       if(p.y > H+5){ p.y = -5; p.x = Math.random()*W; }
-      x.globalAlpha = 0.8; x.fillStyle = p.r>2?"#ffffff":"#ffe2b0";
+      x.globalAlpha = 0.8; x.fillStyle = p.r>2?"#ffffff":"#cfe6ff";
       x.beginPath(); x.arc(p.x%W, p.y, p.r, 0, 7); x.fill();
     }
     requestAnimationFrame(f);
@@ -3384,7 +3392,13 @@ const SHORT={feed:"Home",social:"Social",mannequin:"Manichino",orion:"Orion",war
 const SEASON_W={inverno:["4°C","Freddo intenso"],autunno:["12°C","Fresco avvolgente"],primavera:["18°C","Mite e luminoso"],estate:["26°C","Soleggiato"]};
 const xmasDays=()=>{const n=new Date(),y=n.getFullYear();let t=new Date(y,11,25);if(n>t)t=new Date(y+1,11,25);return Math.ceil((t-n)/864e5)};
 const mi=(id)=>id==='feed'?'home':id;
-function Skin({children}){useEffect(()=>{document.documentElement.classList.add('lf-xmas','lf-luxe');return()=>document.documentElement.classList.remove('lf-xmas','lf-luxe')},[]);return html`<div class="lf-skin">${children}</div>`}
+function Garland(){
+  const cols=["#fff3c4","#8ec5ff","#ffffff","#5fa8ff"],bulbs=[];
+  for(let i=0;i<8;i++)for(const t of [.2,.5,.8]){const y=4*(1-t)*(1-t)+104*t*(1-t)+4*t*t;bulbs.push({l:(i*100+100*t)/8,y:y,c:cols[bulbs.length%4],d:(bulbs.length%5)*.35})}
+  const sw=Array.from({length:8},(_,i)=>`M${i*100},4 Q${i*100+50},52 ${i*100+100},4`).join(" ");
+  return html`<div class="lf-garland" aria-hidden="true"><svg viewBox="0 0 800 62" preserveAspectRatio="none"><path d=${sw} fill="none" stroke="#14506A" stroke-width="9" stroke-linecap="round" vector-effect="non-scaling-stroke"/><path d=${sw} fill="none" stroke="#E6F3FF" stroke-width="9" stroke-dasharray="1 5" opacity=".75" vector-effect="non-scaling-stroke"/><path d=${sw} fill="none" stroke="#3E8CA8" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>${bulbs.map((b,k)=>html`<i key=${k} style=${{left:b.l+"%",top:(b.y+5)+"px","--c":b.c,animationDelay:b.d+"s"}}></i>`)}</div>`;
+}
+function Skin({children,top}){useEffect(()=>{document.documentElement.classList.add('lf-xmas','lf-luxe');return()=>document.documentElement.classList.remove('lf-xmas','lf-luxe')},[]);return html`<div class="lf-skin">${top&&html`<${Garland}/>`}${children}</div>`}
 function Sheet({onClose,children}){
   useEffect(()=>{const k=e=>e.key==='Escape'&&onClose();addEventListener('keydown',k);return()=>removeEventListener('keydown',k)},[]);
   return html`<div class="lf-ov" onClick=${onClose}><div class="lf-sh" onClick=${e=>e.stopPropagation()}>${children}<button type="button" class="btn w-full mt-4" onClick=${onClose}>Chiudi</button></div></div>`;
@@ -3402,8 +3416,6 @@ function FloatStaff(){
 
 /* ===== LUXE UI helpers ===== */
 const HERO_IMG="./img/hero.jpg"; // foto hero (opzionale): se manca resta lo sfondo oro/rubino
-const LF_PLAYLIST=[ /* {title:"Christmas Vibes", artist:"LandraMusic", src:"./audio/brano1.mp3"} */ ];
-const QN=[["Home","feed","home"],["Guardaroba","wardrobe","hanger"],["Armocromia","pal","palette"],["Lookbook","social","gem"],["Premium","profile","star"],["Altro","more","grid"]];
 const ICONS={
 search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
 bell:'<path d="M6 9a6 6 0 0112 0c0 6 2 7 2 8H4c0-1 2-2 2-8z"/><path d="M10 20a2 2 0 004 0"/>',
@@ -3422,43 +3434,11 @@ pause:'<path d="M9 5v14M15 5v14" stroke-width="3"/>',
 prev:'<path d="M6 5v14M19 5L9 12l10 7z" fill="currentColor"/>',
 next:'<path d="M18 5v14M5 5l10 7-10 7z" fill="currentColor"/>',
 music:'<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+logout:'<path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 8l4 4-4 4M20 12H9"/>',
 gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>'
 };
 const LI=({n})=>html`<svg class="lf-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" dangerouslySetInnerHTML=${{__html:ICONS[n]||""}}/>`;
 const Star=({size=28})=>html`<svg class="lf-star" width=${size} height=${size} viewBox="0 0 48 48" aria-hidden="true"><path d="M24 2C25.5 15 33 22.5 46 24 33 25.5 25.5 33 24 46 22.5 33 15 25.5 2 24 15 22.5 22.5 15 24 2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 12c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12Z" fill="currentColor" opacity=".9"/></svg>`;
-
-/* player musicale (LandraMusic) */
-const LFA={a:null,i:0,playing:false,subs:new Set()};
-const lfEmit=()=>LFA.subs.forEach(f=>f());
-function lfLoad(i){
-  if(!LF_PLAYLIST.length) return false;
-  LFA.i=(i+LF_PLAYLIST.length)%LF_PLAYLIST.length;
-  if(!LFA.a){LFA.a=new Audio();LFA.a.addEventListener("ended",()=>{lfLoad(LFA.i+1);LFA.a.play().catch(()=>{})});LFA.a.addEventListener("pause",()=>{LFA.playing=false;lfEmit()});LFA.a.addEventListener("play",()=>{LFA.playing=true;lfEmit()})}
-  LFA.a.src=LF_PLAYLIST[LFA.i].src; lfEmit(); return true;
-}
-function lfToggle(){
-  if(!LF_PLAYLIST.length) return false;
-  if(!LFA.a||!LFA.a.src) lfLoad(LFA.i);
-  if(LFA.a.paused) LFA.a.play().catch(()=>{}); else LFA.a.pause();
-  return true;
-}
-function useLFA(){const[,f]=useState(0);useEffect(()=>{const g=()=>f(x=>x+1);LFA.subs.add(g);return()=>LFA.subs.delete(g)},[]);return LFA}
-function MiniPlayer({onOpen}){
-  const A=useLFA(),t=LF_PLAYLIST[A.i]||{title:"Christmas Vibes",artist:"LandraMusic"};
-  const tog=()=>{if(!lfToggle())onOpen()};
-  const step=d=>{if(lfLoad(A.i+d)){LFA.a.play().catch(()=>{})}else onOpen()};
-  return html`<div class="lf-mini"><button type="button" class="lf-cover" onClick=${onOpen} aria-label="Playlist">🎄</button>
-    <div class="lf-mini-t" onClick=${onOpen}><b>${t.title}</b><small>${t.artist||"LandraMusic"}</small></div>
-    <button type="button" class="lf-mc" aria-label="Precedente" onClick=${()=>step(-1)}><${LI} n="prev"/></button>
-    <button type="button" class="lf-mc lf-mp" aria-label=${A.playing?"Pausa":"Riproduci"} onClick=${tog}><${LI} n=${A.playing?"pause":"play"}/></button>
-    <button type="button" class="lf-mc" aria-label="Successivo" onClick=${()=>step(1)}><${LI} n="next"/></button></div>`;
-}
-function PlaylistView(){
-  const A=useLFA();
-  return html`<div class="lf-h2"><span><${LI} n="music"/> Playlist LandraMusic</span></div>
-  ${LF_PLAYLIST.length?html`<div class="space-y-2">${LF_PLAYLIST.map((t,i)=>html`<button type="button" key=${i} class="glass w-full p-4 flex items-center gap-3 text-left" onClick=${()=>{lfLoad(i);LFA.a.play().catch(()=>{})}}><span class="lf-cover" style="width:44px;height:44px">${A.i===i&&A.playing?"♪":"🎄"}</span><span><b class="block">${t.title}</b><small style="color:#B9B0A2">${t.artist||"LandraMusic"}</small></span></button>`)}</div>`
-  :html`<div class="glass p-6 text-center"><div style="font-size:40px">🎄</div><p class="mt-2" style="color:#D6CFC3">La playlist LandraMusic arriverà presto.</p></div>`}`;
-}
 
 function Shell(){
   const {isStaff,user,userTier,setCheckoutTier,articles,videos,socialPosts,wardrobeItems,profileData,userGender,canAccess}=useApp();
@@ -3480,34 +3460,40 @@ function Shell(){
   const ini=((name||user?.email||"L")[0]||"L").toUpperCase();
   return html`<${Skin}><div class="flex min-h-screen flex-col">
     <header class="lf-top"><div class="lf-top-inner">
-      <button type="button" class="lf-brand" onClick=${()=>go("feed")} aria-label="LandraFashion"><${Star} size=${46}/><span><b>LandraFashion</b><small>ARMONIA · STILE · BELLEZZA</small></span></button>
+      <button type="button" class="lf-brand" onClick=${()=>go("feed")} aria-label="LandraFashion"><${Star} size=${30}/><span><b>LandraFashion</b><small>ARMONIA · STILE · BELLEZZA</small></span></button>
       <div class="lf-top-r">
         <button type="button" class="lf-ib" aria-label="Cerca" onClick=${()=>setSheet("search")}><${LI} n="search"/></button>
-        <button type="button" class="lf-ib" aria-label="Notifiche" onClick=${()=>{setSheet("bell");setSeen(true)}}><${LI} n="bell"/>${!seen&&nots.length>0&&html`<b>${nots.length}</b>`}</button>
         <button type="button" class="lf-ib lf-av" aria-label="Profilo" onClick=${()=>go("profile")}>${ini}</button>
+        <button type="button" class="lf-ib" aria-label="Esci" onClick=${()=>signOut(auth)}><${LI} n="logout"/></button>
       </div></div></header>
-    <main class="mx-auto w-full flex-1 px-4 pt-1 pb-44">
+    <main class="mx-auto w-full flex-1 px-4 pt-3 pb-36">
       ${tab==="feed"&&html`
       <section class="lf-hero3" style=${{"--hero":"url("+HERO_IMG+")"}}>
         <span class="lf-chip"><${LI} n="crown"/> Benvenut${userGender==="Uomo"?"o":"a"}${name?", "+name:""} su LandraFashion</span>
         <h1>Il tuo stile,<br/>la nostra<br/><em>ispirazione.</em></h1>
-        <p>Scopri la palette perfetta<br/>con l’intelligenza di Orion AI.</p>
+        <p>Scopri la palette perfetta con l’intelligenza di Orion AI.</p>
         <button type="button" class="btn lf-cta2" onClick=${()=>go("orion")}><${Star} size=${22}/> Inizia l’Analisi <span class="lf-arr"><${LI} n="arrow"/></span></button>
-        <button type="button" class="lf-orion" onClick=${()=>go("orion")}><${LI} n="atom"/><span><b>Orion AI</b><small>Consulente di Stile Avanzato</small></span><i></i></button>
-      </section>
-      <nav class="lf-qn" aria-label="Moduli">${QN.map(m=>html`<button type="button" key=${m[0]} class="lf-qi ${tab===m[1]?"cur":""}" onClick=${()=>m[1]==="pal"?setSheet("palette"):m[1]==="more"?setSheet("mods"):go(m[1])}><i><${LI} n=${m[2]}/></i><span>${m[0]}</span></button>`)}</nav>
-      <section class="lf-pal" style=${{"--k":cc+"55"}}>
-        <div class="lf-sw">${pal.slice(0,4).map((c,i)=>html`<button type="button" key=${c} aria-label=${c} style=${{background:`linear-gradient(150deg,${c},rgba(0,0,0,.55))`,"--r":(i-1.5)*9+"deg"}} onClick=${()=>{setCol(c)}}></button>`)}</div>
-        <div class="lf-pal-t"><span class="lf-chip"><${Star} size=${14}/> Analisi Personalizzata</span><div class="font-serif">La tua Palette<br/>Armonia</div><small>Scopri i colori che valorizzano la tua bellezza unica.</small></div>
+        <button type="button" class="lf-orion" onClick=${()=>go("orion")}><${LI} n="atom"/><span><b>Orion AI</b><small>Consulente di Stile Avanzato</small></span><i style="margin-left:auto;width:10px;height:10px;border-radius:50%;background:#34e39b"></i></button>
+      </section>`}
+      <nav class="lf-qn" aria-label="Moduli">${SYSTEM_MODULES.map(m=>html`<button type="button" key=${m.id} class="lf-qi ${tab===m.id?"cur":""}" onClick=${()=>go(m.id)}><i><${SvgIcon} name=${mi(m.id)} className="w-5 h-5"/></i><span>${SHORT[m.id]}</span></button>`)}</nav>
+      ${tab==="feed"&&html`
+      <div class="lf-grid">
+        <button type="button" class="lf-w" style="--a:#2f6fe0;--b:#10306e" onClick=${()=>setHrs(!hrs)}><small>🎄 Al Natale</small><b>${hrs?days*24+" ore":days+" giorni"}</b><small>tocca per cambiare</small></button>
+        <button type="button" class="lf-w" style="--a:#4aa3e8;--b:#12467c" onClick=${()=>setSheet("season")}><small>☁ ${season}</small><b>${wx[0]}</b><small>${wx[1]}</small></button>
+        <button type="button" class="lf-w" style="--a:#6a7be0;--b:#232f7a" onClick=${()=>go("wardrobe")}><small>👗 Guardaroba</small><b>${(wardrobeItems||[]).length} capi</b><small>scansiona e indossa</small></button>
+        <button type="button" class="lf-w" style="--a:#8fc0ff;--b:#2a5fa8" onClick=${()=>setCheckoutTier(userTier==="free"?"pro":userTier)}><small>✦ Piano</small><b style="text-transform:capitalize">${userTier}</b><small>${userTier==="free"?"passa a Pro":"attivo"}</small></button>
+      </div>
+      <section class="lf-pal" style=${{"--k":cc}}>
+        <div class="lf-sw">${pal.map((c,i)=>html`<button type="button" key=${c} aria-label=${c} style=${{background:c,"--r":(i-2)*6+"deg"}} onClick=${()=>{setCol(c);try{navigator.clipboard&&navigator.clipboard.writeText(c)}catch(e){}}}></button>`)}</div>
+        <div class="lf-pal-t"><span class="lf-chip"><${Star} size=${14}/> Analisi Personalizzata</span><div class="font-serif">La tua Palette Armonia</div><small>Tocca un colore: ${cc.toUpperCase()}</small></div>
         <button type="button" class="btn lf-vis" onClick=${()=>setSheet("palette")}>Visualizza <span class="lf-arr"><${LI} n="arrow"/></span></button>
       </section>
-      <div class="lf-dots"><i class="on2"></i><i></i><i></i></div>
       <div class="lf-two">
-        <button type="button" class="lf-big" style=${bg(img(arts[0])||img((videos||[])[0]))} onClick=${()=>go("video")}><${LI} n="flame"/><b>Tendenze<br/>Moda 2026</b><small>Scopri le ultime<br/>tendenze di stagione</small><span class="lf-pill">Esplora <${LI} n="arrow"/></span></button>
-        <button type="button" class="lf-big" style=${bg(img((socialPosts||[])[0])||img(arts[1]))} onClick=${()=>go("social")}><${LI} n="gem"/><b>Lookbook<br/>Esclusivo</b><small>I look più iconici<br/>della stagione</small><span class="lf-pill">Sfoglia <${LI} n="arrow"/></span></button>
+        <button type="button" class="lf-big" style=${bg(img(arts[0])||img((videos||[])[0]))} onClick=${()=>go("video")}><${LI} n="flame"/><b>Tendenze<br/>Moda 2026</b><small>Masterclass e novità di stagione</small><span class="lf-pill">Esplora <${LI} n="arrow"/></span></button>
+        <button type="button" class="lf-big" style=${bg(img((socialPosts||[])[0])||img(arts[1]))} onClick=${()=>go("social")}><${LI} n="gem"/><b>Lookbook<br/>Esclusivo</b><small>I look più iconici</small><span class="lf-pill">Sfoglia <${LI} n="arrow"/></span></button>
       </div>
-      <div class="lf-h2"><span><${Star} size=${22}/> Ispirazioni per te</span><button type="button" class="lf-link" onClick=${()=>go("social")}>Vedi tutto <${LI} n="arrow"/></button></div>
-      <div class="lf-row">${(arts.length?arts:[{id:"p1"},{id:"p2"},{id:"p3"},{id:"p4"}]).map((a,i)=>html`<button type="button" key=${a.id} class="lf-insp" style=${bg(img(a))} onClick=${()=>a.title?setPick(a):go("social")}><i class="lf-play"><${LI} n="play"/></i></button>`)}</div>
+      ${arts.length>0&&html`<div class="lf-h2"><span><${Star} size=${22}/> Ispirazioni per te</span><button type="button" class="lf-link" onClick=${()=>go("social")}>Vedi tutto <${LI} n="arrow"/></button></div>
+      <div class="lf-row">${arts.map(a=>html`<button type="button" key=${a.id} class="lf-insp" style=${bg(img(a))} onClick=${()=>setPick(a)}><span>${a.title?.it||a.title}</span></button>`)}</div>`}
       <div class="lf-h2"><span>Home Editorial</span></div>
       <${FeedModule} onSwitchTab=${go}/>`}
       ${tab==="social"&&html`<${SocialPageModule}/>`}
@@ -3519,15 +3505,13 @@ function Shell(){
       ${tab==="videocall"&&html`<${VideocallBookingModule}/>`}
       ${tab==="info"&&html`<${InfoModule}/>`}
       ${tab==="profile"&&html`<${ProfileModule}/>`}
-      ${tab==="playlist"&&html`<${PlaylistView}/>`}
     </main>
-    ${tab==="feed"&&html`<${MiniPlayer} onOpen=${()=>go("playlist")}/>`}
     <nav class="lf-tab" aria-label="Navigazione">
-      <button type="button" class=${tab==="feed"?"cur":""} onClick=${()=>go("feed")}><${LI} n="home"/><span>Home</span></button>
-      <button type="button" class=${tab==="social"?"cur":""} onClick=${()=>go("social")}><${LI} n="star"/><span>Social</span></button>
-      <button type="button" class="lf-mid" aria-label="Orion AI" onClick=${()=>go("orion")}><${Star} size=${34}/></button>
-      <button type="button" class=${tab==="playlist"?"cur":""} onClick=${()=>go("playlist")}><${LI} n="music"/><span>Playlist</span></button>
-      <button type="button" class=${tab==="profile"?"cur":""} onClick=${()=>go("profile")}><${LI} n="gear"/><span>Impostazioni</span></button>
+      <button type="button" class=${tab==="feed"?"cur":""} onClick=${()=>go("feed")}><${SvgIcon} name="home" className="w-6 h-6"/><span>Home</span></button>
+      <button type="button" class=${tab==="social"?"cur":""} onClick=${()=>go("social")}><${SvgIcon} name="social" className="w-6 h-6"/><span>Social</span></button>
+      <button type="button" class="lf-mid" aria-label="Moduli" onClick=${()=>setSheet("mods")}><${Star} size=${36}/></button>
+      <button type="button" class=${tab==="mannequin"?"cur":""} onClick=${()=>go("mannequin")}><${SvgIcon} name="mannequin" className="w-6 h-6"/><span>Manichino</span></button>
+      <button type="button" class=${tab==="profile"?"cur":""} onClick=${()=>go("profile")}><${SvgIcon} name="profile" className="w-6 h-6"/><span>Profilo</span></button>
     </nav>
     ${isStaff&&html`<${FloatStaff}/>`}
     ${sheet==="mods"&&html`<${Sheet} onClose=${()=>setSheet(null)}><h3 class="font-serif text-xl mb-3">Tutti i moduli</h3><div class="grid grid-cols-3 gap-3">${SYSTEM_MODULES.map(m=>html`<button type="button" key=${m.id} class="lf-qi" onClick=${()=>go(m.id)}><i style=${{"--c":MOD_COL[m.id]}}><${SvgIcon} name=${mi(m.id)} className="w-6 h-6"/></i><span>${m.name}</span></button>`)}</div><button type="button" class="btn-ghost w-full mt-3" onClick=${()=>signOut(auth)}>Esci dall’account</button><//>`}
@@ -3551,7 +3535,7 @@ function Main(){
 function App(){
   return html`
     <${Providers}>
-      <${Skin}>
+      <${Skin} top=${true}>
         <${AuthGate}>
           <${Main}/>
         <//>
