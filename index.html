@@ -184,7 +184,6 @@ main{animation:lfFade .5s ease both}@keyframes lfFade{from{opacity:0;transform:t
 /* SCORRIMENTO: niente contenitori che bloccano il touch */
 html{overflow-x:visible!important;height:auto!important}
 body{overflow-x:clip!important;overflow-y:visible!important;height:auto!important;touch-action:auto!important}
-html.is-android #pwa-screenlock{display:none!important}
 /* PULSANTI */
 html body .btn{background:#F7F4EF;color:#0E0D0B;border-radius:999px;letter-spacing:.14em;font-size:11px;font-weight:700;box-shadow:none;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
 html body .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(201,164,95,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
@@ -225,6 +224,195 @@ html body .field:focus{border-color:#DDBF82;box-shadow:0 0 0 4px rgba(221,191,13
 }
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+<style id="xmas">
+html.lf-xmas body{background:#0a0610;background-image:radial-gradient(900px 600px at 0% -10%,rgba(214,38,74,.40),transparent 60%),radial-gradient(800px 600px at 100% 0%,rgba(23,166,115,.32),transparent 60%),radial-gradient(900px 700px at 50% 115%,rgba(245,196,81,.24),transparent 60%);background-attachment:fixed}
+html.lf-xmas body::after{content:"";position:fixed;left:0;right:0;top:0;height:10px;z-index:60;pointer-events:none;background:radial-gradient(circle at 10px 5px,#ff3b5c 0 3px,transparent 4px) 0 0/60px 10px,radial-gradient(circle at 30px 5px,#38e0a0 0 3px,transparent 4px) 0 0/60px 10px,radial-gradient(circle at 50px 5px,#ffd45e 0 3px,transparent 4px) 0 0/60px 10px;filter:drop-shadow(0 0 4px rgba(255,220,140,.8))}
+html.lf-xmas main{animation:lfO .4s ease both!important;max-width:1100px!important}
+@keyframes lfO{from{opacity:0}}
+.lf-skin{--ruby:#e11d48;--emer:#10b981;--gold:#f5c451;--sapp:#4f7cff;--amet:#a855f7}
+.lf-skin .glass{background:linear-gradient(160deg,rgba(48,20,36,.78),rgba(14,28,26,.78)) padding-box,linear-gradient(150deg,#f5c451,rgba(225,29,72,.5) 45%,rgba(16,185,129,.55)) border-box;border:1px solid transparent;animation:lfO .5s both;transition:none}
+.lf-skin .glass:hover{transform:none;box-shadow:0 24px 60px -30px #000}
+.lf-skin .btn{background:linear-gradient(135deg,#ff5c7a,#e11d48 45%,#f5c451);color:#fff;box-shadow:0 10px 26px -10px rgba(225,29,72,.8)}
+.lf-skin .btn-ghost{border-color:rgba(245,196,81,.45);color:#ffe9b8;background:rgba(255,255,255,.05)}
+.lf-skin .on{background:linear-gradient(135deg,#f5c451,#ff8a3d)!important;color:#1a0b10!important;border-color:transparent!important}
+.lf-skin [class*="text-sky-"]{color:#ffd98a!important}
+.lf-skin [class*="bg-sky-"]{background-color:rgba(245,196,81,.16)!important}
+.lf-skin [class*="border-sky-"]{border-color:rgba(245,196,81,.4)!important}
+.lf-skin [class*="shadow-sky"]{--tw-shadow-color:rgba(225,29,72,.5)!important}
+.lf-skin .field{background:rgba(10,6,16,.7);border-color:rgba(245,196,81,.3)}
+/* top bar */
+.lf-skin .lf-top{background:transparent;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;top:0}
+.lf-skin .lf-top-inner{padding-top:12px;padding-bottom:6px}
+.lf-skin .lf-top-l,.lf-skin .lf-top-r{background:rgba(20,10,20,.78);border:1px solid rgba(245,196,81,.35);border-radius:26px;padding:4px 14px;min-height:52px;box-shadow:0 8px 24px -12px #000}
+.lf-skin .lf-top-r{padding:4px 6px;gap:6px}
+.lf-ib{position:relative;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(245,196,81,.4);color:#ffe9b8;cursor:pointer}
+.lf-ib b{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#e11d48;color:#fff;font-size:10px;display:grid;place-items:center;border:2px solid #14091a}
+.lf-av{background:linear-gradient(135deg,#f5c451,#e11d48);color:#1a0b10;font-weight:800;font-size:16px}
+/* hero + widgets */
+.lf-hero2{position:relative;border-radius:32px;padding:26px 22px;overflow:hidden;background:linear-gradient(135deg,rgba(225,29,72,.35),rgba(16,185,129,.22) 70%),rgba(18,8,20,.7);border:1px solid rgba(245,196,81,.4)}
+.lf-hero2::before{content:"❄";position:absolute;right:-10px;top:-20px;font-size:150px;opacity:.12;transform:rotate(15deg)}
+.lf-chip{display:inline-flex;gap:6px;align-items:center;padding:6px 12px;border-radius:99px;border:1px solid rgba(245,196,81,.5);background:rgba(245,196,81,.12);color:#ffe9b8;font-size:12px}
+.lf-hero2 h1{font-size:clamp(38px,9vw,72px);line-height:1;margin:14px 0 10px;color:#fff}
+.lf-hero2 h1 em{background:linear-gradient(120deg,#ffe9b8,#f5c451,#ff8a3d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lf-hero2 p{color:#e9dcc8;max-width:36ch;margin:0 0 16px}
+.lf-orion{display:flex;gap:10px;align-items:center;margin-top:14px;padding:10px 14px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;text-align:left;width:100%;max-width:340px}
+.lf-orion i{width:10px;height:10px;border-radius:50%;background:#34e39b;box-shadow:0 0 10px #34e39b;margin-left:auto}
+.lf-qn{display:flex;gap:6px;overflow-x:auto;margin:14px 0;padding:10px 8px;border-radius:34px;background:rgba(20,10,20,.7);border:1px solid rgba(245,196,81,.35);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.lf-qn::-webkit-scrollbar{display:none}
+.lf-qi{flex:none;min-width:68px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:#f3e6c8;font-size:11px;cursor:pointer}
+.lf-qi i{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,var(--c),rgba(0,0,0,.45));box-shadow:0 6px 16px -6px var(--c)}
+.lf-qi.cur i{outline:2px solid #ffd98a;outline-offset:2px}
+.lf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
+@media(min-width:768px){.lf-grid{grid-template-columns:repeat(4,1fr)}}
+.lf-w{border-radius:24px;padding:16px;min-height:120px;text-align:left;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:linear-gradient(145deg,var(--a),var(--b));display:flex;flex-direction:column;justify-content:space-between;gap:6px;box-shadow:0 14px 30px -18px var(--a)}
+.lf-w:active{transform:scale(.97)}.lf-w small{opacity:.85;font-size:11px}.lf-w b{font:600 22px Fraunces,Georgia,serif}
+.lf-pal{border-radius:30px;padding:20px;background:linear-gradient(120deg,var(--k),rgba(20,8,22,.9));border:1px solid rgba(245,196,81,.4);display:flex;gap:14px;align-items:center;flex-wrap:wrap;transition:background .4s}
+.lf-sw{display:flex;gap:8px}.lf-sw button{width:44px;height:74px;border-radius:14px;border:2px solid rgba(255,255,255,.4);cursor:pointer;transform:rotate(var(--r))}
+.lf-two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.lf-big{position:relative;min-height:190px;border-radius:26px;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;text-align:left;color:#fff;cursor:pointer;border:1px solid rgba(245,196,81,.45);background-size:cover;background-position:center}
+.lf-big::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,4,12,.92),rgba(10,4,12,.15) 70%)}
+.lf-big>*{position:relative}.lf-big b{font:600 22px Fraunces,Georgia,serif}
+.lf-row{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.lf-row::-webkit-scrollbar{display:none}
+.lf-insp{flex:none;width:150px;height:190px;border-radius:22px;border:1px solid rgba(245,196,81,.4);background-size:cover;background-position:center;position:relative;overflow:hidden;cursor:pointer;color:#fff;text-align:left;padding:10px;display:flex;align-items:flex-end;font-size:12px;font-weight:600}
+.lf-insp::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,4,12,.9),transparent 65%)}.lf-insp span{position:relative}
+.lf-h2{font:600 22px Fraunces,Georgia,serif;margin:22px 0 8px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+/* nav */
+.lf-skin .lf-tab{background:rgba(20,10,20,.9);border:1px solid rgba(245,196,81,.45);height:68px}
+.lf-skin .lf-tab button{color:#cbb9a0}.lf-skin .lf-tab button.cur{color:#ffd98a}
+.lf-skin .lf-tab .lf-mid{background:radial-gradient(circle,#ff5c7a,#e11d48 60%,#7a0f2a);color:#fff;box-shadow:0 0 0 3px rgba(245,196,81,.7),0 12px 28px -6px rgba(225,29,72,.8)}
+@media(min-width:768px){.lf-skin .lf-tab{display:flex!important;max-width:560px;left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 32px)}}
+/* overlay: mai tagliati */
+.lf-ov{position:fixed;inset:0;z-index:9990;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,2,8,.78);padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+@media(min-width:768px){.lf-ov{align-items:center}}
+.lf-sh{width:100%;max-width:580px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:28px;padding:22px;background:linear-gradient(160deg,#2a1020,#0f1f1c);border:1px solid rgba(245,196,81,.5);animation:lfUp .3s both;color:#fff}
+html.lf-xmas .fixed.inset-0{z-index:9990!important}
+html.lf-xmas .fixed.inset-0>div{max-height:calc(100dvh - 2rem);overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* staff float */
+.lf-staff{position:fixed;z-index:9000;width:58px;height:58px;border-radius:50%;border:2px solid #ffd98a;background:radial-gradient(circle,#ff5c7a,#9f1239);color:#fff;font-size:20px;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:none;box-shadow:0 10px 26px rgba(0,0,0,.6);cursor:grab;user-select:none;-webkit-user-select:none}.lf-staff small{font-size:8px;letter-spacing:.1em}
+/* PWA banner + onboarding */
+#pwa-screenlock{background:radial-gradient(700px 500px at 10% 0%,rgba(225,29,72,.5),transparent 60%),radial-gradient(700px 500px at 100% 100%,rgba(16,185,129,.4),transparent 60%),#0a0610!important}
+#pwa-screenlock .glass{background:linear-gradient(160deg,rgba(48,20,36,.9),rgba(14,28,26,.9)) padding-box,linear-gradient(150deg,#f5c451,#e11d48,#10b981) border-box!important}
+#pwa-screenlock [class*="text-sky-"]{color:#ffd98a!important}#pwa-screenlock [class*="bg-sky-"]{background:rgba(245,196,81,.2)!important}
+#pwa-screenlock .btn{background:linear-gradient(135deg,#ff5c7a,#e11d48 45%,#f5c451)!important;color:#fff!important}
+</style>
+
+<style id="luxe">
+/* ===== LUXE: stile come screen 2 (nero profondo, oro, vetro) ===== */
+html.lf-luxe{--g:#E8C98A;--g2:#C9A45F}
+html.lf-luxe body{background:#050403;background-image:radial-gradient(520px 420px at 100% 0%,rgba(150,100,40,.30),transparent 62%),radial-gradient(520px 520px at 0% 38%,rgba(110,12,36,.26),transparent 62%),radial-gradient(600px 400px at 60% 100%,rgba(150,100,40,.16),transparent 60%);background-attachment:fixed}
+html.lf-luxe body::after{display:none!important}
+.lf-i{width:22px;height:22px;flex:none}
+.lf-star{color:var(--g);filter:drop-shadow(0 0 8px rgba(232,201,138,.65));flex:none}
+html body .lf-skin .lf-top{background:transparent;border:0}
+.lf-skin .lf-top-inner{padding-top:10px;padding-bottom:8px}
+.lf-brand{display:flex;align-items:center;gap:10px;background:none;border:0;color:#fff;text-align:left;cursor:pointer;min-width:0}
+.lf-brand b{display:block;font:500 25px/1 Fraunces,Georgia,serif;letter-spacing:-.01em;color:#F6EFE3}
+.lf-brand small{display:block;font-size:8px;letter-spacing:.3em;color:#D6CFC3;margin-top:5px;white-space:nowrap}
+html body .lf-skin .lf-top-r{background:none;border:0;box-shadow:none;padding:0;min-height:0;gap:9px}
+html body .lf-skin .lf-ib{width:46px;height:46px;background:rgba(20,17,14,.7);border:1px solid rgba(232,201,138,.45);color:#fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+html body .lf-skin .lf-ib b{background:#E0243F;border:0;color:#fff;top:-2px;right:-2px}
+html body .lf-skin .lf-av{background:linear-gradient(135deg,#F3E2B8,#B08A43);color:#1a1208;border-color:#E8C98A}
+.lf-hero3{position:relative;margin:0 -16px;padding:22px 20px 96px;min-height:430px;overflow:hidden;background:linear-gradient(90deg,rgba(5,4,3,.88) 0%,rgba(5,4,3,.4) 62%,rgba(5,4,3,.1)),linear-gradient(180deg,rgba(5,4,3,0) 55%,#050403),var(--hero) center top/cover no-repeat,radial-gradient(90% 70% at 80% 25%,rgba(232,201,138,.28),transparent 60%),radial-gradient(70% 60% at 100% 70%,rgba(150,15,45,.35),transparent 65%),#0a0807}
+.lf-hero3 .lf-chip{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:99px;border:1px solid rgba(232,201,138,.65);background:rgba(20,16,10,.55);color:#F6EFE3;font-size:13px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lf-hero3 .lf-chip .lf-i{width:18px;height:18px;color:var(--g)}
+.lf-hero3 h1{font:500 clamp(44px,13vw,70px)/1.02 Fraunces,Georgia,serif!important;margin:20px 0 14px;color:#F6EFE3;font-weight:500!important}
+.lf-hero3 h1 em{font-style:italic;background:linear-gradient(120deg,#F3E2B8,#C9A45F);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lf-hero3 p{color:#F0E8DA;font-size:16px;line-height:1.4;margin:0 0 20px;max-width:30ch}
+html body .lf-skin .btn.lf-cta2,html body .lf-skin .btn.lf-vis{background:linear-gradient(135deg,rgba(232,201,138,.22),rgba(20,15,8,.55));color:#fff;border:1px solid rgba(232,201,138,.8);text-transform:none;letter-spacing:0;font-size:17px;font-weight:500;padding:8px 10px 8px 16px;box-shadow:0 0 22px rgba(232,201,138,.35),inset 0 0 14px rgba(232,201,138,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+html body .lf-skin .btn.lf-vis{font-size:15px;padding:8px 8px 8px 16px}
+html body .lf-skin .btn.lf-cta2::after,html body .lf-skin .btn.lf-vis::after{display:none}
+.lf-arr{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:1px solid rgba(232,201,138,.7)}
+.lf-arr .lf-i{width:16px;height:16px}
+html body .lf-skin .lf-orion{position:absolute;right:14px;bottom:30px;width:auto;max-width:215px;margin:0;padding:10px 14px;border-radius:22px;background:rgba(20,17,14,.62);border:1px solid rgba(232,201,138,.4);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);gap:10px;color:#fff}
+.lf-orion .lf-i{width:34px;height:34px;color:var(--g)}
+.lf-orion b{display:block;font-size:17px;font-weight:500}.lf-orion small{display:block;font-size:10px;line-height:1.2;color:#D6CFC3}
+html body .lf-skin .lf-qn{position:relative;z-index:3;margin:-58px 0 14px;padding:10px 8px;justify-content:space-between;gap:0;border-radius:40px;background:rgba(14,12,10,.74);border:1px solid rgba(232,201,138,.5);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);box-shadow:0 14px 40px -14px #000}
+html body .lf-skin .lf-qi{min-width:0;flex:1;color:#F0E8DA;font-size:11.5px;gap:5px}
+html body .lf-skin .lf-qi i{width:46px;height:46px;background:none;box-shadow:none;border:1px solid transparent;color:#fff}
+html body .lf-skin .lf-qi.cur i{border-color:var(--g);box-shadow:0 0 18px rgba(232,201,138,.55),inset 0 0 12px rgba(232,201,138,.18);color:var(--g)}
+html body .lf-skin .lf-qi.cur{color:var(--g)}
+html body .lf-sh .lf-qi i{border:1px solid rgba(232,201,138,.35)}
+html body .lf-skin .lf-pal{position:relative;overflow:hidden;gap:10px;padding:18px 16px;min-height:150px;border-radius:30px;background:radial-gradient(120% 150% at 85% 10%,#b3123a,#5c0719 55%,#190408),#190408;border:1px solid rgba(232,201,138,.55);box-shadow:0 18px 40px -22px #000}
+html body .lf-skin .lf-sw{gap:0;flex:none;padding-left:6px}
+html body .lf-skin .lf-sw button{width:42px;height:98px;margin-right:-12px;border-radius:12px;border:1px solid rgba(255,255,255,.4);box-shadow:0 8px 18px -8px #000}
+.lf-pal-t{flex:1;min-width:140px;padding-left:12px}
+.lf-pal-t .font-serif{font-size:25px;line-height:1.05;margin:8px 0 6px;color:#F6EFE3}
+.lf-pal-t small{color:#F0DCD0;font-size:13px;line-height:1.3;display:block}
+.lf-pal .lf-chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;font-size:11px;border-radius:99px;border:1px solid rgba(232,201,138,.65);background:rgba(20,10,8,.45);color:#F6EFE3}
+html body .lf-skin .lf-pal .lf-vis{margin-left:auto}
+.lf-dots{display:flex;justify-content:center;gap:7px;margin:12px 0 14px}.lf-dots i{width:8px;height:8px;border-radius:9px;background:rgba(255,255,255,.35)}.lf-dots i.on2{width:22px;background:var(--g)}
+.lf-two{margin:6px 0 14px}
+html body .lf-skin .lf-big{min-height:210px;align-items:flex-start;justify-content:flex-start;gap:4px;padding:16px;border-radius:28px;border:1px solid rgba(232,201,138,.55);background-color:#120d0a;background-size:cover;background-position:center right}
+html body .lf-skin .lf-big::before{background:linear-gradient(90deg,rgba(5,4,3,.9) 0%,rgba(5,4,3,.55) 55%,rgba(5,4,3,.05))}
+.lf-big .lf-i{width:30px;height:30px;color:#FF7A2F}
+.lf-big:nth-child(2) .lf-i{color:var(--g)}
+.lf-big b{font:500 24px/1.05 Fraunces,Georgia,serif;margin-top:4px;color:#F6EFE3}
+.lf-big small{font-size:12.5px;line-height:1.3;color:#E6DCCB}
+.lf-pill{margin-top:auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;border:1px solid rgba(232,201,138,.7);background:rgba(10,8,6,.55);font-size:14px;color:#fff}
+.lf-pill .lf-i{width:16px;height:16px;color:#fff!important}
+.lf-h2{font:500 25px Fraunces,Georgia,serif!important;margin:20px 0 10px;color:#F6EFE3}
+.lf-h2>span{display:inline-flex;align-items:center;gap:8px}
+.lf-link{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#F0E8DA;font:500 14px Inter,sans-serif;cursor:pointer}
+.lf-link .lf-i{width:16px;height:16px}
+html body .lf-skin .lf-insp{flex:none;width:96px;height:128px;border-radius:18px;border:1px solid rgba(232,201,138,.3);align-items:center;justify-content:center;padding:0;background-color:#1a1410}
+html body .lf-skin .lf-insp::before{background:linear-gradient(0deg,rgba(5,4,3,.55),transparent 70%)}
+.lf-play{position:relative;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(10,8,6,.62);border:1px solid rgba(255,255,255,.7);color:#fff}
+.lf-play .lf-i{width:16px;height:16px}
+.lf-mini{position:fixed;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 98px);z-index:39;height:64px;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:34px;background:rgba(12,10,8,.84);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);border:1px solid rgba(232,201,138,.65);box-shadow:0 0 26px rgba(232,201,138,.2);max-width:560px;margin:0 auto}
+.lf-cover{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:radial-gradient(circle,#2c4a3a,#0d1a14);border:1px solid rgba(232,201,138,.6);cursor:pointer;color:#fff}
+.lf-mini-t{flex:1;min-width:0;cursor:pointer}.lf-mini-t b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#F6EFE3}.lf-mini-t small{display:block;font-size:13px;color:#D6CFC3}
+.lf-mc{flex:none;width:36px;height:36px;display:grid;place-items:center;background:none;border:0;color:#F6EFE3;cursor:pointer}
+.lf-mc.lf-mp{width:46px;height:46px;border-radius:50%;border:2px solid var(--g);box-shadow:0 0 16px rgba(232,201,138,.5)}
+html body .lf-skin .lf-tab{height:76px;border-radius:38px;background:rgba(12,10,8,.88);border:1px solid rgba(232,201,138,.45);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);max-width:560px;margin:0 auto;left:14px;right:14px}
+html body .lf-skin .lf-tab button{color:#E6DCCB;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500;gap:4px}
+html body .lf-skin .lf-tab button.cur{color:var(--g)}
+html body .lf-skin .lf-tab .lf-i{width:26px;height:26px}
+html body .lf-skin .lf-tab .lf-mid{width:78px;height:78px;min-width:78px;top:-26px;border-radius:50%;background:radial-gradient(circle,#1b1408,#050403 70%);color:var(--g);border:2px solid var(--g);box-shadow:0 0 0 4px rgba(5,4,3,.9),0 0 34px rgba(232,201,138,.55),inset 0 0 18px rgba(232,201,138,.2)}
+@media(min-width:768px){html body .lf-skin .lf-tab{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 32px)}.lf-mini{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 28px)}}
+html body .lf-skin .glass{background:linear-gradient(rgba(18,15,12,.82),rgba(12,10,8,.9)) padding-box,linear-gradient(160deg,rgba(232,201,138,.6),rgba(232,201,138,.08) 45%,rgba(255,255,255,.1)) border-box;border:1px solid transparent;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+html body .lf-skin .btn{background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;box-shadow:0 10px 26px -12px rgba(232,201,138,.7)}
+html body .lf-skin .btn-ghost{background:rgba(20,16,10,.5);border:1px solid rgba(232,201,138,.5);color:#F3E6C8}
+html body .lf-skin .on{background:linear-gradient(135deg,#F3E2B8,#C9A45F)!important;color:#1a1208!important}
+html body .lf-skin .field{background:rgba(5,4,3,.7);border-color:rgba(232,201,138,.3)}
+html body .lf-skin [class*="text-sky-"]{color:#E8C98A!important}
+html body .lf-sh{background:linear-gradient(160deg,#18130e,#080605);border:1px solid rgba(232,201,138,.5);color:#F6EFE3}
+html body .lf-staff{background:radial-gradient(circle,#2a1f0c,#0a0807);border-color:var(--g);color:var(--g)}
+.lf-load{min-height:100vh;min-height:100dvh;display:grid;place-items:center;text-align:center;padding:24px}
+.lf-load-in{display:flex;flex-direction:column;align-items:center;gap:10px}
+.lf-load-star{font-size:48px;color:var(--g);text-shadow:0 0 28px rgba(232,201,138,.8);animation:sp-pulse 1.6s ease-in-out infinite}
+.lf-load-t{font:500 36px Fraunces,Georgia,serif;color:#F6EFE3}
+.lf-load-s{font-size:10px;letter-spacing:.32em;color:#D6CFC3}
+.lf-load-bar{margin-top:18px;width:180px;height:2px;border-radius:2px;background:rgba(232,201,138,.2);overflow:hidden}
+.lf-load-bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,var(--g),transparent);animation:hsbar 1.2s ease-in-out infinite}
+.lf-load-m{margin-top:10px;font-size:13px;color:#E6DCCB;line-height:1.5}
+html body #pwa-screenlock{background:radial-gradient(600px 460px at 90% 0%,rgba(150,100,40,.4),transparent 60%),radial-gradient(600px 460px at 0% 100%,rgba(110,12,36,.4),transparent 60%),#050403!important}
+html body #pwa-screenlock .glass{background:linear-gradient(rgba(18,15,12,.9),rgba(10,8,6,.95)) padding-box,linear-gradient(160deg,#E8C98A,rgba(232,201,138,.1) 50%,#E8C98A) border-box!important;border:1px solid transparent!important}
+html body #pwa-screenlock .btn{background:linear-gradient(135deg,#F3E2B8,#C9A45F)!important;color:#1a1208!important}
+html body #pwa-screenlock [class*="bg-sky-"]{background:rgba(232,201,138,.12)!important}
+html body #pwa-screenlock [class*="border-sky-"]{border-color:rgba(232,201,138,.4)!important}
+</style>
+<script>
+/* WATCHDOG: se la piattaforma non parte entro 12s mostra un messaggio con "Riprova" invece di restare vuota */
+setTimeout(function(){var a=document.getElementById('app');if(a&&!a.children.length){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#050403;color:#F3E6C8;text-align:center;padding:24px;font-family:Inter,sans-serif';d.innerHTML='<div style="font-size:44px;color:#E8C98A">✦</div><div style="font:500 30px Fraunces,Georgia,serif">LandraFashion</div><p style="max-width:300px;opacity:.85;font-size:14px;line-height:1.5;margin:0">Impossibile avviare la piattaforma. Controlla la connessione oppure apri il sito dal suo indirizzo https.</p><button onclick="location.reload()" style="margin-top:6px;padding:12px 26px;border-radius:99px;border:0;background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;font-weight:700">Riprova</button>';document.body.appendChild(d);if(window.__hideSplash)window.__hideSplash();}},12000);
+</script>
+<style id="pwabanner">
+.pb-powered{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#B9B0A2}
+.pb-compat-t{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#B9B0A2;margin-bottom:10px}
+.pb-compat{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.pb-os{display:flex;flex-direction:column;align-items:center;gap:5px;color:#B9B0A2}
+.pb-os span{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(232,201,138,.3);background:rgba(255,255,255,.03)}
+.pb-os small{font-size:9.5px}
+.pb-os.cur{color:#E8C98A}.pb-os.cur span{border-color:#E8C98A;box-shadow:0 0 14px rgba(232,201,138,.5)}
+.pb-note{padding:14px;border-radius:18px;background:rgba(232,201,138,.08);border:1px solid rgba(232,201,138,.3);color:#F0E8DA;font-size:12px;line-height:1.5}
+.pb-note b{color:#E8C98A}.pb-note p{margin:4px 0 0}
+.pb-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;text-align:left}
+.pb-steps li{display:flex;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(232,201,138,.25)}
+.pb-steps .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#F3E2B8,#C9A45F);color:#1a1208;font-weight:800;font-size:14px}
+.pb-steps b{display:block;color:#F6EFE3;font-size:13.5px}
+.pb-steps p{margin:3px 0 0;font-size:12px;line-height:1.5;color:#D6CFC3}
+.pb-steps svg{display:inline-block;vertical-align:-5px;color:#E8C98A}
+.pb-install{font-size:15px!important;gap:10px}
+</style>
 </head>
 <body class="app-bg">
 
@@ -243,18 +431,19 @@ html body .field:focus{border-color:#DDBF82;box-shadow:0 0 0 4px rgba(221,191,13
       </div>
     </div>
 
-    <div class="space-y-2">
-      <h1 class="text-2xl font-serif font-bold text-white tracking-wide">LandraFashion Enterprise OS</h1>
-      <p class="text-xs text-sky-200">Per accedere all'ecosistema e e all'<<<<ai Orion, è obbligatorio avviare l'applicazione.</p>
+    <div class="space-y-1">
+      <h1 class="text-3xl font-serif font-semibold text-white tracking-wide">LandraFashion</h1>
+      <div class="pb-powered">Powered by Horizon™ technologies</div>
+      <p class="text-xs text-sky-200 pt-3">Per accedere all'ecosistema e all'AI Orion installa l'app: si apre a schermo intero, come un'app nativa.</p>
     </div>
 
-    <div id="pwa-action-container" class="space-y-4 pt-2">
+    <div id="pwa-action-container" class="space-y-4 pt-1">
       <!-- Dinamico inserito via JS in base a OS e versione -->
     </div>
 
-    <button type="button" id="pwa-skip" class="btn-ghost w-full text-xs" onclick="try{sessionStorage.setItem('lf_skip_lock','1')}catch(e){};document.getElementById('pwa-screenlock').style.display='none'">Continua nel browser</button>
-    <div class="text-[10px] text-slate-400 font-mono pt-2 border-t border-sky-500/20 flex items-center justify-center gap-2">
-      <span>Horizon Enterprise Node v4.2</span> • <span>Licenza HRZ62376</span>
+    <div class="pt-4 border-t border-sky-500/20">
+      <div class="pb-compat-t">Compatibile con</div>
+      <div id="pwa-compat"></div>
     </div>
   </div>
 </div>
@@ -343,7 +532,9 @@ function detectOSAndVersion() {
   let os = "Desktop";
   let version = "";
 
-  if (/android/i.test(ua)) {
+  if (/OrionOS/i.test(ua)) {
+    os = "OrionOS";
+  } else if (/android/i.test(ua)) {
     os = "Android";
     const match = ua.match(/Android\s([0-9\.]+)/);
     if (match) version = match[1];
@@ -357,8 +548,29 @@ function detectOSAndVersion() {
     if (match) version = match[1].replace(/_/g, '.');
   } else if (/Win/.test(ua)) {
     os = "Windows";
+  } else if (/OrionOS/i.test(ua)) {
+    os = "OrionOS";
+  } else if (/Linux|X11|CrOS/.test(ua)) {
+    os = "Linux";
   }
   return { os, version };
+}
+
+function lfIcon(k){
+  const m={
+    android:'<path d="M5 16a7 7 0 0114 0z" fill="currentColor" stroke="none"/><path d="M8 7L6.5 4.5M16 7l1.5-2.5"/><circle cx="9.5" cy="12.5" r=".9" fill="#0a0807" stroke="none"/><circle cx="14.5" cy="12.5" r=".9" fill="#0a0807" stroke="none"/><path d="M7 18v2M17 18v2M9.5 17.5V21M14.5 17.5V21"/>',
+    ios:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.5 5.2h3M11 19h2"/>',
+    mac:'<rect x="3" y="4" width="18" height="12" rx="1.8"/><path d="M8 20h8M12 16v4"/>',
+    windows:'<path d="M3 5.5l7.5-1v7H3zM11.5 4.3L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z" fill="currentColor" stroke="none"/>',
+    orion:'<path d="M12 2C12.8 8 16 11.2 22 12 16 12.8 12.8 16 12 22 11.2 16 8 12.8 2 12 8 11.2 11.2 8 12 2Z"/>',
+    linux:'<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 10l3 2.5L7 15M12.5 15.5h4.5"/>'
+  };
+  return '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+m[k]+'</svg>';
+}
+
+function renderCompat(cur){
+  const items=[["android","Android","Android"],["ios","iOS","iOS"],["mac","Mac","macOS"],["windows","Windows","Windows"],["orion","OrionOS","OrionOS"],["linux","Linux","Linux"]];
+  return '<div class="pb-compat">'+items.map(i=>'<div class="pb-os'+(i[2]===cur?' cur':'')+'"><span>'+lfIcon(i[0])+'</span><small>'+i[1]+'</small></div>').join('')+'</div>';
 }
 
 function renderScreenLockUI() {
@@ -366,147 +578,105 @@ function renderScreenLockUI() {
   if(!container) return;
 
   const { os, version } = detectOSAndVersion();
-  let majorVer = parseInt(version, 10) || 0;
+  const ua = navigator.userAgent || "";
+  const compatEl = document.getElementById("pwa-compat");
+  if (compatEl) compatEl.innerHTML = renderCompat(os);
 
   if (window._isPWAInstalled) {
     document.getElementById("pwa-screenlock").style.display = "none";
     return;
   }
 
-  let htmlContent = "";
+  if (location.protocol === 'content:' || location.protocol === 'file:') {
+    container.innerHTML = `
+      <div class="pb-note text-left">
+        <b>Pagina aperta come file locale</b>
+        <p>L'installazione e il login funzionano solo dall'indirizzo <b>https://</b> del sito pubblicato (non da un file aperto dal telefono). Apri LandraFashion dal suo link e il pulsante di installazione comparirà qui.</p>
+      </div>`;
+    return;
+  }
 
   let _installedFlag = false;
   try { _installedFlag = localStorage.getItem('lf_pwa_installed') === '1'; } catch (e) {}
 
-  if (!window.__deferredPrompt && _installedFlag) {
+  /* ---------- iOS: guida passo-passo ---------- */
+  if (os === "iOS") {
+    const isIPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const notSafari = /CriOS|FxiOS|EdgiOS|OPiOS|Instagram|FBAN|FBAV|Line\/|WhatsApp|Snapchat|TikTok/i.test(ua) || !/Safari/.test(ua);
+    const where = isIPad ? "in alto a destra, accanto alla barra dell'indirizzo" : "in basso al centro della barra di Safari";
+    const shareSvg = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 00-1 1v8a1 1 0 001 1h14a1 1 0 001-1v-8a1 1 0 00-1-1h-1"/></svg>';
+    const plusSvg = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
     container.innerHTML = `
-      <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-100 space-y-2 text-left">
-        <span class="text-emerald-300 font-bold block">✅ App LandraFashion installata</span>
-        <p class="leading-relaxed">Per usare la piattaforma devi aprirla dall'<b>app installata</b> (icona LandraFashion sul desktop, menu Start o schermata Home), non da questa scheda del browser.</p>
-      </div>
-      <button type="button" id="pwa-open-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        🚀 Apri l'app
-      </button>
-      <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
-        🔄 Aggiorna stato
-      </button>
-    `;
-    const ob = document.getElementById("pwa-open-btn");
-    if (ob) ob.addEventListener("click", openInstalledPWA);
+      ${notSafari ? `
+      <div class="pb-note text-left">
+        <b>Passo 0 · Apri con Safari</b>
+        <p>Su iPhone e iPad l'installazione si fa da <b>Safari</b> (l'icona blu con la bussola). Se sei in Instagram, WhatsApp, Chrome o un altro browser, copia il link e incollalo in Safari.</p>
+        <button type="button" id="pwa-copy" class="btn-ghost w-full text-xs mt-2">Copia il link</button>
+      </div>` : ``}
+      <ol class="pb-steps">
+        <li><span class="n">1</span><div><b>Tocca il tasto Condividi</b><p>È l'icona ${shareSvg} (un quadrato con una freccia verso l'alto), ${where}.</p></div></li>
+        <li><span class="n">2</span><div><b>Scorri il menu verso l'alto</b><p>Trascina il foglio che si apre fino a trovare la voce <b>«Aggiungi alla schermata Home»</b> ${plusSvg}. Se non la vedi, tocca <b>«Altro»</b> o <b>«Modifica azioni»</b> in fondo all'elenco.</p></div></li>
+        <li><span class="n">3</span><div><b>Tocca «Aggiungi alla schermata Home»</b><p>Lascia il nome <b>LandraFashion</b> e premi <b>«Aggiungi»</b> in alto a destra.</p></div></li>
+        <li><span class="n">4</span><div><b>Apri l'app dall'icona</b><p>Chiudi Safari, torna nella schermata Home e tocca l'icona <b>LandraFashion</b>: si aprirà a schermo intero, come un'app vera.</p></div></li>
+      </ol>
+      <div class="pb-note text-left"><small>Serve iOS 16.4 o successivo per ricevere le notifiche dell'app. Se hai già aggiunto l'icona, aprila dalla Home: da questa pagina non si sblocca.</small></div>`;
+    const cp = document.getElementById("pwa-copy");
+    if (cp) cp.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(location.href); cp.textContent = "✓ Link copiato: incollalo in Safari"; }
+      catch (e) { cp.textContent = location.href; }
+    });
     return;
   }
 
-  if (os === "Android") {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">Dispositivo Android Rilevato</span>
-        <p>Installa l'applicazione con un solo click per sbloccare l'interfaccia a schermo intero.</p>
-      </div>
-      <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa l'app
-      </button>
-    `;
-  } else if (os === "Windows") {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">PC Desktop Windows Rilevato</span>
-        <p>Aggiungi l'app al desktop per un'esperienza nativa e fluida.</p>
-      </div>
-      <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa su Windows
-      </button>
-    `;
-  } else if (os === "iOS") {
-    let safariGuide = "";
-    if (majorVer >= 17) {
-      safariGuide = `Tocca l'icona di <b>Condivisione (quadradino con freccia in sù ⎋)</b> nella barra in basso di Safari, quindi scorri e seleziona <b>"Aggiungi alla schermata Home" (+)</b>.`;
-    } else if (majorVer >= 15 && majorVer < 17) {
-      safariGuide = `Tocca il tasto <b>Condivisione ⎋</b> in basso al centro su Safari, poi scorri l'elenco e tocca <b>"Aggiungi alla schermata Home"</b>.`;
-    } else {
-      safariGuide = `Tocca il tasto centrale <b>Condivisione ⎋</b> nel browser Safari e seleziona l'icona <b>"+" Aggiungi a Home</b>.`;
+  /* ---------- app già installata, ma aperta nel browser ---------- */
+  if (!window.__deferredPrompt && _installedFlag) {
+    container.innerHTML = `
+      <div class="pb-note text-left"><b>✅ App LandraFashion già installata</b>
+        <p>Aprila dall'icona <b>LandraFashion</b> (desktop, menu Start/Applicazioni o schermata Home), non da questa scheda del browser.</p></div>
+      <button type="button" id="pwa-open-btn" class="btn w-full py-3.5 text-sm font-bold">Apri l'app</button>
+      <button type="button" class="btn-ghost w-full text-xs" id="pwa-reinstall">Non la trovo: reinstalla</button>`;
+    document.getElementById("pwa-open-btn").addEventListener("click", openInstalledPWA);
+    document.getElementById("pwa-reinstall").addEventListener("click", () => { try { localStorage.removeItem('lf_pwa_installed'); } catch (e) {} renderScreenLockUI(); });
+    return;
+  }
+
+  /* ---------- Android / Windows / macOS / Linux / OrionOS: installazione diretta ---------- */
+  const label = { Android: "Android", Windows: "Windows", macOS: "Mac", Linux: "Linux", OrionOS: "OrionOS" }[os] || "questo dispositivo";
+  const ready = !!window.__deferredPrompt;
+  container.innerHTML = `
+    <button id="pwa-install-btn" type="button" class="btn w-full py-4 text-sm font-bold pb-install">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>
+      Scarica l'app per ${label}
+    </button>
+    <p class="text-[11px] opacity-70">${ready ? "Un tocco e l'app viene installata: si apre a schermo intero, senza barra del browser." : "Se il pulsante non avvia l'installazione, ti mostro come fare dal menu del browser."}</p>`;
+
+  document.getElementById("pwa-install-btn").addEventListener("click", async () => {
+    const dp = window.__deferredPrompt;
+    if (dp) {
+      try {
+        dp.prompt();
+        const { outcome } = await dp.userChoice;
+        if (outcome === 'accepted') { try { localStorage.setItem('lf_pwa_installed', '1'); } catch (err) {} }
+      } catch (err) { console.warn('Prompt installazione fallito:', err); }
+      window.__deferredPrompt = null;
+      renderScreenLockUI();
+      return;
     }
-
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-blue-950/60 border border-sky-500/40 text-xs text-sky-100 space-y-3 text-left">
-        <div class="flex items-center gap-2 font-bold text-white">
-          <span class="w-2 h-2 rounded-full bg-amber-400"></span> Dispositivo Apple iOS (v${version || 'Recente'})
-        </div>
-        <p class="leading-relaxed">
-          ${safariGuide}
-        </p>
-        <div class="text-[10px] text-sky-300 bg-black/40 p-2.5 rounded-xl border border-sky-500/20">
-          ⚠️ <b>Nota:</b> Apri questa pagina obbligatoriamente dal browser <b>Safari</b> (non funzionante se aperto da app terze come Instagram o WhatsApp).
-        </div>
-      </div>
-      <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
-        🔄 Ho installato l'App, aggiorna interfaccia
-      </button>
-    `;
-  } else if (os === "macOS" && window.__deferredPrompt) {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-xs text-slate-200 space-y-2">
-        <span class="text-sky-300 font-bold block">Computer macOS Rilevato</span>
-        <p>Aggiungi l'app al Dock per un'esperienza nativa e fluida.</p>
-      </div>
-      <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold shadow-lg shadow-sky-900/50">
-        📥 Installa l'app
-      </button>
-    `;
-  } else if (os === "macOS") {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-blue-950/60 border border-sky-500/40 text-xs text-sky-100 space-y-3 text-left">
-        <div class="font-bold text-white">Computer Apple macOS Rilevato</div>
-        <p>
-          Apri il sito su browser <b>Safari</b>, vai nel menu in alto <b>File -> "Aggiungi al Dock"</b> oppure usa <b>Condivisione -> Aggiungi alla schermata Home</b>.
-        </p>
-      </div>
-      <button type="button" class="btn-ghost w-full text-xs" onClick="window.location.reload()">
-        🔄 Aggiorna Stato App
-      </button>
-    `;
-  } else {
-    htmlContent = `
-      <div class="p-4 rounded-2xl bg-slate-900 border border-sky-500/30 text-xs text-slate-300">
-        <p>Installa l'app dal menu del tuo browser (icona Installazione o "Aggiungi a schermata Home") per sbloccare l'applicazione.</p>
-      </div>
-      <button id="pwa-install-btn" class="btn w-full py-3.5 text-sm font-bold">
-        📥 Installa app
-      </button>
-    `;
-  }
-
-  container.innerHTML = htmlContent;
-
-  const installBtn = document.getElementById("pwa-install-btn");
-  if (installBtn) {
-    installBtn.addEventListener("click", async () => {
-      const dp = window.__deferredPrompt;
-      if (dp) {
-        try {
-          dp.prompt();
-          const { outcome } = await dp.userChoice;
-          if (outcome === 'accepted') {
-            try { localStorage.setItem('lf_pwa_installed', '1'); } catch (err) {}
-          }
-        } catch (err) {
-          console.warn('Prompt installazione fallito:', err);
-        }
-        window.__deferredPrompt = null;
-        renderScreenLockUI();
-      } else {
-        // Prompt non ancora disponibile: istruzioni manuali visibili nella pagina (non solo alert)
-        let hint = document.getElementById("pwa-manual-hint");
-        if (!hint) {
-          hint = document.createElement("div");
-          hint.id = "pwa-manual-hint";
-          hint.className = "p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-xs text-amber-100 text-left leading-relaxed";
-          installBtn.insertAdjacentElement("afterend", hint);
-        }
-        hint.innerHTML = "Il browser non ha reso disponibile l'installazione diretta. Controllo il motivo...";
-        runPWADiagnostics().then(r => { hint.innerHTML = r; });
-      }
-    });
-  }
+    let hint = document.getElementById("pwa-manual-hint");
+    if (!hint) {
+      hint = document.createElement("div");
+      hint.id = "pwa-manual-hint";
+      hint.className = "pb-note text-left";
+      container.appendChild(hint);
+    }
+    let how;
+    if (os === "Android") how = "Tocca il menu <b>⋮</b> in alto a destra di Chrome, poi <b>«Installa app»</b> (o «Aggiungi a schermata Home»).";
+    else if (os === "macOS" && /Safari\//.test(ua) && !/Chrome|Chromium|Edg/.test(ua)) how = "In Safari apri il menu <b>File → Aggiungi al Dock</b>.";
+    else if (/Firefox\//.test(ua) && !/Android/.test(ua)) how = "Firefox su computer non installa le app: apri questa pagina con <b>Chrome</b> o <b>Edge</b>.";
+    else how = "Clicca l'icona <b>Installa</b> (monitor con freccia) a destra della barra dell'indirizzo, oppure menu <b>⋮ → Salva e condividi → Installa LandraFashion</b>.";
+    hint.innerHTML = `<b>Installazione dal menu</b><p>${how}</p><div id="pwa-diag" class="mt-2 opacity-80">Controllo il motivo…</div>`;
+    runPWADiagnostics().then(r => { const d = document.getElementById("pwa-diag"); if (d) d.innerHTML = r; });
+  });
 }
 
 
@@ -578,8 +748,7 @@ async function runPWADiagnostics() {
 
 // Esecuzione immediata all'avvio
 document.addEventListener("DOMContentLoaded", () => {
-  let _sk=false; try{_sk=sessionStorage.getItem('lf_skip_lock')==='1'}catch(e){}
-  if (window._isPWAInstalled || (_sk && !document.documentElement.classList.contains('is-ios'))) {
+  if (window._isPWAInstalled) {
     document.getElementById("pwa-screenlock").style.display = "none";
   } else {
     renderScreenLockUI();
@@ -676,13 +845,13 @@ const DEFAULT_FEATURE_PERMISSIONS = {
   const rs = () => { W = c.width = innerWidth; H = c.height = innerHeight; };
   rs();
   addEventListener("resize", rs);
-  const P = Array.from({length: 55}, () => ({x: Math.random()*2400, y: Math.random()*1400, r: Math.random()*1.8+0.5, s: Math.random()*0.4+0.1, t: Math.random()*6}));
+  const P = Array.from({length: 90}, () => ({x: Math.random()*2400, y: Math.random()*1400, r: Math.random()*2.6+0.8, s: Math.random()*0.4+0.1, t: Math.random()*6}));
   (function f(){
     x.clearRect(0,0,W,H);
     for(const p of P){
       p.y += p.s; p.t += 0.01; p.x += Math.sin(p.t)*0.2;
       if(p.y > H+5){ p.y = -5; p.x = Math.random()*W; }
-      x.globalAlpha = 0.45; x.fillStyle = "#DDBF82";
+      x.globalAlpha = 0.8; x.fillStyle = p.r>2?"#ffffff":"#ffe2b0";
       x.beginPath(); x.arc(p.x%W, p.y, p.r, 0, 7); x.fill();
     }
     requestAnimationFrame(f);
@@ -896,9 +1065,17 @@ function Providers({children}){
     { duration: "60 Minuti", price: 89 }
   ]);
   const [checkoutTier, setCheckoutTier] = useState(null);
+  const [loadFailed, setLoadFailed] = useState(false);
+
+  // WATCHDOG: se auth/profilo non rispondono (rete lenta, content://, storage bloccato) l'app NON resta bloccata
+  useEffect(() => {
+    const t1 = setTimeout(() => setAuthReady(true), 5000);
+    const t2 = setTimeout(() => { setProfileLoaded(v => { if(!v) setLoadFailed(true); return true; }); setAuthReady(true); }, 9000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
   useEffect(() => {
-    if(!auth) { setAuthReady(true); return; }
+    if(!auth) { setAuthReady(true); setProfileLoaded(true); return; }
     const unsub = onAuthStateChanged(auth, u => {
       setUser(u);
       if(!u || !rtdb) setProfileLoaded(true); else setProfileLoaded(false);
@@ -1098,11 +1275,21 @@ function Providers({children}){
     <${AppState.Provider} value=${{
       user, isStaff, authReady, profileLoaded, profileData, articles, products, socialPosts, stories, videos, videoCategories,
       pricing, permissions, wardrobeItems, userTier, userGender, canAccess, checkoutTier, setCheckoutTier,
-      transactions, videocallTariffs, autoConfig
+      transactions, videocallTariffs, autoConfig, loadFailed
     }}>
       ${children}
     <//>
   `;
+}
+
+function LoadingScreen({failed}){
+  useEffect(()=>{document.documentElement.classList.add('lf-luxe');return()=>document.documentElement.classList.remove('lf-luxe')},[]);
+  return html`<div class="lf-skin lf-load"><div class="lf-load-in">
+    <div class="lf-load-star">✦</div>
+    <div class="lf-load-t">LandraFashion</div>
+    <div class="lf-load-s">ARMONIA · STILE · BELLEZZA</div>
+    ${failed?html`<p class="lf-load-m">Connessione lenta o non disponibile.<br/>Controlla la rete e riprova.</p><button type="button" class="btn" onClick=${()=>location.reload()}>Riprova →</button>`:html`<div class="lf-load-bar"><i></i></div><div class="lf-load-m">Caricamento piattaforma...</div>`}
+  </div></div>`;
 }
 
 function AuthGate({children}){
@@ -1114,7 +1301,7 @@ function AuthGate({children}){
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
-  if(!authReady) return html`<div class="grid min-h-screen place-items-center text-sky-200">Caricamento piattaforma...</div>`;
+  if(!authReady) return html`<${LoadingScreen}/>`;
   if(user) return children;
 
   const submit = async e => {
@@ -1796,8 +1983,9 @@ function SocialPageModule(){
   `;
 }
 
-function Mannequin3D({gender,skin,hair,top,bottom}){
+function Mannequin3D({gender,skin,hair,top,bottom,topTex,bottomTex}){
   const box=useRef(null), api=useRef({});
+  api.current.tex={topTex,bottomTex};
   useEffect(()=>{
     let dead=false, raf=0, ro=null, r=null;
     import('https://esm.sh/three@0.160.0').then(T=>{
@@ -1811,77 +1999,89 @@ function Mannequin3D({gender,skin,hair,top,bottom}){
       cam.position.set(0,.95,4.8); cam.lookAt(0,.85,0);
       sc.add(new T.HemisphereLight(0xfff3dc,0x1a1815,1.1));
       const d=new T.DirectionalLight(0xffffff,1.6); d.position.set(2,3,3); sc.add(d);
-      const rim=new T.DirectionalLight(0xddbf82,1.4); rim.position.set(-3,2,-2); sc.add(rim);
-      const M=(c,rg=.55)=>new T.MeshStandardMaterial({color:c,roughness:rg,metalness:.05,side:T.DoubleSide});
-      const mk={skin:M(skin,.6),hair:M(hair,.4),top:M(top),bottom:M(bottom)}; api.current.mk=mk;
+      const rim=new T.DirectionalLight(0xff3b5c,1.6); rim.position.set(-3,2,-2); sc.add(rim);
+      const rim2=new T.DirectionalLight(0x38e0a0,1.1); rim2.position.set(3,1,-3); sc.add(rim2);
+      const M=(c,rg=.55,m=.05)=>new T.MeshStandardMaterial({color:c,roughness:rg,metalness:m,side:T.DoubleSide});
+      const mk={skin:M(skin,.55),hair:M(hair,.35),top:M(top,.6),bottom:M(bottom,.6)}; api.current.mk=mk;
       const g=new T.Group(); sc.add(g);
       const add=(geo,mat,x,y,z,rz,sx,sy,sz)=>{const o=new T.Mesh(geo,mat);o.position.set(x||0,y||0,z||0);o.rotation.z=rz||0;o.scale.set(sx||1,sy||1,sz||1);g.add(o);return o};
-      const lathe=(pts,mat,z)=>add(new T.LatheGeometry(pts.map(q=>new T.Vector2(q[0],q[1])),40),mat,0,0,0,0,1,1,z||.62);
+      const smooth=(pts)=>{const c=new T.SplineCurve(pts.map(q=>new T.Vector2(q[0],q[1])));return c.getPoints(36).map(p=>new T.Vector2(Math.max(.001,p.x),p.y))};
+      const lathe=(pts,mat,z)=>add(new T.LatheGeometry(smooth(pts),56),mat,0,0,0,0,1,1,z||.62);
       const F=gender==='Donna';
-      add(new T.SphereGeometry(.17,32,24),mk.skin,0,1.76,0,0,.92,1.08,1);
-      add(new T.SphereGeometry(.185,32,24),mk.hair,0,1.79,-.03,0,.95,F?1:.8,1);
-      if(F) add(new T.CapsuleGeometry(.14,.4,8,16),mk.hair,0,1.5,-.1,0,1,1,.6);
-      add(new T.CylinderGeometry(.06,.07,.16,20),mk.skin,0,1.6,0);
+      add(new T.SphereGeometry(.17,40,30),mk.skin,0,1.76,0,0,.92,1.1,1);
+      add(new T.SphereGeometry(.186,40,30),mk.hair,0,1.79,-.03,0,.96,F?1:.8,1);
+      if(F){add(new T.CapsuleGeometry(.14,.46,8,18),mk.hair,0,1.5,-.1,0,1,1,.6);add(new T.SphereGeometry(.08,20,16),mk.hair,0,1.95,-.06)}
+      add(new T.CylinderGeometry(.06,.07,.18,24),mk.skin,0,1.6,0);
+      // cappello di Natale
+      const hat=M(0xd6264a,.7), wh=M(0xffffff,.9);
+      const cone=add(new T.ConeGeometry(.17,.34,32),hat,.05,2.03,0,-.25); add(new T.TorusGeometry(.17,.035,12,40),wh,0,1.9,0).rotation.x=Math.PI/2; add(new T.SphereGeometry(.05,16,12),wh,.14,2.2,0);
       lathe(F?[[.001,.98],[.2,.98],[.17,1.1],[.19,1.28],[.24,1.45],[.2,1.56],[.001,1.57]]:[[.001,.98],[.23,.98],[.24,1.2],[.29,1.45],[.22,1.56],[.001,1.57]],mk.top);
       [-1,1].forEach(k=>{
-        add(new T.CapsuleGeometry(.055,.62,8,14),mk.skin,k*(F?.31:.36),1.15,0,k*.12);
-        add(new T.CapsuleGeometry(.068,.2,8,14),mk.top,k*(F?.28:.34),1.4,0,k*.2);
-        if(F) add(new T.CapsuleGeometry(.07,.58,8,14),mk.skin,k*.09,.32,0);
-        else add(new T.CapsuleGeometry(.092,.86,8,14),mk.bottom,k*.11,.5,0);
+        add(new T.CapsuleGeometry(.055,.62,8,16),mk.skin,k*(F?.31:.36),1.15,0,k*.12);
+        add(new T.SphereGeometry(.05,16,12),mk.skin,k*(F?.35:.41),.78,0);
+        add(new T.CapsuleGeometry(.07,.22,8,16),mk.top,k*(F?.28:.34),1.4,0,k*.2);
+        if(F) add(new T.CapsuleGeometry(.07,.58,8,16),mk.skin,k*.09,.32,0);
+        else add(new T.CapsuleGeometry(.092,.86,8,16),mk.bottom,k*.11,.5,0);
+        add(new T.CapsuleGeometry(.05,.14,6,12),M(0x1a1815,.3),k*.1,-.0,.06).rotation.x=Math.PI/2;
       });
       if(F) lathe([[.36,.58],[.3,.7],[.2,.98],[.001,.98]],mk.bottom,.8);
-      add(new T.CylinderGeometry(.5,.54,.04,48),M(0x1a1815,.3),0,-.04,0);
-      add(new T.TorusGeometry(.5,.008,8,64),M(0xddbf82,.3),0,-.015,0,0).rotation.x=Math.PI/2;
-      let ry=.5,vy=0,drag=false,lx=0;
+      add(new T.CylinderGeometry(.5,.54,.05,56),M(0x7a0f2a,.3,.3),0,-.05,0);
+      add(new T.TorusGeometry(.5,.01,8,72),M(0xf5c451,.25,.8),0,-.02,0).rotation.x=Math.PI/2;
+      // "infisso": capo scansionato applicato come decal fronte/retro
+      const dec=(w,h,y,z)=>{const m=new T.MeshBasicMaterial({transparent:true,alphaTest:.05,depthWrite:false});const a=new T.Mesh(new T.PlaneGeometry(w,h),m);a.position.set(0,y,z);a.visible=false;g.add(a);const b=new T.Mesh(a.geometry,m);b.position.set(0,y,-z);b.rotation.y=Math.PI;b.visible=false;g.add(b);return{a,b,m}};
+      const dt=dec(.7,.66,1.27,F?.17:.2), db=dec(.52,.95,.5,.13);
+      api.current.apply=()=>{const t=api.current.tex||{};[[dt,t.topTex],[db,t.bottomTex]].forEach(([o,src])=>{if(!src){o.a.visible=o.b.visible=false;return}new T.TextureLoader().load(src,x=>{x.colorSpace=T.SRGBColorSpace;o.m.map=x;o.m.needsUpdate=true;o.a.visible=o.b.visible=true})})};
+      api.current.apply();
+      let ry=.5,vy=0,drag=false,lx=0,t0=0;
       const dn=e=>{drag=true;lx=e.clientX;vy=0;r.domElement.style.cursor='grabbing'};
       const mv=e=>{if(!drag)return;vy=(e.clientX-lx)*.012;ry+=vy;lx=e.clientX};
       const up=()=>{drag=false;r.domElement.style.cursor='grab'};
       r.domElement.addEventListener('pointerdown',dn);addEventListener('pointermove',mv);addEventListener('pointerup',up);
       ro=new ResizeObserver(()=>{r.setSize(W(),H());cam.aspect=W()/H();cam.updateProjectionMatrix()});ro.observe(el);
-      const loop=()=>{raf=requestAnimationFrame(loop);if(!drag){vy*=.94;ry+=vy+.004}g.rotation.y=ry;r.render(sc,cam)};loop();
+      const loop=()=>{raf=requestAnimationFrame(loop);t0+=.02;if(!drag){vy*=.94;ry+=vy+.004}g.rotation.y=ry;g.position.y=Math.sin(t0)*.01;r.render(sc,cam)};loop();
       api.current.off=()=>{r.domElement.removeEventListener('pointerdown',dn);removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};
     }).catch(e=>console.warn('3D non disponibile',e));
-    return()=>{dead=true;cancelAnimationFrame(raf);if(ro)ro.disconnect();if(api.current.off)api.current.off();if(r){r.dispose();if(r.domElement.parentNode)r.domElement.parentNode.removeChild(r.domElement)}api.current.mk=null};
+    return()=>{dead=true;cancelAnimationFrame(raf);if(ro)ro.disconnect();if(api.current.off)api.current.off();if(r){r.dispose();if(r.domElement.parentNode)r.domElement.parentNode.removeChild(r.domElement)}api.current.mk=null;api.current.apply=null};
   },[gender]);
   useEffect(()=>{const k=api.current.mk;if(!k)return;k.skin.color.set(skin);k.hair.color.set(hair);k.top.color.set(top);k.bottom.color.set(bottom)},[skin,hair,top,bottom,gender]);
-  return html`<div ref=${box} style="width:100%;height:min(62vh,480px);min-height:340px;border-radius:24px;background:radial-gradient(circle at 50% 35%,#2a2519,#0E0D0B 70%)"></div>`;
+  useEffect(()=>{if(api.current.apply)api.current.apply()},[topTex,bottomTex]);
+  return html`<div ref=${box} style="width:100%;height:min(62vh,480px);min-height:340px;border-radius:24px;background:radial-gradient(circle at 50% 35%,#4a1426,#0a0610 72%)"></div>`;
 }
 
 function MannequinStudioModule(){
-  const {userGender} = useApp();
+  const {userGender,wardrobeItems} = useApp();
   const [selectedGender, setSelectedGender] = useState(userGender || "Donna");
   const [skinColor, setSkinColor] = useState("#f5d0c5");
-  const [hairColor, setHairColor] = useState("#1e293b");
-  const [topColor, setTopColor] = useState("#2563eb");
+  const [hairColor, setHairColor] = useState("#3b2418");
+  const [topColor, setTopColor] = useState("#e11d48");
   const [bottomColor, setBottomColor] = useState("#1e1b4b");
-
+  const [topTex, setTopTex] = useState(null);
+  const [bottomTex, setBottomTex] = useState(null);
+  const wear=(it)=>{const low=/Pantaloni|Gonna/.test(it.type||"");if(low){setBottomColor(it.colorHex||bottomColor);setBottomTex(it.scanUrl||null)}else{setTopColor(it.colorHex||topColor);setTopTex(it.scanUrl||null)}};
+  useEffect(()=>{try{const w=JSON.parse(sessionStorage.getItem("lf_wear")||"null");if(w){wear(w);sessionStorage.removeItem("lf_wear")}}catch(e){}},[]);
   return html`
     <div class="max-w-4xl mx-auto space-y-6">
-      <div class="glass p-6 flex justify-between items-center">
-        <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2">
-          <${SvgIcon} name="mannequin" className="w-6 h-6 text-sky-400"/> Manichino 3D — trascina per ruotare
-        </h2>
+      <div class="glass p-6 flex justify-between items-center gap-3 flex-wrap">
+        <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2"><${SvgIcon} name="mannequin" className="w-6 h-6 text-sky-400"/> Manichino 3D — trascina per ruotare</h2>
         <div class="flex gap-2">
           <button type="button" class="btn-ghost text-xs ${selectedGender==='Donna'?'on':''}" onClick=${()=>setSelectedGender('Donna')}>Donna</button>
           <button type="button" class="btn-ghost text-xs ${selectedGender==='Uomo'?'on':''}" onClick=${()=>setSelectedGender('Uomo')}>Uomo</button>
         </div>
       </div>
-
-      <div class="grid md:grid-cols-2 gap-6 items-center">
-        <div class="glass p-6 flex flex-col items-center bg-slate-950/90 border border-sky-500/30">
-          <${Mannequin3D} gender=${selectedGender} skin=${skinColor} hair=${hairColor} top=${topColor} bottom=${bottomColor}/>
-        </div>
-
+      <div class="grid md:grid-cols-2 gap-6 items-start">
+        <div class="glass p-4"><${Mannequin3D} gender=${selectedGender} skin=${skinColor} hair=${hairColor} top=${topColor} bottom=${bottomColor} topTex=${topTex} bottomTex=${bottomTex}/></div>
         <div class="glass p-6 space-y-4 text-xs">
           <h3 class="font-bold text-white text-sm border-b border-sky-500/20 pb-2">Personalizza Palette Silhouette</h3>
-          <label class="flex justify-between items-center text-slate-300"><span>Colore Top / Capo Superiore</span><input type="color" value=${topColor} onChange=${e=>setTopColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
-          <label class="flex justify-between items-center text-slate-300"><span>Pantaloni / Gonna</span><input type="color" value=${bottomColor} onChange=${e=>setBottomColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
-          <label class="flex justify-between items-center text-slate-300"><span>Capelli & Chioma</span><input type="color" value=${hairColor} onChange=${e=>setHairColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
-          <label class="flex justify-between items-center text-slate-300"><span>Incarnato Sottotono</span><input type="color" value=${skinColor} onChange=${e=>setSkinColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
+          <label class="flex justify-between items-center text-slate-300"><span>Colore Top / Capo Superiore</span><input type="color" value=${topColor} onInput=${e=>setTopColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
+          <label class="flex justify-between items-center text-slate-300"><span>Pantaloni / Gonna</span><input type="color" value=${bottomColor} onInput=${e=>setBottomColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
+          <label class="flex justify-between items-center text-slate-300"><span>Capelli & Chioma</span><input type="color" value=${hairColor} onInput=${e=>setHairColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
+          <label class="flex justify-between items-center text-slate-300"><span>Incarnato Sottotono</span><input type="color" value=${skinColor} onInput=${e=>setSkinColor(e.target.value)} class="h-8 w-12 bg-transparent cursor-pointer rounded"/></label>
+          <h3 class="font-bold text-white text-sm border-b border-sky-500/20 pb-2 pt-2">Indossa dal guardaroba</h3>
+          <div class="lf-row">${(wardrobeItems||[]).length===0?html`<span class="text-slate-300">Nessun capo: scansionane uno nel Guardaroba.</span>`:(wardrobeItems||[]).map(it=>html`<button type="button" key=${it.id} class="lf-insp" style=${{width:"96px",height:"120px",backgroundColor:it.colorHex,backgroundImage:it.scanUrl?`url(${it.scanUrl})`:"none",backgroundSize:"contain",backgroundRepeat:"no-repeat",backgroundPosition:"center"}} onClick=${()=>wear(it)}><span>${it.name}</span></button>`)}</div>
+          <button type="button" class="btn-ghost w-full" onClick=${()=>{setTopTex(null);setBottomTex(null)}}>Togli capi scansionati</button>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function WardrobeModule(){
@@ -1894,6 +2094,42 @@ function WardrobeModule(){
   const [qColor, setQColor] = useState("#2563eb");
   const [qCity, setQCity] = useState(profileData?.city || "Brescia");
   const [busy, setBusy] = useState(false);
+  const scanRef=useRef(null);
+  const [scanMsg,setScanMsg]=useState("");
+  const scanGarment=async(file)=>{
+    const img=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=URL.createObjectURL(file)});
+    const k=Math.min(1,320/Math.max(img.width,img.height)),w=Math.max(8,Math.round(img.width*k)),h=Math.max(8,Math.round(img.height*k));
+    const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d",{willReadFrequently:true});x.drawImage(img,0,0,w,h);URL.revokeObjectURL(img.src);
+    const im=x.getImageData(0,0,w,h),p=im.data;let br=0,bg=0,bb=0,n=0;
+    const sample=(i,j)=>{const o=(j*w+i)*4;br+=p[o];bg+=p[o+1];bb+=p[o+2];n++};
+    for(let i=0;i<w;i++){sample(i,0);sample(i,h-1)}for(let j=0;j<h;j++){sample(0,j);sample(w-1,j)}
+    br/=n;bg/=n;bb/=n;const tol=60;
+    const near=o=>Math.abs(p[o]-br)+Math.abs(p[o+1]-bg)+Math.abs(p[o+2]-bb)<tol*1.6;
+    const seen=new Uint8Array(w*h),st=[];
+    const push=(i,j)=>{if(i<0||j<0||i>=w||j>=h)return;const q=j*w+i;if(seen[q])return;if(!near(q*4))return;seen[q]=1;st.push(q)};
+    for(let i=0;i<w;i++){push(i,0);push(i,h-1)}for(let j=0;j<h;j++){push(0,j);push(w-1,j)}
+    while(st.length){const q=st.pop(),i=q%w,j=(q/w)|0;push(i+1,j);push(i-1,j);push(i,j+1);push(i,j-1)}
+    const bins={};let minX=w,maxX=0,minY=h,maxY=0,cnt=0;
+    for(let q=0;q<w*h;q++){const o=q*4;if(seen[q]){p[o+3]=0;continue}cnt++;const i=q%w,j=(q/w)|0;if(i<minX)minX=i;if(i>maxX)maxX=i;if(j<minY)minY=j;if(j>maxY)maxY=j;const key=(p[o]>>5)+","+(p[o+1]>>5)+","+(p[o+2]>>5);const b=bins[key]||(bins[key]=[0,0,0,0]);b[0]++;b[1]+=p[o];b[2]+=p[o+1];b[3]+=p[o+2]}
+    if(cnt<w*h*.04) throw new Error("Capo non rilevato: usa uno sfondo uniforme");
+    x.putImageData(im,0,0);
+    const best=Object.values(bins).sort((a,b)=>b[0]-a[0])[0];
+    const hex="#"+[1,2,3].map(i=>Math.round(best[i]/best[0]).toString(16).padStart(2,"0")).join("");
+    const cw=maxX-minX+1,ch=maxY-minY+1,o2=document.createElement("canvas");o2.width=cw;o2.height=ch;o2.getContext("2d").drawImage(c,minX,minY,cw,ch,0,0,cw,ch);
+    return {url:o2.toDataURL("image/png"),hex,tall:ch/cw};
+  };
+  const onScan=async(e)=>{
+    const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||!rtdb||!user)return;
+    setBusy(true);setScanMsg("Scansione in corso…");
+    try{
+      const s=await scanGarment(f);
+      const type=/Pantaloni|Gonna/.test(qType)||s.tall>1.5&&qType==="Abito da Sera"?qType:qType;
+      await push(ref(rtdb,"wardrobe/"+user.uid),{name:type+" scansionato",type,colorHex:s.hex,scanUrl:s.url,scanned:true,city:qCity,desc:"Capo acquisito dalla fotocamera: sfondo rimosso e colore dominante "+s.hex.toUpperCase()+".",createdAt:serverTimestamp()});
+      setScanMsg("Capo aggiunto! Premi «Indossa» per vederlo sul manichino.");
+    }catch(err){setScanMsg(err.message||"Scansione non riuscita")}
+    setBusy(false);
+  };
+  const wearOn=(item)=>{try{sessionStorage.setItem("lf_wear",JSON.stringify({type:item.type,colorHex:item.colorHex,scanUrl:item.scanUrl||null}))}catch(e){}dispatchEvent(new CustomEvent("lf-tab",{detail:"mannequin"}))};
 
   if(!canAccess("wardrobe")) return html`<${LockedFeatureCard} title="ArmoWardrobe Digital" module="wardrobe" />`;
 
@@ -1944,9 +2180,9 @@ function WardrobeModule(){
           <h2 class="text-xl font-serif font-bold text-white flex items-center gap-2">
             <${SvgIcon} name="wardrobe" className="w-6 h-6 text-sky-400" /> ArmoWardrobe Digital Generativo
           </h2>
-          <p class="text-xs text-sky-200 mt-1">Generazione capo guidata da IA con dati meteo approssimativi di <b>${qCity}</b>.</p>
+          <p class="text-xs text-sky-200 mt-1">${scanMsg} Generazione capo guidata da IA con dati meteo approssimativi di <b>${qCity}</b>.</p>
         </div>
-        <button type="button" class="btn text-xs" onClick=${()=>setStep(2)}>+ Genera Capo Digital</button>
+        <div class="flex gap-2 flex-wrap"><input ref=${scanRef} type="file" accept="image/*" capture="environment" style="display:none" onChange=${onScan}/><button type="button" class="btn text-xs" disabled=${busy} onClick=${()=>scanRef.current&&scanRef.current.click()}>📷 Scansiona capo</button><button type="button" class="btn-ghost text-xs" onClick=${()=>setStep(2)}>+ Genera Capo Digital</button></div>
       </div>
 
       ${step === 2 && html`
@@ -2007,7 +2243,7 @@ function WardrobeModule(){
         ${wardrobeItems.map(item => html`
           <div key=${item.id} class="glass p-5 space-y-3 border border-sky-500/20 flex flex-col justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner" style=${{backgroundColor: item.colorHex}}>
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner" style=${{backgroundColor: item.colorHex, backgroundImage:item.scanUrl?`url(${item.scanUrl})`:"none", backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center"}}>
                 <${SvgIcon} name="wardrobe" className="w-7 h-7 text-white drop-shadow"/>
               </div>
               <div>
@@ -2019,6 +2255,7 @@ function WardrobeModule(){
             <p class="text-xs text-slate-300 line-clamp-2">${item.desc}</p>
             <div class="pt-2 border-t border-sky-500/10 flex justify-between items-center">
               <span class="text-[10px] text-sky-400 font-bold">${item.fabric || 'Sartoriale'}</span>
+              <button type="button" class="btn-ghost text-xs" onClick=${()=>wearOn(item)}>👗 Indossa</button>
               <button type="button" class="text-red-400 hover:text-red-300 transition" onClick=${()=>remove(ref(rtdb, `wardrobe/${user.uid}/${item.id}`))}>
                 <${SvgIcon} name="trash" className="w-4 h-4"/>
               </button>
@@ -3141,146 +3378,183 @@ function CmsGate(){
   return html`<${CmsDashboard}/>`;
 }
 
+const PALETTES={inverno:["#0b1d4a","#e11d48","#f4f1ea","#0f8f6b","#c9a45f"],autunno:["#7a2e12","#c8711a","#e0b54a","#2f6b4f","#4a2c2a"],primavera:["#ff6f61","#7bd88f","#ffd166","#3ec1d3","#f6a6c1"],estate:["#f4a6c0","#8fb8ff","#c9b6f2","#9fe0d4","#e9e3d8"]};
+const MOD_COL={feed:"#f5c451",social:"#ff5c8a",mannequin:"#a855f7",orion:"#4f7cff",wardrobe:"#e11d48",video:"#ff8a3d",expert_chat:"#10b981",videocall:"#22b8cf",info:"#64748b",profile:"#f472b6"};
+const SHORT={feed:"Home",social:"Social",mannequin:"Manichino",orion:"Orion",wardrobe:"Guardaroba",video:"Video",expert_chat:"Stylist",videocall:"Call",info:"Info",profile:"Profilo"};
+const SEASON_W={inverno:["4°C","Freddo intenso"],autunno:["12°C","Fresco avvolgente"],primavera:["18°C","Mite e luminoso"],estate:["26°C","Soleggiato"]};
+const xmasDays=()=>{const n=new Date(),y=n.getFullYear();let t=new Date(y,11,25);if(n>t)t=new Date(y+1,11,25);return Math.ceil((t-n)/864e5)};
+const mi=(id)=>id==='feed'?'home':id;
+function Skin({children}){useEffect(()=>{document.documentElement.classList.add('lf-xmas','lf-luxe');return()=>document.documentElement.classList.remove('lf-xmas','lf-luxe')},[]);return html`<div class="lf-skin">${children}</div>`}
+function Sheet({onClose,children}){
+  useEffect(()=>{const k=e=>e.key==='Escape'&&onClose();addEventListener('keydown',k);return()=>removeEventListener('keydown',k)},[]);
+  return html`<div class="lf-ov" onClick=${onClose}><div class="lf-sh" onClick=${e=>e.stopPropagation()}>${children}<button type="button" class="btn w-full mt-4" onClick=${onClose}>Chiudi</button></div></div>`;
+}
+function FloatStaff(){
+  const def=()=>({x:innerWidth-76,y:innerHeight-200});
+  const [pos,setPos]=useState(()=>{try{return JSON.parse(localStorage.getItem('lf_staff_pos'))||def()}catch(e){return def()}});
+  const d=useRef(null);
+  const cl=(x,y)=>({x:Math.max(8,Math.min(innerWidth-66,x)),y:Math.max(8,Math.min(innerHeight-66,y))});
+  const down=e=>{d.current={sx:e.clientX,sy:e.clientY,ox:pos.x,oy:pos.y,m:false};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}};
+  const move=e=>{const s=d.current;if(!s)return;const dx=e.clientX-s.sx,dy=e.clientY-s.sy;if(Math.abs(dx)+Math.abs(dy)>6)s.m=true;if(s.m)setPos(cl(s.ox+dx,s.oy+dy))};
+  const up=()=>{const s=d.current;d.current=null;if(!s)return;if(s.m){try{localStorage.setItem('lf_staff_pos',JSON.stringify(pos))}catch(_){}}else location.hash='#staff'};
+  return html`<button type="button" class="lf-staff" aria-label="Apri CMS staff" style=${{left:pos.x+'px',top:pos.y+'px'}} onPointerDown=${down} onPointerMove=${move} onPointerUp=${up} onPointerCancel=${()=>{d.current=null}}>★<small>STAFF</small></button>`;
+}
+
+/* ===== LUXE UI helpers ===== */
+const HERO_IMG="./img/hero.jpg"; // foto hero (opzionale): se manca resta lo sfondo oro/rubino
+const LF_PLAYLIST=[ /* {title:"Christmas Vibes", artist:"LandraMusic", src:"./audio/brano1.mp3"} */ ];
+const QN=[["Home","feed","home"],["Guardaroba","wardrobe","hanger"],["Armocromia","pal","palette"],["Lookbook","social","gem"],["Premium","profile","star"],["Altro","more","grid"]];
+const ICONS={
+search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+bell:'<path d="M6 9a6 6 0 0112 0c0 6 2 7 2 8H4c0-1 2-2 2-8z"/><path d="M10 20a2 2 0 004 0"/>',
+crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',
+arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+atom:'<circle cx="12" cy="12" r="1.4"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>',
+home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+hanger:'<path d="M12 8V7a2 2 0 10-2-2"/><path d="M12 8l9 6.5a1.5 1.5 0 01-.9 2.7H3.9A1.5 1.5 0 013 14.5z"/>',
+palette:'<path d="M12 3a9 9 0 100 18c1.5 0 2-1 1.5-2-.6-1.2.2-2.5 1.6-2.5H17a4 4 0 004-4c0-5-4-9.5-9-9.5z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+gem:'<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 6 3-6M12 21L9 9M12 21l3-12"/>',
+star:'<path d="M12 3l2.7 5.8 6.3.8-4.6 4.4 1.2 6.3L12 17.2 6.4 20.3l1.2-6.3L3 9.6l6.3-.8z"/>',
+grid:'<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>',
+flame:'<path d="M12 22c4 0 7-3 7-7 0-3-2-5-3-7-1 2-2 3-3 3 0-4-1-7-4-9 0 4-4 6-4 12 0 4 3 8 7 8z"/>',
+play:'<path d="M8 5v14l11-7z" fill="currentColor"/>',
+pause:'<path d="M9 5v14M15 5v14" stroke-width="3"/>',
+prev:'<path d="M6 5v14M19 5L9 12l10 7z" fill="currentColor"/>',
+next:'<path d="M18 5v14M5 5l10 7-10 7z" fill="currentColor"/>',
+music:'<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>'
+};
+const LI=({n})=>html`<svg class="lf-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" dangerouslySetInnerHTML=${{__html:ICONS[n]||""}}/>`;
+const Star=({size=28})=>html`<svg class="lf-star" width=${size} height=${size} viewBox="0 0 48 48" aria-hidden="true"><path d="M24 2C25.5 15 33 22.5 46 24 33 25.5 25.5 33 24 46 22.5 33 15 25.5 2 24 15 22.5 22.5 15 24 2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M24 12c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12Z" fill="currentColor" opacity=".9"/></svg>`;
+
+/* player musicale (LandraMusic) */
+const LFA={a:null,i:0,playing:false,subs:new Set()};
+const lfEmit=()=>LFA.subs.forEach(f=>f());
+function lfLoad(i){
+  if(!LF_PLAYLIST.length) return false;
+  LFA.i=(i+LF_PLAYLIST.length)%LF_PLAYLIST.length;
+  if(!LFA.a){LFA.a=new Audio();LFA.a.addEventListener("ended",()=>{lfLoad(LFA.i+1);LFA.a.play().catch(()=>{})});LFA.a.addEventListener("pause",()=>{LFA.playing=false;lfEmit()});LFA.a.addEventListener("play",()=>{LFA.playing=true;lfEmit()})}
+  LFA.a.src=LF_PLAYLIST[LFA.i].src; lfEmit(); return true;
+}
+function lfToggle(){
+  if(!LF_PLAYLIST.length) return false;
+  if(!LFA.a||!LFA.a.src) lfLoad(LFA.i);
+  if(LFA.a.paused) LFA.a.play().catch(()=>{}); else LFA.a.pause();
+  return true;
+}
+function useLFA(){const[,f]=useState(0);useEffect(()=>{const g=()=>f(x=>x+1);LFA.subs.add(g);return()=>LFA.subs.delete(g)},[]);return LFA}
+function MiniPlayer({onOpen}){
+  const A=useLFA(),t=LF_PLAYLIST[A.i]||{title:"Christmas Vibes",artist:"LandraMusic"};
+  const tog=()=>{if(!lfToggle())onOpen()};
+  const step=d=>{if(lfLoad(A.i+d)){LFA.a.play().catch(()=>{})}else onOpen()};
+  return html`<div class="lf-mini"><button type="button" class="lf-cover" onClick=${onOpen} aria-label="Playlist">🎄</button>
+    <div class="lf-mini-t" onClick=${onOpen}><b>${t.title}</b><small>${t.artist||"LandraMusic"}</small></div>
+    <button type="button" class="lf-mc" aria-label="Precedente" onClick=${()=>step(-1)}><${LI} n="prev"/></button>
+    <button type="button" class="lf-mc lf-mp" aria-label=${A.playing?"Pausa":"Riproduci"} onClick=${tog}><${LI} n=${A.playing?"pause":"play"}/></button>
+    <button type="button" class="lf-mc" aria-label="Successivo" onClick=${()=>step(1)}><${LI} n="next"/></button></div>`;
+}
+function PlaylistView(){
+  const A=useLFA();
+  return html`<div class="lf-h2"><span><${LI} n="music"/> Playlist LandraMusic</span></div>
+  ${LF_PLAYLIST.length?html`<div class="space-y-2">${LF_PLAYLIST.map((t,i)=>html`<button type="button" key=${i} class="glass w-full p-4 flex items-center gap-3 text-left" onClick=${()=>{lfLoad(i);LFA.a.play().catch(()=>{})}}><span class="lf-cover" style="width:44px;height:44px">${A.i===i&&A.playing?"♪":"🎄"}</span><span><b class="block">${t.title}</b><small style="color:#B9B0A2">${t.artist||"LandraMusic"}</small></span></button>`)}</div>`
+  :html`<div class="glass p-6 text-center"><div style="font-size:40px">🎄</div><p class="mt-2" style="color:#D6CFC3">La playlist LandraMusic arriverà presto.</p></div>`}`;
+}
+
 function Shell(){
-  const {isStaff, userTier, setCheckoutTier} = useApp();
-  const [tab, setTab] = useState("feed");
-  const [startOpen, setStartOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [hash, setHash] = useState(location.hash);
-
-  useEffect(() => {
-    const h = () => setHash(location.hash);
-    addEventListener("hashchange", h);
-    return () => removeEventListener("hashchange", h);
-  }, []);
-
-  if(hash === "#staff") return html`<${CmsGate}/>`;
-
-  const openTab = (t) => { setTab(t); setStartOpen(false); setDropdownOpen(false); };
-
-  return html`
-    <div class="flex min-h-screen flex-col">
-      <header class="lf-top">
-        <div class="lf-top-inner">
-        <div class="lf-top-l"><${BrandLogo}/></div>
-
-        <nav class="hidden md:flex items-center gap-2 relative">
-          <button type="button" class="btn-ghost ${tab==='feed'?'on':''}" onClick=${()=>setTab('feed')}>Home Editorial</button>
-          <button type="button" class="btn-ghost ${tab==='social'?'on':''}" onClick=${()=>setTab('social')}>Social Page</button>
-          <button type="button" class="btn-ghost ${tab==='mannequin'?'on':''}" onClick=${()=>setTab('mannequin')}>Manichino Vettoriale</button>
-
-          <div class="relative">
-            <button type="button" class="btn-ghost flex items-center gap-1" onClick=${()=>setDropdownOpen(!dropdownOpen)}>
-              Moduli ▾
-            </button>
-            ${dropdownOpen && html`
-              <div class="fixed inset-0 z-40" onClick=${()=>setDropdownOpen(false)}></div>
-              <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 glass glass-strong p-2 space-y-1 shadow-2xl z-50">
-                ${SYSTEM_MODULES.map(m => html`
-                  <button type="button" key=${m.id} class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-sky-500/20 text-slate-200 transition flex items-center justify-between" onClick=${()=>openTab(m.id)}>
-                    <span>${m.name}</span>
-                    <${SvgIcon} name=${m.id} className="w-4 h-4 text-sky-400"/>
-                  </button>
-                `)}
-              </div>
-            `}
-          </div>
-        </nav>
-
-        <div class="lf-top-r">
-          <button type="button" class="btn-ghost text-xs uppercase tracking-wider text-sky-300 font-bold" aria-label="Piano ${userTier}" onClick=${()=>setCheckoutTier(userTier==='free'?'pro':userTier)}>
-            <${SvgIcon} name="sparkles" className="w-4 h-4"/> <span>${userTier}</span>
-          </button>
-          ${isStaff && html`<a href="#staff" class="btn-ghost text-xs font-mono">CMS</a>`}
-          <button type="button" class="btn-ghost" aria-label="Esci" onClick=${()=>signOut(auth)}><span class="lf-txt">Esci</span><span class="md:hidden" aria-hidden="true">⎋</span></button>
-        </div>
-        </div>
-      </header>
-
-      <main class="mx-auto w-full max-w-[1200px] flex-1 px-4 pt-6 pb-32">
-        ${tab==='feed' && html`
-        <section class="lf-hero">
-          <p class="lf-eyebrow">Atelier digitale · Orion AI</p>
-          <h1>Il tuo stile,<br/><em>ridisegnato.</em></h1>
-          <p class="lf-lead">Armocromia, guardaroba e consulenza personale in un unico spazio.</p>
-          <div class="lf-cta">
-            <button type="button" class="btn" onClick=${()=>setTab('mannequin')}>Prova il manichino 3D</button>
-            <button type="button" class="btn-ghost" onClick=${()=>setTab('orion')}>Parla con Orion</button>
-          </div>
-          <div class="lf-rail">
-            ${SYSTEM_MODULES.map((m,i)=>html`<button type="button" key=${m.id} class="lf-tile" onClick=${()=>setTab(m.id)}>
-              <span class="lf-n">${String(i+1).padStart(2,'0')}</span>
-              <${SvgIcon} name=${m.id} className="w-7 h-7"/>
-              <b>${m.name}</b><small>${m.desc||''}</small>
-            </button>`)}
-          </div>
-        </section>`}
-        ${tab==='feed' && html`<${FeedModule} onSwitchTab=${(t)=>setTab(t)}/>`}
-        ${tab==='social' && html`<${SocialPageModule}/>`}
-        ${tab==='mannequin' && html`<${MannequinStudioModule}/>`}
-        ${tab==='wardrobe' && html`<${WardrobeModule}/>`}
-        ${tab==='orion' && html`<${OrionChatModule}/>`}
-        ${tab==='video' && html`<${VideoMasterclassModule}/>`}
-        ${tab==='expert_chat' && html`<${ExpertChatModule}/>`}
-        ${tab==='videocall' && html`<${VideocallBookingModule}/>`}
-        ${tab==='info' && html`<${InfoModule}/>`}
-        ${tab==='profile' && html`<${ProfileModule}/>`}
-      </main>
-
-      ${startOpen && html`
-        <div class="fixed inset-0 z-40 bg-black/60 md:hidden" style="-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)" onClick=${()=>setStartOpen(false)}>
-          <div class="lf-sheet fixed left-4 right-4 glass glass-strong p-5 space-y-4" style="bottom:calc(env(safe-area-inset-bottom,0px) + 90px)" onClick=${e=>e.stopPropagation()}>
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-              <span class="font-serif font-bold text-lg text-white">Moduli</span>
-              <span class="text-[10px] text-sky-400 font-bold uppercase">Il tuo atelier</span>
-            </div>
-            <div class="grid grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto">
-              ${SYSTEM_MODULES.map(m => html`
-                <button type="button" key=${m.id} class="glass p-3 flex flex-col items-center justify-center text-center space-y-1.5 cursor-pointer min-h-[88px]" onClick=${()=>openTab(m.id)}>
-                  <${SvgIcon} name=${m.id} className="w-6 h-6 text-sky-400" />
-                  <span class="text-[10px] font-bold text-white">${m.name}</span>
-                </button>
-              `)}
-            </div>
-          </div>
-        </div>
-      `}
-
-      <nav class="lf-tab md:hidden" aria-label="Navigazione">
-        <button type="button" class="${tab==='feed'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('feed')}>
-          <${SvgIcon} name="home" className="w-5 h-5"/><span>Home</span>
-        </button>
-        <button type="button" class="${tab==='social'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('social')}>
-          <${SvgIcon} name="social" className="w-5 h-5"/><span>Social</span>
-        </button>
-        <button type="button" class="lf-mid" aria-label="Moduli" onClick=${()=>setStartOpen(!startOpen)}>
-          <${SvgIcon} name="grid" className="w-6 h-6" />
-        </button>
-        <button type="button" class="${tab==='mannequin'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('mannequin')}>
-          <${SvgIcon} name="mannequin" className="w-5 h-5"/><span>Manichino</span>
-        </button>
-        <button type="button" class="${tab==='profile'?'text-sky-400':'text-slate-400'}" onClick=${()=>setTab('profile')}>
-          <${SvgIcon} name="profile" className="w-5 h-5"/><span>Profilo</span>
-        </button>
-      </nav>
-
-      <${PayPalCheckoutModal}/>
-    </div>
-  `;
+  const {isStaff,user,userTier,setCheckoutTier,articles,videos,socialPosts,wardrobeItems,profileData,userGender,canAccess}=useApp();
+  const [tab,setTab]=useState("feed"),[sheet,setSheet]=useState(null),[q,setQ]=useState(""),[seen,setSeen]=useState(false),[pick,setPick]=useState(null),[hash,setHash]=useState(location.hash),[col,setCol]=useState(null),[hrs,setHrs]=useState(false);
+  useEffect(()=>{const h=()=>setHash(location.hash),t=e=>{setTab(e.detail);setSheet(null);scrollTo(0,0)};addEventListener("hashchange",h);addEventListener("lf-tab",t);return()=>{removeEventListener("hashchange",h);removeEventListener("lf-tab",t)}},[]);
+  if(hash==="#staff") return html`<${CmsGate}/>`;
+  const go=t=>{setTab(t);setSheet(null);scrollTo({top:0,behavior:"smooth"})};
+  const season=profileData?.season||"inverno",pal=PALETTES[season]||PALETTES.inverno,cc=col||pal[1];
+  const wx=SEASON_W[season]||["15°C","Variabile"];
+  const name=((user?.displayName||profileData?.name||"")+"").split(" ")[0];
+  const arts=(articles||[]).filter(a=>(!a.season||a.season===season)&&(!a.targetGender||a.targetGender==="Unisex"||a.targetGender===userGender)).slice(0,10);
+  const img=o=>o&&(o.imageUrl||o.mediaUrl||o.image||o.thumbnail||o.thumb||o.coverUrl);
+  const bg=u=>u?{backgroundImage:`url(${u})`}:{backgroundImage:"linear-gradient(135deg,#6b0f26,#150a0b 60%,#3a2a12)"};
+  const nots=arts.slice(0,3);
+  const days=xmasDays();
+  const sr=q.trim().toLowerCase();
+  const sm=SYSTEM_MODULES.filter(m=>!sr||(m.name+m.desc).toLowerCase().includes(sr));
+  const sa=sr?(articles||[]).filter(a=>((a.title?.it||a.title||"")+"").toLowerCase().includes(sr)).slice(0,5):[];
+  const ini=((name||user?.email||"L")[0]||"L").toUpperCase();
+  return html`<${Skin}><div class="flex min-h-screen flex-col">
+    <header class="lf-top"><div class="lf-top-inner">
+      <button type="button" class="lf-brand" onClick=${()=>go("feed")} aria-label="LandraFashion"><${Star} size=${46}/><span><b>LandraFashion</b><small>ARMONIA · STILE · BELLEZZA</small></span></button>
+      <div class="lf-top-r">
+        <button type="button" class="lf-ib" aria-label="Cerca" onClick=${()=>setSheet("search")}><${LI} n="search"/></button>
+        <button type="button" class="lf-ib" aria-label="Notifiche" onClick=${()=>{setSheet("bell");setSeen(true)}}><${LI} n="bell"/>${!seen&&nots.length>0&&html`<b>${nots.length}</b>`}</button>
+        <button type="button" class="lf-ib lf-av" aria-label="Profilo" onClick=${()=>go("profile")}>${ini}</button>
+      </div></div></header>
+    <main class="mx-auto w-full flex-1 px-4 pt-1 pb-44">
+      ${tab==="feed"&&html`
+      <section class="lf-hero3" style=${{"--hero":"url("+HERO_IMG+")"}}>
+        <span class="lf-chip"><${LI} n="crown"/> Benvenut${userGender==="Uomo"?"o":"a"}${name?", "+name:""} su LandraFashion</span>
+        <h1>Il tuo stile,<br/>la nostra<br/><em>ispirazione.</em></h1>
+        <p>Scopri la palette perfetta<br/>con l’intelligenza di Orion AI.</p>
+        <button type="button" class="btn lf-cta2" onClick=${()=>go("orion")}><${Star} size=${22}/> Inizia l’Analisi <span class="lf-arr"><${LI} n="arrow"/></span></button>
+        <button type="button" class="lf-orion" onClick=${()=>go("orion")}><${LI} n="atom"/><span><b>Orion AI</b><small>Consulente di Stile Avanzato</small></span><i></i></button>
+      </section>
+      <nav class="lf-qn" aria-label="Moduli">${QN.map(m=>html`<button type="button" key=${m[0]} class="lf-qi ${tab===m[1]?"cur":""}" onClick=${()=>m[1]==="pal"?setSheet("palette"):m[1]==="more"?setSheet("mods"):go(m[1])}><i><${LI} n=${m[2]}/></i><span>${m[0]}</span></button>`)}</nav>
+      <section class="lf-pal" style=${{"--k":cc+"55"}}>
+        <div class="lf-sw">${pal.slice(0,4).map((c,i)=>html`<button type="button" key=${c} aria-label=${c} style=${{background:`linear-gradient(150deg,${c},rgba(0,0,0,.55))`,"--r":(i-1.5)*9+"deg"}} onClick=${()=>{setCol(c)}}></button>`)}</div>
+        <div class="lf-pal-t"><span class="lf-chip"><${Star} size=${14}/> Analisi Personalizzata</span><div class="font-serif">La tua Palette<br/>Armonia</div><small>Scopri i colori che valorizzano la tua bellezza unica.</small></div>
+        <button type="button" class="btn lf-vis" onClick=${()=>setSheet("palette")}>Visualizza <span class="lf-arr"><${LI} n="arrow"/></span></button>
+      </section>
+      <div class="lf-dots"><i class="on2"></i><i></i><i></i></div>
+      <div class="lf-two">
+        <button type="button" class="lf-big" style=${bg(img(arts[0])||img((videos||[])[0]))} onClick=${()=>go("video")}><${LI} n="flame"/><b>Tendenze<br/>Moda 2026</b><small>Scopri le ultime<br/>tendenze di stagione</small><span class="lf-pill">Esplora <${LI} n="arrow"/></span></button>
+        <button type="button" class="lf-big" style=${bg(img((socialPosts||[])[0])||img(arts[1]))} onClick=${()=>go("social")}><${LI} n="gem"/><b>Lookbook<br/>Esclusivo</b><small>I look più iconici<br/>della stagione</small><span class="lf-pill">Sfoglia <${LI} n="arrow"/></span></button>
+      </div>
+      <div class="lf-h2"><span><${Star} size=${22}/> Ispirazioni per te</span><button type="button" class="lf-link" onClick=${()=>go("social")}>Vedi tutto <${LI} n="arrow"/></button></div>
+      <div class="lf-row">${(arts.length?arts:[{id:"p1"},{id:"p2"},{id:"p3"},{id:"p4"}]).map((a,i)=>html`<button type="button" key=${a.id} class="lf-insp" style=${bg(img(a))} onClick=${()=>a.title?setPick(a):go("social")}><i class="lf-play"><${LI} n="play"/></i></button>`)}</div>
+      <div class="lf-h2"><span>Home Editorial</span></div>
+      <${FeedModule} onSwitchTab=${go}/>`}
+      ${tab==="social"&&html`<${SocialPageModule}/>`}
+      ${tab==="mannequin"&&html`<${MannequinStudioModule}/>`}
+      ${tab==="wardrobe"&&html`<${WardrobeModule}/>`}
+      ${tab==="orion"&&html`<${OrionChatModule}/>`}
+      ${tab==="video"&&html`<${VideoMasterclassModule}/>`}
+      ${tab==="expert_chat"&&html`<${ExpertChatModule}/>`}
+      ${tab==="videocall"&&html`<${VideocallBookingModule}/>`}
+      ${tab==="info"&&html`<${InfoModule}/>`}
+      ${tab==="profile"&&html`<${ProfileModule}/>`}
+      ${tab==="playlist"&&html`<${PlaylistView}/>`}
+    </main>
+    ${tab==="feed"&&html`<${MiniPlayer} onOpen=${()=>go("playlist")}/>`}
+    <nav class="lf-tab" aria-label="Navigazione">
+      <button type="button" class=${tab==="feed"?"cur":""} onClick=${()=>go("feed")}><${LI} n="home"/><span>Home</span></button>
+      <button type="button" class=${tab==="social"?"cur":""} onClick=${()=>go("social")}><${LI} n="star"/><span>Social</span></button>
+      <button type="button" class="lf-mid" aria-label="Orion AI" onClick=${()=>go("orion")}><${Star} size=${34}/></button>
+      <button type="button" class=${tab==="playlist"?"cur":""} onClick=${()=>go("playlist")}><${LI} n="music"/><span>Playlist</span></button>
+      <button type="button" class=${tab==="profile"?"cur":""} onClick=${()=>go("profile")}><${LI} n="gear"/><span>Impostazioni</span></button>
+    </nav>
+    ${isStaff&&html`<${FloatStaff}/>`}
+    ${sheet==="mods"&&html`<${Sheet} onClose=${()=>setSheet(null)}><h3 class="font-serif text-xl mb-3">Tutti i moduli</h3><div class="grid grid-cols-3 gap-3">${SYSTEM_MODULES.map(m=>html`<button type="button" key=${m.id} class="lf-qi" onClick=${()=>go(m.id)}><i style=${{"--c":MOD_COL[m.id]}}><${SvgIcon} name=${mi(m.id)} className="w-6 h-6"/></i><span>${m.name}</span></button>`)}</div><button type="button" class="btn-ghost w-full mt-3" onClick=${()=>signOut(auth)}>Esci dall’account</button><//>`}
+    ${sheet==="search"&&html`<${Sheet} onClose=${()=>setSheet(null)}><input autofocus class="field" placeholder="Cerca moduli e articoli…" value=${q} onInput=${e=>setQ(e.target.value)}/><div class="space-y-2 mt-3">${sm.map(m=>html`<button type="button" key=${m.id} class="btn-ghost w-full justify-start" onClick=${()=>go(m.id)}>${m.name}</button>`)}${sa.map(a=>html`<button type="button" key=${a.id} class="btn-ghost w-full justify-start" onClick=${()=>{setSheet(null);setPick(a)}}>📰 ${a.title?.it||a.title}</button>`)}</div><//>`}
+    ${sheet==="bell"&&html`<${Sheet} onClose=${()=>setSheet(null)}><h3 class="font-serif text-xl mb-3">Notifiche</h3>${nots.length?nots.map(a=>html`<button type="button" key=${a.id} class="btn-ghost w-full justify-start mb-2" onClick=${()=>{setSheet(null);setPick(a)}}>🎁 ${a.title?.it||a.title}</button>`):html`<p>Nessuna novità.</p>`}<//>`}
+    ${sheet==="season"&&html`<${Sheet} onClose=${()=>setSheet(null)}><h3 class="font-serif text-xl">${wx[0]} · ${wx[1]}</h3><p class="mt-2">Stagione cromatica: <b>${season}</b>. Consulta Orion per outfit adatti al meteo.</p><button type="button" class="btn mt-3" onClick=${()=>go("orion")}>Chiedi a Orion</button><//>`}
+    ${sheet==="palette"&&html`<${Sheet} onClose=${()=>setSheet(null)}><h3 class="font-serif text-2xl mb-3">La tua Palette Armonia</h3><div class="grid grid-cols-5 gap-2">${pal.map(c=>html`<div key=${c} style=${{background:c,height:"90px",borderRadius:"16px",border:"1px solid rgba(255,255,255,.4)"}}></div>`)}</div><p class="mt-3 text-sm">${pal.join(" · ").toUpperCase()}</p><button type="button" class="btn mt-3" onClick=${()=>go("orion")}>Affina con Orion AI</button><//>`}
+    ${pick&&html`<${Sheet} onClose=${()=>setPick(null)}>${img(pick)&&html`<img src=${img(pick)} alt="" style="width:100%;height:220px;object-fit:cover;border-radius:20px;margin-bottom:12px"/>`}<h3 class="font-serif text-2xl">${pick.title?.it||pick.title}</h3><div class="whitespace-pre-line text-sm mt-2">${pick.body?.it||pick.body||pick.excerpt?.it||""}</div><//>`}
+    <${PayPalCheckoutModal}/>
+  </div><//>`;
 }
 
 function Main(){
-  const {profileData, profileLoaded} = useApp();
-  if(!profileLoaded) return html`<div class="grid min-h-screen place-items-center text-sky-200">Caricamento piattaforma...</div>`;
-  if(!profileData?.onboarded) return html`<${IntakeSurvey} onDone=${()=>window.location.reload()}/>`;
+  const {profileData, profileLoaded, loadFailed} = useApp();
+  if(!profileLoaded) return html`<${LoadingScreen}/>`;
+  if(loadFailed && !profileData) return html`<${LoadingScreen} failed=${true}/>`;
+  if(!profileData?.onboarded) return html`<${Skin}><${IntakeSurvey} onDone=${()=>window.location.reload()}/><//>`;
   return html`<${Shell}/>`;
 }
 
 function App(){
   return html`
     <${Providers}>
-      <${AuthGate}>
-        <${Main}/>
+      <${Skin}>
+        <${AuthGate}>
+          <${Main}/>
+        <//>
       <//>
     <//>
   `;
